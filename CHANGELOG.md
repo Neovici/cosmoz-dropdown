@@ -1,3 +1,10 @@
+### [1.0.4](https://github.com/neovici/cosmoz-dropdown/compare/v1.0.3...v1.0.4) (2021-12-16)
+
+
+### Bug Fixes
+
+* expose placement ([844d77e](https://github.com/neovici/cosmoz-dropdown/commit/844d77ef261b7ea0600798f9687424fe727bae4e))
+
 ### [1.0.3](https://github.com/neovici/cosmoz-dropdown/compare/v1.0.2...v1.0.3) (2021-12-16)
 
 
