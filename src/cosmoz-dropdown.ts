@@ -161,8 +161,9 @@ type MenuProps = Pick<DropdownProps, 'placement'>;
 const Menu = ({ placement }: MenuProps) => html` <cosmoz-dropdown
 	.placement=${placement}
 	part="dropdown"
-	exportparts="anchor, button, content, wrap, dropdown"
+	exportparts="anchor, button, content, wrap, dropdown, dashboard-button"
 >
+	<slot name="dashboard-button" slot="dashboard-button"></slot>
 	<slot name="button" slot="button"></slot>
 	<cosmoz-dropdown-list><slot></slot></cosmoz-dropdown-list>
 </cosmoz-dropdown>`;
