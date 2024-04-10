@@ -1,11 +1,5 @@
 import { d as dedent } from './index-PiJ8i7Ux.js';
-import { j, w } from './lit-html-NgIrJPgd.js';
-
-/**
- * @license
- * Copyright 2020 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */const e$2=(o,t)=>void 0===t?void 0!==o?._$litType$:o?._$litType$===t;
+import { j, w, e as e$2 } from './directive-helpers-4X-C2hHT.js';
 
 /**
  * @license

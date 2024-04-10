@@ -1,4 +1,4 @@
-import { j, x, T } from './lit-html-NgIrJPgd.js';
+import { f as f$1, j, T, x } from './directive-helpers-4X-C2hHT.js';
 
 let current;
 let currentId = 0;
@@ -549,6 +549,19 @@ function pion({ render }) {
     return { component, createContext };
 }
 
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const t={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},e=t=>(...e)=>({_$litDirective$:t,values:e});class i{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,i){this._$Ct=t,this._$AM=e,this._$Ci=i;}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}}
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const s=(i,t)=>{const e=i._$AN;if(void 0===e)return !1;for(const i of e)i._$AO?.(t,!1),s(i,t);return !0},o$1=i=>{let t,e;do{if(void 0===(t=i._$AM))break;e=t._$AN,e.delete(i),i=t;}while(0===e?.size)},r=i=>{for(let t;t=i._$AM;i=t){let e=t._$AN;if(void 0===e)t._$AN=e=new Set;else if(e.has(i))break;e.add(i),c(t);}};function h(i){void 0!==this._$AN?(o$1(this),this._$AM=i,r(this)):this._$AM=i;}function n$2(i,t=!1,e=0){const r=this._$AH,h=this._$AN;if(void 0!==h&&0!==h.size)if(t)if(Array.isArray(r))for(let i=e;i<r.length;i++)s(r[i],!1),o$1(r[i]);else null!=r&&(s(r,!1),o$1(r));else s(this,i);}const c=i=>{i.type==t.CHILD&&(i._$AP??=n$2,i._$AQ??=h);};class f extends i{constructor(){super(...arguments),this._$AN=void 0;}_$AT(i,t,e){super._$AT(i,t,e),r(this),this.isConnected=i._$AU;}_$AO(i,t=!0){i!==this.isConnected&&(this.isConnected=i,i?this.reconnected?.():this.disconnected?.()),t&&(s(this,i),o$1(this));}setValue(t){if(f$1(this._$Ct))this._$Ct._$AI(t,this);else {const i=[...this._$Ct._$AH];i[this._$Ci]=t,this._$Ct._$AI(i,this,0);}}disconnected(){}reconnected(){}}
+
 const { component, createContext } = pion({ render: j });
 
 /**
@@ -556,7 +569,9 @@ const { component, createContext } = pion({ render: j });
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-function n(n,r,t){return n?r(n):t?.(n)}
+function n$1(n,r,t){return n?r(n):t?.(n)}
+
+const o=new WeakMap,n=e(class extends f{render(i){return T}update(i,[s]){const e=s!==this.Y;return e&&void 0!==this.Y&&this.rt(void 0),(e||this.lt!==this.ct)&&(this.Y=s,this.ht=i.options?.host,this.rt(this.ct=i.element)),T}rt(t){if("function"==typeof this.Y){const i=this.ht??globalThis;let s=o.get(i);void 0===s&&(s=new WeakMap,o.set(i,s)),void 0!==s.get(this.Y)&&this.Y.call(this.ht,void 0),s.set(this.Y,t),void 0!==t&&this.Y.call(this.ht,t);}else this.Y.value=t;}get lt(){return "function"==typeof this.Y?o.get(this.ht??globalThis)?.get(this.Y):this.Y?.value}disconnected(){this.lt===this.ct&&this.rt(void 0);}reconnected(){this.rt(this.ct);}});
 
 const oppositeDirections = {
     top: 'bottom',
@@ -1187,6 +1202,17 @@ const useHostFocus = (host) => {
 };
 
 const preventDefault = (e) => e.preventDefault();
+const supportsPopover = () => {
+  return HTMLElement.prototype.hasOwnProperty("popover");
+};
+const showPopover = (popover) => {
+  const popoverElement = popover;
+  if (supportsPopover()) {
+    requestAnimationFrame(() => {
+      popoverElement?.showPopover();
+    });
+  }
+};
 const Content = (host) => {
   const { anchor, placement, render } = host;
   usePosition({ anchor, placement, host });
@@ -1198,6 +1224,12 @@ const Content = (host) => {
 				box-sizing: border-box;
 				padding: var(--cosmoz-dropdown-spacing, 0px);
 				z-index: var(--cosmoz-dropdown-z-index, 2);
+			}
+			:host(:popover-open) {
+				margin: 0;
+				border: 0;
+				/* The padding is needed to show the box shadow in Chrome */
+				padding: 4px;
 			}
 			.wrap {
 				background: var(--cosmoz-dropdown-bg-color, #fff);
@@ -1269,9 +1301,11 @@ const Dropdown$1 = (host) => {
 				<slot name="button">...</slot>
 			</button>
 		</div>
-		${n(
+		${n$1(
     active,
-    () => x` <cosmoz-dropdown-content
+    () => x`<cosmoz-dropdown-content
+					${n(showPopover)}
+					popover
 					id="content"
 					part="content"
 					exportparts="wrap, content"
@@ -1297,7 +1331,9 @@ const List = () => x`
 			padding: 10px 24px;
 			background: transparent;
 			color: var(--cosmoz-dropdown-menu-color, #101010);
-			transition: background 0.25s, color 0.25s;
+			transition:
+				background 0.25s,
+				color 0.25s;
 			border: none;
 			cursor: pointer;
 			font-size: 14px;
@@ -1322,13 +1358,13 @@ const List = () => x`
 	<slot></slot>
 `;
 const Menu = ({ placement }) => x` <cosmoz-dropdown
-	.placement=${placement}
-	part="dropdown"
-	exportparts="anchor, button, content, wrap, dropdown"
->
-	<slot name="button" slot="button"></slot>
-	<cosmoz-dropdown-list><slot></slot></cosmoz-dropdown-list>
-</cosmoz-dropdown>`;
+		.placement=${placement}
+		part="dropdown"
+		exportparts="anchor, button, content, wrap, dropdown"
+	>
+		<slot name="button" slot="button"></slot>
+		<cosmoz-dropdown-list><slot></slot></cosmoz-dropdown-list>
+	</cosmoz-dropdown>`;
 customElements.define(
   "cosmoz-dropdown-content",
   component(Content)
@@ -1366,6 +1402,7 @@ const DropdownMenu = {
   }
 };
 const DropdownWithBug = {
+  name: "Dropdown with Bug - fixed on Chrome",
   render: () => {
     return x`<style>
 				.wrapper-with-bug {
@@ -1375,9 +1412,18 @@ const DropdownWithBug = {
 					height: 300px;
 					top: 100px;
 					left: 100px;
-					margin: 0 auto;
 					background-color: blueviolet;
 					transform: translate3d(0, 0, 0);
+				}
+				.overlay {
+					width: 350px;
+					height: 350px;
+					background-color: green;
+					transform: translate3d(0, 0, 0);
+					position: absolute;
+					top: 150px;
+					left: 100px;
+					z-index: 3;
 				}
 			</style>
 			<div class="wrapper-with-bug">
@@ -1388,7 +1434,8 @@ const DropdownWithBug = {
 					<div>Item 4</div>
 					<div>Item 5</div>
 				</cosmoz-dropdown>
-			</div>`;
+			</div>
+			<div class="overlay"></div>`;
   }
 };
 const __namedExportsOrder = ["Dropdown", "DropdownMenu", "DropdownWithBug"];
