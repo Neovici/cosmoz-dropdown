@@ -46,6 +46,7 @@ const Content = (host: HTMLElement & ContentProps) => {
 				border: 0;
 				padding: 0;
 				overflow: visible;
+				background: var(--cosmoz-dropdown-bg-color, #fff);
 			}
 			.wrap {
 				background: var(--cosmoz-dropdown-bg-color, #fff);
