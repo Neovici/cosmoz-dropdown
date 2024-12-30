@@ -1,4 +1,4 @@
-import { d as dedent } from './index-PiJ8i7Ux.js';
+import { d as dedent } from './index-Kjm4kNkQ.js';
 
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
 // require the crypto API and do not support built-in fallback to lower quality random number
@@ -51,16 +51,6 @@ function v4(options, buf, offset) {
 
   rnds[6] = rnds[6] & 0x0f | 0x40;
   rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
-
-  if (buf) {
-    offset = offset || 0;
-
-    for (let i = 0; i < 16; ++i) {
-      buf[offset + i] = rnds[i];
-    }
-
-    return buf;
-  }
 
   return unsafeStringify(rnds);
 }

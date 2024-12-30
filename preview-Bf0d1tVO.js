@@ -1,4 +1,4 @@
-import { d as dedent } from './index-PiJ8i7Ux.js';
+import { d as dedent } from './index-Kjm4kNkQ.js';
 
 var PARAM_KEY="backgrounds";var{document,window}=__STORYBOOK_MODULE_GLOBAL__.global,isReduceMotionEnabled=()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches,getBackgroundColorByName=(currentSelectedValue,backgrounds=[],defaultName)=>{if(currentSelectedValue==="transparent")return "transparent";if(backgrounds.find(background=>background.value===currentSelectedValue))return currentSelectedValue;let defaultBackground=backgrounds.find(background=>background.name===defaultName);if(defaultBackground)return defaultBackground.value;if(defaultName){let availableColors=backgrounds.map(background=>background.name).join(", ");__STORYBOOK_MODULE_CLIENT_LOGGER__.logger.warn(dedent`
         Backgrounds Addon: could not find the default color "${defaultName}".

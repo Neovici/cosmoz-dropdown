@@ -1,4 +1,4 @@
-import { d as dedent } from './index-PiJ8i7Ux.js';
+import { d as dedent } from './index-Kjm4kNkQ.js';
 
 var clearStyles=selector=>{(Array.isArray(selector)?selector:[selector]).forEach(clearStyle);},clearStyle=input=>{let selector=typeof input=="string"?input:input.join(""),element=__STORYBOOK_MODULE_GLOBAL__.global.document.getElementById(selector);element&&element.parentElement&&element.parentElement.removeChild(element);},addOutlineStyles=(selector,css)=>{let existingStyle=__STORYBOOK_MODULE_GLOBAL__.global.document.getElementById(selector);if(existingStyle)existingStyle.innerHTML!==css&&(existingStyle.innerHTML=css);else {let style=__STORYBOOK_MODULE_GLOBAL__.global.document.createElement("style");style.setAttribute("id",selector),style.innerHTML=css,__STORYBOOK_MODULE_GLOBAL__.global.document.head.appendChild(style);}};var PARAM_KEY="outline";function outlineCSS(selector){return dedent`
     ${selector} body {
