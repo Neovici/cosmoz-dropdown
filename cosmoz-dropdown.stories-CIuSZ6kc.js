@@ -2284,11 +2284,12 @@ const style = css`
 	}
 `;
 const Dropdown$1 = (host) => {
-  const { placement, strategy, render } = host;
+  const { placement, strategy, middleware, render } = host;
   const { active, onToggle } = useHostFocus(host);
   const { styles, setReference, setFloating } = useFloating({
     placement,
-    strategy
+    strategy,
+    middleware
   });
   return x` <div class="anchor" part="anchor" ${n$1(setReference)}>
 			<button
