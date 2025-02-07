@@ -68,6 +68,9 @@
     "./use-focus": "./dist/use-focus.js",
     "./use-floating": "./dist/use-floating.js",
     "./connectable": "./dist/connectable.js",
+    "./dropdown": "./dist/cosmoz-dropdown.js",
+    "./menu": "./dist/cosmoz-dropdown-menu.js",
+    "./install": "./dist/install.js",
     "./src/use-focus.js": "./dist/use-focus.js"
   },
   "dependencies": {
