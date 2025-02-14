@@ -2219,8 +2219,9 @@ const useFloating = ({
   placement = "bottom-start",
   strategy,
   middleware = defaultMiddleware
-}) => {
-  const [[reference, floating], setRefs] = useState([]);
+} = {}) => {
+  const [reference, setReference] = useState();
+  const [floating, setFloating] = useState();
   const [position, setPosition] = useState();
   useEffect(() => {
     if (!reference || !(floating instanceof HTMLElement)) {
@@ -2238,11 +2239,8 @@ const useFloating = ({
     );
   }, [reference, floating, placement, strategy, middleware]);
   return {
-    setReference: useCallback(
-      (el) => setRefs(([, _]) => [el, _]),
-      []
-    ),
-    setFloating: useCallback((el) => setRefs(([_]) => [_, el]), []),
+    setReference,
+    setFloating,
     styles: useMemo(
       () => position ? { left: `${position.x}px`, top: `${position.y}px` } : {},
       [position?.x, position?.y]
