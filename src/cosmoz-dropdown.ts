@@ -1,11 +1,11 @@
-import { component, css } from '@pionjs/pion';
+import { component, css, Options } from '@pionjs/pion';
 import { html, nothing } from 'lit-html';
 import { when } from 'lit-html/directives/when.js';
 import { ref } from 'lit-html/directives/ref.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
 import { guard } from 'lit-html/directives/guard.js';
 import { useHostFocus, UseFocusOpts } from './use-focus';
-import { Content } from './cosmoz-dropdown-content';
+import { Content, define as defineContent } from './cosmoz-dropdown-content';
 import { useFloating, UseFloating } from './use-floating';
 
 const preventDefault = <T extends Event>(e: T) => e.preventDefault();
@@ -60,7 +60,7 @@ const style = css`
 	}
 `;
 
-const Dropdown = (host: HTMLElement & Props) => {
+const Dropdown = (contentTag: string) => (host: HTMLElement & Props) => {
 	const { placement, strategy, middleware, render } = host;
 	const { active, onToggle } = useHostFocus(host);
 	const { styles, setReference, setFloating } = useFloating({
@@ -81,7 +81,7 @@ const Dropdown = (host: HTMLElement & Props) => {
 		${when(
 			active,
 			() =>
-				html`<cosmoz-dropdown-content
+				html`<${contentTag}
 					popover
 					id="content"
 					part="content"
@@ -89,15 +89,20 @@ const Dropdown = (host: HTMLElement & Props) => {
 					style="${styleMap(styles)}"
 					@connected=${(e: Event) => (e.target as HTMLElement).showPopover?.()}
 					${ref(setFloating)}
-					><slot></slot>${guard(
-						[render],
-						() => render?.() || nothing,
-					)}</cosmoz-dropdown-content
-				> `,
+					><slot></slot>${guard([render], () => render?.() || nothing)}</${contentTag}>`,
 		)}`;
 };
-customElements.define(
-	'cosmoz-dropdown',
-	component<Props>(Dropdown, { styleSheets: [style] }),
-);
+
+export const element = (contentTag: string) => (opts?: Options) =>
+	component<Props>(Dropdown(contentTag), { ...opts, styleSheets: [style] });
+
+export const define = (
+	name = 'cosmoz-dropdown',
+	registry: CustomElementRegistry = window.customElements,
+) => {
+	const contentTag = `${name}-content`;
+	registry.define(name, element(contentTag)());
+	defineContent(contentTag);
+};
+
 export { Dropdown, Content };
