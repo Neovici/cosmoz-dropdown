@@ -1,4 +1,4 @@
-import { component, css } from '@pionjs/pion';
+import { component, css, Options } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { connectable } from './connectable';
 
@@ -32,7 +32,10 @@ const style = css`
 export const Content = () =>
 	html`<div class="wrap" part="wrap"><slot></slot></div>`;
 
-customElements.define(
-	'cosmoz-dropdown-content',
-	connectable(component(Content, { styleSheets: [style] })),
-);
+export const element = (opts?: Options) =>
+	connectable(component(Content, { ...opts, styleSheets: [style] }));
+
+export const define = (
+	name = 'cosmoz-dropdown-content',
+	registry: CustomElementRegistry = window.customElements,
+) => registry.define(name, element());
