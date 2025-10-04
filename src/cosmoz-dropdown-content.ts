@@ -10,6 +10,7 @@ const style = css`
 		box-sizing: border-box;
 		padding: var(--cosmoz-dropdown-spacing, 0px);
 		z-index: var(--cosmoz-dropdown-z-index, 2);
+		border-radius: 20px;
 	}
 	:host(:popover-open) {
 		margin: 0;
@@ -23,6 +24,7 @@ const style = css`
 			--cosmoz-dropdown-box-shadow,
 			0px 3px 4px 2px rgba(0, 0, 0, 0.1)
 		);
+		border-radius: 20px;
 	}
 	::slotted(*) {
 		display: block;
