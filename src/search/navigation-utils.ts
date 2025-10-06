@@ -149,12 +149,10 @@ export const handleKeyboardEvent = (
 
 	switch (e.key) {
 		case 'ArrowUp':
-		case 'Up':
 			e.preventDefault();
 			handleArrowUp(currentIndex, ctx);
 			break;
 		case 'ArrowDown':
-		case 'Down':
 			e.preventDefault();
 			handleArrowDown(currentIndex, ctx);
 			break;
