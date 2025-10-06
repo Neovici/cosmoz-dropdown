@@ -22,7 +22,7 @@ export const SearchableList = (host: HTMLElement & SearchableListProps) => {
 	// Use menuHost (the parent menu) for navigation since that's where the actual button elements are
 	const navigationHost = menuHost || host;
 	
-	const hasVisibleItems = useVisibleItems({ host: navigationHost, searchTerm });
+	const hasVisibleItems = useVisibleItems({ host, searchTerm });
 	const { position, focusSearchInput } = useSearchNavigation({ host: navigationHost, onSearchChange });
 
 	const handleSearchInput = useCallback((e: Event) => {
