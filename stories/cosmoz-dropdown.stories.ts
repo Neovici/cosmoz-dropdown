@@ -37,6 +37,25 @@ export const DropdownMenu: Story = {
 	},
 };
 
+export const SearchableMenu: Story = {
+	render: () => {
+		return html`
+			<cosmoz-dropdown-menu-searchable>
+				<div>Home</div>
+				<div>About</div>
+				<div>Services</div>
+				<div>Products</div>
+				<div>Portfolio</div>
+				<div>Contact</div>
+				<div>Blog</div>
+				<div>FAQ</div>
+				<div>Support</div>
+				<div>Documentation</div>
+			</cosmoz-dropdown-menu-searchable>
+		`;
+	},
+};
+
 export const DropdownWithBug: Story = {
 	name: 'Dropdown with Bug - fixed on Chrome',
 	render: () => {

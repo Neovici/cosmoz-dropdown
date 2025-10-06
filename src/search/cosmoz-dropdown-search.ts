@@ -6,6 +6,7 @@ import { searchableMenuStyle } from './style';
 import { useSearchNavigation } from './use-navigation.js';
 import { useSearchFilter } from './use-search-filter';
 import { useVisibleItems } from './use-visible-items';
+import { SEARCHABLE_LIST_TAG } from './types';
 
 interface SearchableListProps {
 	searchTerm: string;
@@ -81,7 +82,7 @@ export const SearchableList = (host: HTMLElement & SearchableListProps) => {
 };
 
 customElements.define(
-	'cosmoz-dropdown-list-searchable',
+	SEARCHABLE_LIST_TAG,
 	component<SearchableListProps>(SearchableList, { styleSheets: [searchableMenuStyle] }),
 );
 

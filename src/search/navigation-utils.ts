@@ -3,7 +3,7 @@
  * These are extracted from use-navigation.ts to improve testability and maintainability.
  */
 
-import type { Position, KeyboardContext } from './types';
+import { SEARCHABLE_LIST_TAG, BUTTON_SLOT, type Position, type KeyboardContext } from './types';
 
 export type { Position, KeyboardContext };
 
@@ -13,7 +13,7 @@ export type { Position, KeyboardContext };
  * @returns {HTMLInputElement | null} The search input element or null if not found
  */
 export const getSearchInput = (host: HTMLElement): HTMLInputElement | null => {
-	const listElement = host.shadowRoot?.querySelector('cosmoz-dropdown-list-searchable');
+	const listElement = host.shadowRoot?.querySelector(SEARCHABLE_LIST_TAG);
 	const input = listElement?.shadowRoot?.querySelector('.search-input') as HTMLInputElement;
 	return input || null;
 };
@@ -25,7 +25,7 @@ export const getSearchInput = (host: HTMLElement): HTMLInputElement | null => {
  */
 export const getVisibleItems = (host: HTMLElement): HTMLElement[] => {
 	const children = Array.from(host.children).filter(
-		child => child.slot !== 'button' // Skip the dropdown button itself
+		child => child.slot !== BUTTON_SLOT // Skip the dropdown button itself
 	) as HTMLElement[];
 	return children.filter(el => el.style.display !== 'none');
 };
@@ -36,7 +36,7 @@ export const getVisibleItems = (host: HTMLElement): HTMLElement[] => {
  */
 export const makeElementsFocusable = (host: HTMLElement): void => {
 	const children = Array.from(host.children).filter(
-		child => child.slot !== 'button'
+		child => child.slot !== BUTTON_SLOT
 	) as HTMLElement[];
 	
 	children.forEach((element, idx) => {

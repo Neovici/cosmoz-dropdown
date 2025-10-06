@@ -1,4 +1,14 @@
 /**
+ * Tag name for the searchable dropdown list component
+ */
+export const SEARCHABLE_LIST_TAG = 'cosmoz-dropdown-list-searchable';
+
+/**
+ * Slot name for the dropdown button element
+ */
+export const BUTTON_SLOT = 'button';
+
+/**
  * Represents the current focus position in the dropdown navigation.
  */
 export interface Position {
