@@ -3,9 +3,11 @@ import { css } from '@pionjs/pion';
 export const searchableMenuStyle = css`
 	:host {
 		display: contents;
-		max-height: var(--cosmoz-dropdown-menu-max-height, calc(96vh - 64px));
-		overflow-y: auto;
+	}
+
+	.dropdown-content {
 		border-radius: var(--cosmoz-dropdown-border-radius, 15px);
+		overflow: hidden;
 	}
 
 	.search-container {
@@ -15,7 +17,6 @@ export const searchableMenuStyle = css`
 		background: var(--cosmoz-dropdown-menu-bg-color, #fff);
 		border-bottom: 1px solid var(--cosmoz-dropdown-search-border-color, #e0e0e0);
 		padding: var(--cosmoz-dropdown-search-padding, 8px 12px);
-		border-radius: var(--cosmoz-dropdown-border-radius, 15px) var(--cosmoz-dropdown-border-radius, 15px) 0 0;
 	}
 
 	.search-input {
@@ -38,6 +39,12 @@ export const searchableMenuStyle = css`
 
 	.search-input::placeholder {
 		color: var(--cosmoz-dropdown-search-input-placeholder-color, #999);
+	}
+
+	.listbox-wrapper {
+		max-height: var(--cosmoz-dropdown-menu-max-height, 300px);
+		overflow-y: auto;
+		overflow-x: hidden;
 	}
 
 	::slotted(:not(slot)) {

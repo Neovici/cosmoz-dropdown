@@ -41,24 +41,28 @@ export const SearchableList = (host: HTMLElement & SearchableListProps) => {
 	}, []);
 
 	return html`
-		<div class="search-container">
-			<input
-				class="search-input"
-				type="text"
-				role="combobox"
-				aria-autocomplete="list"
-				aria-controls="dropdown-listbox"
-				aria-expanded="true"
-				aria-activedescendant=${position.focused === 'item' ? `dropdown-item-${position.index}` : ''}
-				.value=${searchTerm}
-				placeholder=${placeholder}
-				@input=${handleSearchInput}
-			/>
+		<div class="dropdown-content">
+			<div class="search-container">
+				<input
+					class="search-input"
+					type="text"
+					role="combobox"
+					aria-autocomplete="list"
+					aria-controls="dropdown-listbox"
+					aria-expanded="true"
+					aria-activedescendant=${position.focused === 'item' ? `dropdown-item-${position.index}` : ''}
+					.value=${searchTerm}
+					placeholder=${placeholder}
+					@input=${handleSearchInput}
+				/>
+			</div>
+			<div class="listbox-wrapper">
+				<div role="listbox" id="dropdown-listbox">
+					<slot></slot>
+				</div>
+				${!hasVisibleItems && searchTerm ? html`<div class="no-results" role="status" aria-live="polite">${noResultsText}</div>` : ''}
+			</div>
 		</div>
-		<div role="listbox" id="dropdown-listbox">
-			<slot></slot>
-		</div>
-		${!hasVisibleItems && searchTerm ? html`<div class="no-results" role="status" aria-live="polite">${noResultsText}</div>` : ''}
 	`;
 };
 
