@@ -7,13 +7,14 @@ const style = css`
 		display: contents;
 		max-height: var(--cosmoz-dropdown-menu-max-height, calc(96vh - 64px));
 		overflow-y: auto;
+		border-radius: var(--cosmoz-dropdown-border-radius, 15px);
 	}
 	::slotted(:not(slot)) {
 		display: block;
 		--paper-button_-_display: block;
 		box-sizing: border-box;
 		padding: 10px 24px;
-		background: transparent;
+		background: var(--cosmoz-dropdown-menu-bg-color, transparent);
 		color: var(--cosmoz-dropdown-menu-color, #101010);
 		transition:
 			background 0.25s,
