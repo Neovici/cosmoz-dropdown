@@ -1,0 +1,106 @@
+import { component, useCallback, useEffect, useState } from '@pionjs/pion';
+import { html } from 'lit-html';
+import type { Props as DropdownProps } from '../cosmoz-dropdown';
+import '../cosmoz-dropdown.js';
+import { searchableMenuStyle } from './style';
+import { useSearchNavigation } from './use-navigation.js';
+import { useSearchFilter } from './use-search-filter';
+import { useVisibleItems } from './use-visible-items';
+
+interface SearchableListProps {
+	searchTerm: string;
+	placeholder?: string;
+	onSearchChange: (term: string) => void;
+	noResultsText?: string;
+	menuHost?: HTMLElement; // The parent menu element that contains the actual button elements
+}
+
+export const SearchableList = (host: HTMLElement & SearchableListProps) => {
+	const { searchTerm, placeholder = 'Search...', onSearchChange, noResultsText = 'No results found', menuHost } = host;
+	
+	// Use menuHost (the parent menu) for navigation since that's where the actual button elements are
+	const navigationHost = menuHost || host;
+	
+	const hasVisibleItems = useVisibleItems({ host: navigationHost, searchTerm });
+	const { position } = useSearchNavigation({ host: navigationHost, onSearchChange });
+
+	const handleSearchInput = useCallback((e: Event) => {
+		const target = e.target as HTMLInputElement;
+		onSearchChange(target.value);
+	}, [onSearchChange]);
+
+	// Auto-focus search input when dropdown opens
+	useEffect(() => {
+		const input = host.shadowRoot?.querySelector('.search-input') as HTMLInputElement;
+		if (input) {
+			// Small delay to ensure DOM is ready
+			requestAnimationFrame(() => {
+				input.focus();
+			});
+		}
+	}, []);
+
+	return html`
+		<div class="search-container">
+			<input
+				class="search-input"
+				type="text"
+				role="combobox"
+				aria-autocomplete="list"
+				aria-controls="dropdown-listbox"
+				aria-expanded="true"
+				aria-activedescendant=${position.focused === 'item' ? `dropdown-item-${position.index}` : ''}
+				.value=${searchTerm}
+				placeholder=${placeholder}
+				@input=${handleSearchInput}
+			/>
+		</div>
+		<div role="listbox" id="dropdown-listbox">
+			<slot></slot>
+		</div>
+		${!hasVisibleItems && searchTerm ? html`<div class="no-results" role="status" aria-live="polite">${noResultsText}</div>` : ''}
+	`;
+};
+
+customElements.define(
+	'cosmoz-dropdown-list-searchable',
+	component<SearchableListProps>(SearchableList, { styleSheets: [searchableMenuStyle] }),
+);
+
+type SearchableMenuProps = Pick<DropdownProps, 'placement'> & {
+	searchPlaceholder?: string;
+	noResultsText?: string;
+};
+
+export const SearchableMenu = (host: HTMLElement & SearchableMenuProps) => {
+	const { placement, searchPlaceholder, noResultsText } = host;
+	const [searchTerm, setSearchTerm] = useState('');
+
+	const handleSearchChange = useCallback((term: string) => {
+		setSearchTerm(term);
+	}, []);
+
+	// Use the search filter hook to handle filtering
+	useSearchFilter({ host, searchTerm });
+
+	return html`
+		<cosmoz-dropdown
+			.placement=${placement}
+			part="dropdown"
+			exportparts="anchor, button, content, wrap, dropdown"
+		>
+			<slot name="button" slot="button"></slot>
+			<cosmoz-dropdown-list-searchable
+				.searchTerm=${searchTerm}
+				.placeholder=${searchPlaceholder}
+				.noResultsText=${noResultsText}
+				.onSearchChange=${handleSearchChange}
+				.menuHost=${host}
+			>
+				<slot></slot>
+			</cosmoz-dropdown-list-searchable>
+		</cosmoz-dropdown>
+	`;
+};
+
+customElements.define('cosmoz-dropdown-menu-searchable', component<SearchableMenuProps>(SearchableMenu));
