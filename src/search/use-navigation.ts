@@ -4,9 +4,8 @@ import {
 	getVisibleItems,
 	makeElementsFocusable,
 	handleKeyboardEvent,
-	type Position,
-	type KeyboardContext,
 } from './navigation-utils';
+import type { Position, KeyboardContext } from './types';
 
 export interface UseSearchNavigationOptions {
 	host: HTMLElement;

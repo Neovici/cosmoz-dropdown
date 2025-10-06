@@ -3,19 +3,9 @@
  * These are extracted from use-navigation.ts to improve testability and maintainability.
  */
 
-export interface Position {
-	index: number;
-	focused: 'search' | 'item';
-}
+import type { Position, KeyboardContext } from './types';
 
-export interface KeyboardContext {
-	host: HTMLElement;
-	position: Position;
-	visibleItems: HTMLElement[];
-	onSearchChange: (term: string) => void;
-	focusSearchInput: () => void;
-	focusItem: (index: number) => void;
-}
+export type { Position, KeyboardContext };
 
 /**
  * Gets the search input element from the dropdown's shadow DOM
