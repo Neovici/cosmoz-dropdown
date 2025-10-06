@@ -34,9 +34,9 @@ export const SearchableList = (host: HTMLElement & SearchableListProps) => {
 		// Listen for when the dropdown content becomes visible
 		const handleOpen = () => {
 			// Small delay to ensure the search input is rendered
-			setTimeout(() => {
+			requestAnimationFrame(() => {
 				focusSearchInput();
-			}, 0);
+			});
 		};
 
 		// The dropdown content gets shown when the dropdown opens
