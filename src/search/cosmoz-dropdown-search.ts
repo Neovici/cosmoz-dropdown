@@ -22,7 +22,7 @@ export const SearchableList = (host: HTMLElement & SearchableListProps) => {
 	const navigationHost = menuHost || host;
 	
 	const hasVisibleItems = useVisibleItems({ host: navigationHost, searchTerm });
-	const { position } = useSearchNavigation({ host: navigationHost, onSearchChange });
+	const { position, focusSearchInput } = useSearchNavigation({ host: navigationHost, onSearchChange });
 
 	const handleSearchInput = useCallback((e: Event) => {
 		const target = e.target as HTMLInputElement;
@@ -31,14 +31,28 @@ export const SearchableList = (host: HTMLElement & SearchableListProps) => {
 
 	// Auto-focus search input when dropdown opens
 	useEffect(() => {
-		const input = host.shadowRoot?.querySelector('.search-input') as HTMLInputElement;
-		if (input) {
-			// Small delay to ensure DOM is ready
-			requestAnimationFrame(() => {
-				input.focus();
+		// Listen for when the dropdown content becomes visible
+		const handleOpen = () => {
+			// Small delay to ensure the search input is rendered
+			setTimeout(() => {
+				focusSearchInput();
+			}, 0);
+		};
+
+		// The dropdown content gets shown when the dropdown opens
+		// We can detect this by listening for when the element becomes visible
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting && entry.intersectionRatio > 0) {
+					handleOpen();
+				}
 			});
-		}
-	}, []);
+		});
+
+		observer.observe(host);
+
+		return () => observer.disconnect();
+	}, [focusSearchInput]);
 
 	return html`
 		<div class="dropdown-content">

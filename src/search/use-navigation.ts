@@ -10,11 +10,8 @@ interface Position {
 	focused: 'search' | 'item';
 }
 
-// eslint-disable-next-line max-statements
-export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigationOptions) => {
-	const [position, setPosition] = useState<Position>({ index: -1, focused: 'search' });
-	const [slotVersion, setSlotVersion] = useState(0);
-
+// Helper hook for managing DOM elements and visibility
+const useDropdownElements = (host: HTMLElement, slotVersion: number) => {
 	const getSlottedElements = useCallback(() => {
 		// The buttons are light DOM children of the menu host, not slotted in shadow DOM
 		const children = Array.from(host.children).filter(
@@ -41,13 +38,18 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 		return input || null;
 	}, [host]);
 
+	return { visibleItems, getSearchInput, getSlottedElements };
+};
+
+// Helper hook for focus management
+const useFocusManagement = (visibleItems: HTMLElement[], getSearchInput: () => HTMLInputElement | null, setPosition: (pos: Position) => void) => {
 	const focusSearchInput = useCallback(() => {
 		const searchInput = getSearchInput();
 		if (searchInput) {
 			searchInput.focus();
 			setPosition({ index: -1, focused: 'search' });
 		}
-	}, [getSearchInput]);
+	}, [getSearchInput, setPosition]);
 
 	const focusItem = useCallback((index: number) => {
 		if (index >= 0 && index < visibleItems.length) {
@@ -58,8 +60,27 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 			item.focus();
 			setPosition({ index, focused: 'item' });
 		}
-	}, [visibleItems]);
+	}, [visibleItems, setPosition]);
 
+	return { focusSearchInput, focusItem };
+};
+
+// Helper hook for keyboard event handlers  
+const useKeyboardHandlers = ({
+	position,
+	visibleItems,
+	focusItem,
+	focusSearchInput,
+	onSearchChange,
+	getSearchInput
+}: {
+	position: Position;
+	visibleItems: HTMLElement[];
+	focusItem: (index: number) => void;
+	focusSearchInput: () => void;
+	onSearchChange: (term: string) => void;
+	getSearchInput: () => HTMLInputElement | null;
+}) => {
 	const triggerSingleVisibleItem = useCallback((e: KeyboardEvent) => {
 		if (visibleItems.length === 1) {
 			e.preventDefault();
@@ -67,7 +88,6 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 		}
 	}, [visibleItems]);
 
-	// Handle arrow up navigation
 	const handleArrowUp = useCallback((currentIndex: number) => {
 		if (position.focused === 'search') {
 			if (visibleItems.length > 0) {
@@ -80,7 +100,6 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 		}
 	}, [position.focused, focusItem, focusSearchInput, visibleItems]);
 
-	// Handle arrow down navigation
 	const handleArrowDown = useCallback((currentIndex: number) => {
 		if (position.focused === 'search') {
 			if (visibleItems.length > 0) {
@@ -91,7 +110,6 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 		}
 	}, [position.focused, focusItem, visibleItems]);
 
-	// Handle enter key
 	const handleEnter = useCallback((currentIndex: number, e: KeyboardEvent) => {
 		if (position.focused === 'item' && currentIndex >= 0 && currentIndex < visibleItems.length) {
 			visibleItems[currentIndex].click();
@@ -100,7 +118,6 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 		}
 	}, [position.focused, triggerSingleVisibleItem, visibleItems]);
 
-	// Handle escape key
 	const handleEscape = useCallback(() => {
 		onSearchChange('');
 		const searchInput = getSearchInput();
@@ -110,8 +127,28 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 		focusSearchInput();
 	}, [onSearchChange, getSearchInput, focusSearchInput]);
 
-	// Main keyboard handler - simplified like cosmoz-autocomplete
-	const handleKeyboard = useCallback((e: KeyboardEvent) => {
+	return { handleArrowUp, handleArrowDown, handleEnter, handleEscape };
+};
+
+// Helper hook for the main keyboard event handler
+const useMainKeyboardHandler = ({
+	host,
+	position,
+	getSearchInput,
+	handleArrowUp,
+	handleArrowDown,
+	handleEnter,
+	handleEscape
+}: {
+	host: HTMLElement;
+	position: Position;
+	getSearchInput: () => HTMLInputElement | null;
+	handleArrowUp: (currentIndex: number) => void;
+	handleArrowDown: (currentIndex: number) => void;
+	handleEnter: (currentIndex: number, e: KeyboardEvent) => void;
+	handleEscape: () => void;
+}) => {
+	return useCallback((e: KeyboardEvent) => {
 		if (e.defaultPrevented || (e.ctrlKey && e.altKey)) {
 			return;
 		}
@@ -119,6 +156,16 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 		// Only handle keys if we have a search input (dropdown is open)
 		const searchInput = getSearchInput();
 		if (!searchInput) {
+			return;
+		}
+
+		// Only handle keyboard events when the dropdown or its children have focus
+		const activeElement = document.activeElement;
+		const isWithinDropdown = host.contains(activeElement) || 
+			searchInput === activeElement ||
+			host.shadowRoot?.contains(activeElement);
+		
+		if (!isWithinDropdown) {
 			return;
 		}
 
@@ -144,9 +191,16 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 				handleEscape();
 				break;
 		}
-	}, [getSearchInput, position, handleArrowUp, handleArrowDown, handleEnter, handleEscape]);
+	}, [host, getSearchInput, position, handleArrowUp, handleArrowDown, handleEnter, handleEscape]);
+};
 
-	// Set up keyboard listener and ensure items are focusable
+// Helper hook for setting up event listeners and DOM management
+const useEventListeners = (
+	host: HTMLElement,
+	handleKeyboard: (e: KeyboardEvent) => void,
+	getSlottedElements: () => HTMLElement[],
+	setSlotVersion: (fn: (v: number) => number) => void
+) => {
 	useEffect(() => {
 		const makeElementsFocusable = () => {
 			const elements = getSlottedElements();
@@ -164,8 +218,9 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 			makeElementsFocusable();
 		};
 
-		// Add global keyboard listener with capture to match cosmoz-autocomplete pattern
-		document.addEventListener('keydown', handleKeyboard, true);
+		// Add keyboard listener scoped to the host element instead of document
+		// This prevents multiple global listeners and improves performance
+		host.addEventListener('keydown', handleKeyboard, true);
 
 		// Initial setup
 		makeElementsFocusable();
@@ -175,10 +230,41 @@ export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigatio
 		observer.observe(host, { childList: true });
 
 		return () => {
-			document.removeEventListener('keydown', handleKeyboard, true);
+			host.removeEventListener('keydown', handleKeyboard, true);
 			observer.disconnect();
 		};
-	}, [host, handleKeyboard, getSlottedElements]);
+	}, [host, handleKeyboard, getSlottedElements, setSlotVersion]);
+};
+
+export const useSearchNavigation = ({ host, onSearchChange }: UseSearchNavigationOptions) => {
+	const [position, setPosition] = useState<Position>({ index: -1, focused: 'search' });
+	const [slotVersion, setSlotVersion] = useState(0);
+
+	// Use helper hooks to break down complexity
+	const { visibleItems, getSearchInput, getSlottedElements } = useDropdownElements(host, slotVersion);
+	const { focusSearchInput, focusItem } = useFocusManagement(visibleItems, getSearchInput, setPosition);
+	const { handleArrowUp, handleArrowDown, handleEnter, handleEscape } = useKeyboardHandlers({
+		position,
+		visibleItems,
+		focusItem,
+		focusSearchInput,
+		onSearchChange,
+		getSearchInput
+	});
+
+	// Main keyboard handler
+	const handleKeyboard = useMainKeyboardHandler({
+		host,
+		position,
+		getSearchInput,
+		handleArrowUp,
+		handleArrowDown,
+		handleEnter,
+		handleEscape
+	});
+
+	// Set up event listeners and DOM management
+	useEventListeners(host, handleKeyboard, getSlottedElements, setSlotVersion);
 
 	// Reset position when visible items change to prevent out-of-bounds index
 	useEffect(() => {
