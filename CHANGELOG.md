@@ -1,3 +1,9 @@
+## [6.4.0](https://github.com/neovici/cosmoz-dropdown/compare/v6.3.0...v6.4.0) (2025-10-06)
+
+### Features
+
+* color variables and border radius ([#40](https://github.com/neovici/cosmoz-dropdown/issues/40)) ([52a57f8](https://github.com/neovici/cosmoz-dropdown/commit/52a57f84c363857c0253376a38c98f12f9fdd686))
+
 ## [6.3.0](https://github.com/neovici/cosmoz-dropdown/compare/v6.2.1...v6.3.0) (2025-08-12)
 
 ### Features
