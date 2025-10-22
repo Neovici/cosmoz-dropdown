@@ -1,3 +1,9 @@
+## [6.5.0](https://github.com/neovici/cosmoz-dropdown/compare/v6.4.0...v6.5.0) (2025-10-22)
+
+### Features
+
+* update deps ([674e863](https://github.com/neovici/cosmoz-dropdown/commit/674e863ea9f63df245bdbd5eded612244b016633))
+
 ## [6.4.0](https://github.com/neovici/cosmoz-dropdown/compare/v6.3.0...v6.4.0) (2025-10-06)
 
 ### Features
