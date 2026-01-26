@@ -1,3 +1,17 @@
+## [7.0.0](https://github.com/neovici/cosmoz-dropdown/compare/v6.5.0...v7.0.0) (2026-01-26)
+
+### ⚠ BREAKING CHANGES
+
+* button styling removed
+
+### Features
+
+* remove default button styling ([#43](https://github.com/neovici/cosmoz-dropdown/issues/43)) ([acdb1c0](https://github.com/neovici/cosmoz-dropdown/commit/acdb1c0c2c2f1efb33fb7c99d5dd836b870e4477))
+
+### Bug Fixes
+
+* release ([7907ae4](https://github.com/neovici/cosmoz-dropdown/commit/7907ae4c2c0dd1a96e0ab875572fcf6ac8c8f935))
+
 ## [6.5.0](https://github.com/neovici/cosmoz-dropdown/compare/v6.4.0...v6.5.0) (2025-10-22)
 
 ### Features
