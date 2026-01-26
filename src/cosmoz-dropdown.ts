@@ -20,37 +20,7 @@ const style = css`
 		padding: var(--cosmoz-dropdown-anchor-spacing);
 	}
 	button {
-		border: none;
-		cursor: pointer;
-		position: relative;
 		pointer-events: auto;
-		outline: none;
-		background: var(
-			--cosmoz-dropdown-button-bg-color,
-			var(--cosmoz-button-bg-color, #101010)
-		);
-		--color: var(
-			--cosmoz-dropdown-button-color,
-			var(--cosmoz-button-color, #fff)
-		);
-		color: var(--color);
-		border-radius: var(--cosmoz-dropdown-button-radius, 50%);
-		width: var(
-			--cosmoz-dropdown-button-width,
-			var(--cosmoz-dropdown-button-size, 40px)
-		);
-		height: var(
-			--cosmoz-dropdown-button-height,
-			var(--cosmoz-dropdown-button-size, 40px)
-		);
-		padding: var(--cosmoz-dropdown-button-padding);
-	}
-	button:hover {
-		background: var(
-			--cosmoz-dropdown-button-hover-bg-color,
-			var(--cosmoz-button-hover-bg-color, #3a3f44)
-		);
-		color: var(--cosmoz-dropdown-button-hover-color, var(--color));
 	}
 	::slotted(svg) {
 		pointer-events: none;
