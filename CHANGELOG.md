@@ -1,3 +1,9 @@
+## [7.0.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.0.0...v7.0.1) (2026-01-27)
+
+### Bug Fixes
+
+* repository URL case sensitivity ([f1d3050](https://github.com/Neovici/cosmoz-dropdown/commit/f1d30508fab5f5deea043c662518610ed2a9dd3f))
+
 ## [7.0.0](https://github.com/neovici/cosmoz-dropdown/compare/v6.5.0...v7.0.0) (2026-01-26)
 
 ### ⚠ BREAKING CHANGES
