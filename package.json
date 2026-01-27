@@ -6,13 +6,13 @@
     "lit-html",
     "web-components"
   ],
-  "homepage": "https://github.com/neovici/cosmoz-dropdown#readme",
+  "homepage": "https://github.com/Neovici/cosmoz-dropdown#readme",
   "bugs": {
-    "url": "https://github.com/neovici/cosmoz-dropdown/issues"
+    "url": "https://github.com/Neovici/cosmoz-dropdown/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neovici/cosmoz-dropdown.git"
+    "url": "git+https://github.com/Neovici/cosmoz-dropdown.git"
   },
   "license": "Apache-2.0",
   "author": "",
