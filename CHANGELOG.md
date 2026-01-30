@@ -1,3 +1,9 @@
+## [7.0.2](https://github.com/Neovici/cosmoz-dropdown/compare/v7.0.1...v7.0.2) (2026-01-30)
+
+### Bug Fixes
+
+* reset default button styles ([#45](https://github.com/Neovici/cosmoz-dropdown/issues/45)) ([f2f456c](https://github.com/Neovici/cosmoz-dropdown/commit/f2f456c28fed03d8d9aa6652dea3705b00ff8cae))
+
 ## [7.0.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.0.0...v7.0.1) (2026-01-27)
 
 ### Bug Fixes
