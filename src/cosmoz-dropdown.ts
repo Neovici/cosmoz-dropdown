@@ -1,12 +1,12 @@
 import { component, css } from '@pionjs/pion';
 import { html, nothing } from 'lit-html';
-import { when } from 'lit-html/directives/when.js';
+import { guard } from 'lit-html/directives/guard.js';
 import { ref } from 'lit-html/directives/ref.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
-import { guard } from 'lit-html/directives/guard.js';
-import { useHostFocus, UseFocusOpts } from './use-focus';
+import { when } from 'lit-html/directives/when.js';
 import { Content } from './cosmoz-dropdown-content';
 import { useFloating, UseFloating } from './use-floating';
+import { UseFocusOpts, useHostFocus } from './use-focus';
 
 const preventDefault = <T extends Event>(e: T) => e.preventDefault();
 
@@ -21,6 +21,10 @@ const style = css`
 	}
 	button {
 		pointer-events: auto;
+		border: none;
+		cursor: pointer;
+		background: transparent;
+		padding: 0;
 	}
 	::slotted(svg) {
 		pointer-events: none;
@@ -72,4 +76,4 @@ customElements.define(
 	'cosmoz-dropdown',
 	component<Props>(Dropdown, { styleSheets: [style] }),
 );
-export { Dropdown, Content };
+export { Content, Dropdown };
