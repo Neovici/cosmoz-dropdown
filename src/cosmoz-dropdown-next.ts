@@ -21,12 +21,8 @@ const style = css`
 
 		border: none;
 		padding: 0;
-		background: var(--cosmoz-dropdown-bg-color, #fff);
-		box-shadow: var(
-			--cosmoz-dropdown-box-shadow,
-			0px 3px 4px 2px rgba(0, 0, 0, 0.1)
-		);
-		border-radius: var(--cosmoz-dropdown-border-radius, 15px);
+		background: transparent;
+		overflow: visible;
 	}
 `;
 

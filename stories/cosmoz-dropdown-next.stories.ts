@@ -11,11 +11,18 @@ export default meta;
 
 export type Story = StoryObj;
 
+const contentStyle = `
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
+	padding: 8px;
+`;
+
 export const DropdownNext: Story = {
 	render: () => {
 		return html`<cosmoz-dropdown-next>
 			<button slot="button">Open Menu</button>
-			<div style="padding: 8px;">
+			<div style=${contentStyle}>
 				<input
 					type="text"
 					placeholder="Search..."
@@ -45,7 +52,7 @@ export const PositionFallbacks: Story = {
 				<div style="position: absolute; top: 8px; left: 8px;">
 					<cosmoz-dropdown-next>
 						<button slot="button">Top Left</button>
-						<div style="padding: 8px;">
+						<div style=${contentStyle}>
 							<div>Item 1</div>
 							<div>Item 2</div>
 							<div>Item 3</div>
@@ -57,7 +64,7 @@ export const PositionFallbacks: Story = {
 				<div style="position: absolute; top: 8px; right: 8px;">
 					<cosmoz-dropdown-next>
 						<button slot="button">Top Right</button>
-						<div style="padding: 8px;">
+						<div style=${contentStyle}>
 							<div>Item 1</div>
 							<div>Item 2</div>
 							<div>Item 3</div>
@@ -69,7 +76,7 @@ export const PositionFallbacks: Story = {
 				<div style="position: absolute; bottom: 8px; left: 8px;">
 					<cosmoz-dropdown-next>
 						<button slot="button">Bottom Left</button>
-						<div style="padding: 8px;">
+						<div style=${contentStyle}>
 							<div>Item 1</div>
 							<div>Item 2</div>
 							<div>Item 3</div>
@@ -81,7 +88,7 @@ export const PositionFallbacks: Story = {
 				<div style="position: absolute; bottom: 8px; right: 8px;">
 					<cosmoz-dropdown-next>
 						<button slot="button">Bottom Right</button>
-						<div style="padding: 8px;">
+						<div style=${contentStyle}>
 							<div>Item 1</div>
 							<div>Item 2</div>
 							<div>Item 3</div>
