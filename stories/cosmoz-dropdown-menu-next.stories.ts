@@ -1,10 +1,10 @@
 import { html } from '@pionjs/pion';
 import type { Meta, StoryObj } from '@storybook/web-components';
-import '../src/cosmoz-dropdown-menu-group-next';
-import '../src/cosmoz-dropdown-menu-next';
-import '../src/cosmoz-dropdown-next';
-import '../src/cosmoz-keybinding-badge';
-import '../src/cosmoz-menu-label';
+import '../src/next/cosmoz-dropdown-menu-group-next';
+import '../src/next/cosmoz-dropdown-menu-next';
+import '../src/next/cosmoz-dropdown-next';
+import '../src/next/cosmoz-keybinding-badge';
+import '../src/next/cosmoz-menu-label';
 
 const meta: Meta = {
 	title: 'Cosmoz Dropdown Menu Next',

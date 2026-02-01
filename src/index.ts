@@ -4,11 +4,11 @@ export * from './use-focus';
 
 // Next generation components using Popover API and CSS Anchor Positioning
 import '@neovici/cosmoz-button';
-import './cosmoz-dropdown-menu-group-next';
-import './cosmoz-dropdown-menu-next';
-import './cosmoz-dropdown-next';
-import './cosmoz-keybinding-badge';
-import './cosmoz-menu-label';
+import './next/cosmoz-dropdown-menu-group-next';
+import './next/cosmoz-dropdown-menu-next';
+import './next/cosmoz-dropdown-next';
+import './next/cosmoz-keybinding-badge';
+import './next/cosmoz-menu-label';
 
 // Export keybindings for apps to use
-export * from './menu-keybindings';
+export * from './next/menu-keybindings';

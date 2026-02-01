@@ -2,7 +2,7 @@ import '@neovici/cosmoz-button';
 import '@neovici/cosmoz-tokens';
 import { useKeybindings } from '@neovici/cosmoz-utils/keybindings';
 import { component, html } from '@pionjs/pion';
-import { menuBindings } from '../src/menu-keybindings';
+import { menuBindings } from '../src/next/menu-keybindings';
 
 /**
  * Component that provides keybindings context for all stories.

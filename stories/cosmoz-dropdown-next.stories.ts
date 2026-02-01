@@ -1,7 +1,7 @@
 import '@neovici/cosmoz-button';
 import { html } from '@pionjs/pion';
 import type { Meta, StoryObj } from '@storybook/web-components';
-import '../src/cosmoz-dropdown-next';
+import '../src/next/cosmoz-dropdown-next';
 
 const meta: Meta = {
 	title: 'Cosmoz Dropdown Next',
