@@ -1,33 +1,13 @@
-import { useKeybindings } from '@neovici/cosmoz-utils/keybindings';
-import { component, html } from '@pionjs/pion';
+import { html } from '@pionjs/pion';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import '../src/cosmoz-dropdown-menu-group-next';
 import '../src/cosmoz-dropdown-menu-item-next';
 import '../src/cosmoz-dropdown-menu-next';
 import '../src/cosmoz-dropdown-next';
-import { menuBindings } from '../src/menu-keybindings';
-
-/**
- * Wrapper component that provides keybindings context for all stories.
- * This enables keyboard navigation (Arrow keys, Home/End) in the menu.
- */
-const KeybindingsWrapper = () => {
-	const register = useKeybindings(menuBindings);
-	return html`
-		<cosmoz-keybinding-provider .value=${register}>
-			<slot></slot>
-		</cosmoz-keybinding-provider>
-	`;
-};
-
-customElements.define('keybindings-wrapper', component(KeybindingsWrapper));
 
 const meta: Meta = {
 	title: 'Cosmoz Dropdown Menu Next',
 	component: 'cosmoz-dropdown-menu-next',
-	decorators: [
-		(story) => html`<keybindings-wrapper>${story()}</keybindings-wrapper>`,
-	],
 };
 
 export default meta;

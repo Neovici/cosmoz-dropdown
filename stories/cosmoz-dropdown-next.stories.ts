@@ -12,10 +12,10 @@ export default meta;
 export type Story = StoryObj;
 
 const contentStyle = `
-	background: #fff;
-	border-radius: 8px;
-	box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
-	padding: 8px;
+	background: var(--cz-color-bg-primary);
+	border-radius: var(--cz-radius-md);
+	box-shadow: var(--cz-shadow-lg);
+	padding: calc(var(--cz-spacing) * 2);
 `;
 
 export const DropdownNext: Story = {
