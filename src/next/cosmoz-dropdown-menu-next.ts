@@ -94,17 +94,20 @@ interface MenuProps {
 }
 
 /**
- * Filter a single item based on search text
+ * Filter a single item based on search text.
+ * Returns true if the item matches (is visible).
  */
-const filterItem = (item: Element, normalizedSearch: string) => {
+const filterItem = (item: Element, normalizedSearch: string): boolean => {
 	const text = item.textContent?.toLowerCase() || '';
 	const matches = !normalizedSearch || text.includes(normalizedSearch);
 	item.toggleAttribute('hidden', !matches);
+	return matches;
 };
 
 /**
  * Filter menu items based on search text.
  * Sets [hidden] attribute on items that don't match.
+ * Also hides groups when all their items are hidden.
  */
 const filterItems = (slot: HTMLSlotElement | null, searchText: string) => {
 	if (!slot) return;
@@ -115,13 +118,18 @@ const filterItems = (slot: HTMLSlotElement | null, searchText: string) => {
 	for (const el of elements) {
 		if (el.matches(ITEM_SELECTOR)) {
 			filterItem(el, normalizedSearch);
-		} else if (el.matches(GROUP_SELECTOR)) {
-			const groupItems = getGroupItems(el);
-			for (const item of groupItems) {
-				if (item.matches(ITEM_SELECTOR)) {
-					filterItem(item, normalizedSearch);
-				}
-			}
+			continue;
+		}
+
+		if (el.matches(GROUP_SELECTOR)) {
+			const groupItems = getGroupItems(el).filter((item) =>
+				item.matches(ITEM_SELECTOR),
+			);
+			// Filter all items and collect visibility results
+			const visibleItems = groupItems.map((item) =>
+				filterItem(item, normalizedSearch),
+			);
+			el.toggleAttribute('hidden', !visibleItems.includes(true));
 		}
 	}
 };

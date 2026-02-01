@@ -7,13 +7,12 @@ const style = css`
 		display: block;
 	}
 
-	/* Hide the entire group when all items are hidden */
-	:host(:not(:has(::slotted(:not([hidden]))))) {
+	:host([hidden]) {
 		display: none;
 	}
 
-	/* Add separator before groups (except first) */
-	:host(:not(:first-child)) {
+	/* Add separator before groups (except first visible) */
+	:host(:not(:first-child):not([hidden])) {
 		border-top: 1px solid var(--cz-color-border-secondary, #eaecf0);
 		margin-top: calc(var(--cz-spacing, 0.25rem) * 2);
 		padding-top: calc(var(--cz-spacing, 0.25rem) * 2);

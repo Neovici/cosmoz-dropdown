@@ -29,20 +29,24 @@ export const menuBindings: readonly KeyBinding[] = [
 		{ key: 'ArrowUp' },
 		[MENU_NAVIGATE_UP],
 		{ title: 'Up', description: 'Navigate to previous menu item' },
+		{ allowInEditable: true },
 	],
 	[
 		{ key: 'ArrowDown' },
 		[MENU_NAVIGATE_DOWN],
 		{ title: 'Down', description: 'Navigate to next menu item' },
+		{ allowInEditable: true },
 	],
 	[
 		{ key: 'Home' },
 		[MENU_NAVIGATE_HOME],
 		{ title: 'Home', description: 'Navigate to first menu item' },
+		{ allowInEditable: true },
 	],
 	[
 		{ key: 'End' },
 		[MENU_NAVIGATE_END],
 		{ title: 'End', description: 'Navigate to last menu item' },
+		{ allowInEditable: true },
 	],
 ];
