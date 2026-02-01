@@ -107,7 +107,7 @@ const downloadIcon = html`
 export const Basic: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
-			<button slot="button">Open Menu</button>
+			<cosmoz-button slot="button">Open Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next>
 				<cosmoz-button variant="tertiary" full-width role="menuitem">
 					<cosmoz-menu-label>Copy</cosmoz-menu-label>
@@ -129,7 +129,7 @@ export const Basic: Story = {
 export const WithSearch: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
-			<button slot="button">Open Searchable Menu</button>
+			<cosmoz-button slot="button">Open Searchable Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next searchable placeholder="Search actions...">
 				<cosmoz-button variant="tertiary" full-width role="menuitem">
 					<cosmoz-menu-label>Copy</cosmoz-menu-label>
@@ -166,7 +166,7 @@ export const WithSearch: Story = {
 export const WithGroups: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
-			<button slot="button">Open Grouped Menu</button>
+			<cosmoz-button slot="button">Open Grouped Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next>
 				<cosmoz-dropdown-menu-group-next label="Edit">
 					<cosmoz-button variant="tertiary" full-width role="menuitem">
@@ -203,7 +203,7 @@ export const WithGroups: Story = {
 export const WithIcons: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
-			<button slot="button">Open Menu with Icons</button>
+			<cosmoz-button slot="button">Open Menu with Icons</cosmoz-button>
 			<cosmoz-dropdown-menu-next>
 				<cosmoz-button variant="tertiary" full-width role="menuitem">
 					${copyIcon}
@@ -236,7 +236,7 @@ export const WithIcons: Story = {
 export const WithKeybindings: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
-			<button slot="button">Open Menu with Shortcuts</button>
+			<cosmoz-button slot="button">Open Menu with Shortcuts</cosmoz-button>
 			<cosmoz-dropdown-menu-next>
 				<cosmoz-button variant="tertiary" full-width role="menuitem">
 					${copyIcon}
@@ -272,7 +272,7 @@ export const WithKeybindings: Story = {
 export const WithDisabledItems: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
-			<button slot="button">Open Menu with Disabled Items</button>
+			<cosmoz-button slot="button">Open Menu with Disabled Items</cosmoz-button>
 			<cosmoz-dropdown-menu-next>
 				<cosmoz-button variant="tertiary" full-width role="menuitem">
 					${copyIcon}
@@ -301,7 +301,7 @@ export const WithDisabledItems: Story = {
 export const FullExample: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
-			<button slot="button">Command Menu</button>
+			<cosmoz-button slot="button">Command Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next searchable placeholder="Type a command...">
 				<cosmoz-dropdown-menu-group-next label="Clipboard">
 					<cosmoz-button variant="tertiary" full-width role="menuitem">

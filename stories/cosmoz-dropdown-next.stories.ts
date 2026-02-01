@@ -1,3 +1,4 @@
+import '@neovici/cosmoz-button';
 import { html } from '@pionjs/pion';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import '../src/cosmoz-dropdown-next';
@@ -21,7 +22,7 @@ const contentStyle = `
 export const DropdownNext: Story = {
 	render: () => {
 		return html`<cosmoz-dropdown-next>
-			<button slot="button">Open Menu</button>
+			<cosmoz-button slot="button">Open Menu</cosmoz-button>
 			<div style=${contentStyle}>
 				<input
 					type="text"
@@ -51,7 +52,7 @@ export const PositionFallbacks: Story = {
 				<!-- Top Left -->
 				<div style="position: absolute; top: 8px; left: 8px;">
 					<cosmoz-dropdown-next>
-						<button slot="button">Top Left</button>
+						<cosmoz-button slot="button">Top Left</cosmoz-button>
 						<div style=${contentStyle}>
 							<div>Item 1</div>
 							<div>Item 2</div>
@@ -63,7 +64,7 @@ export const PositionFallbacks: Story = {
 				<!-- Top Right -->
 				<div style="position: absolute; top: 8px; right: 8px;">
 					<cosmoz-dropdown-next>
-						<button slot="button">Top Right</button>
+						<cosmoz-button slot="button">Top Right</cosmoz-button>
 						<div style=${contentStyle}>
 							<div>Item 1</div>
 							<div>Item 2</div>
@@ -75,7 +76,7 @@ export const PositionFallbacks: Story = {
 				<!-- Bottom Left -->
 				<div style="position: absolute; bottom: 8px; left: 8px;">
 					<cosmoz-dropdown-next>
-						<button slot="button">Bottom Left</button>
+						<cosmoz-button slot="button">Bottom Left</cosmoz-button>
 						<div style=${contentStyle}>
 							<div>Item 1</div>
 							<div>Item 2</div>
@@ -87,7 +88,7 @@ export const PositionFallbacks: Story = {
 				<!-- Bottom Right -->
 				<div style="position: absolute; bottom: 8px; right: 8px;">
 					<cosmoz-dropdown-next>
-						<button slot="button">Bottom Right</button>
+						<cosmoz-button slot="button">Bottom Right</cosmoz-button>
 						<div style=${contentStyle}>
 							<div>Item 1</div>
 							<div>Item 2</div>
