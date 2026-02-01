@@ -1,3 +1,4 @@
+import '@neovici/cosmoz-button';
 import '@neovici/cosmoz-tokens';
 import { useKeybindings } from '@neovici/cosmoz-utils/keybindings';
 import { component, html } from '@pionjs/pion';

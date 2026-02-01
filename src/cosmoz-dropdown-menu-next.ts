@@ -1,6 +1,13 @@
 import { normalize } from '@neovici/cosmoz-tokens/normalize';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings';
-import { component, css, useCallback, useProperty, useRef } from '@pionjs/pion';
+import {
+	component,
+	css,
+	useCallback,
+	useEffect,
+	useProperty,
+	useRef,
+} from '@pionjs/pion';
 import { html, nothing } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 import {
@@ -86,7 +93,7 @@ interface MenuProps {
 	placeholder?: string;
 }
 
-const ITEM_SELECTOR = 'cosmoz-dropdown-menu-item-next';
+const ITEM_SELECTOR = 'cosmoz-button';
 const GROUP_SELECTOR = 'cosmoz-dropdown-menu-group-next';
 const VISIBLE_ITEM_SELECTOR = `${ITEM_SELECTOR}:not([hidden]):not([disabled])`;
 
@@ -276,6 +283,26 @@ const CosmozDropdownMenuNext = ({
 	// Set up keyboard navigation
 	useMenuNavigation(slotRef, hostRef);
 
+	// Close popover when a button is clicked
+	useEffect(() => {
+		const host = hostRef.current;
+		if (!host) return;
+
+		const handleClick = (e: Event) => {
+			const target = e.target as HTMLElement;
+			const button = target.closest('cosmoz-button');
+			if (button && !button.hasAttribute('disabled')) {
+				const popover = host.closest('[popover]');
+				if (popover instanceof HTMLElement) {
+					popover.hidePopover();
+				}
+			}
+		};
+
+		host.addEventListener('click', handleClick);
+		return () => host.removeEventListener('click', handleClick);
+	}, [hostRef]);
+
 	return html`
 		<div
 			${ref((el) => {
@@ -315,6 +342,5 @@ customElements.define(
 	component<MenuProps>(CosmozDropdownMenuNext, {
 		styleSheets: [normalize, style],
 		observedAttributes: ['searchable', 'search', 'placeholder'],
-		shadowRootInit: { mode: 'open' },
 	}),
 );
