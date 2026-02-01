@@ -1,5 +1,4 @@
 import { normalize } from '@neovici/cosmoz-tokens/normalize';
-import { useActivity } from '@neovici/cosmoz-utils/keybindings';
 import {
 	component,
 	css,
@@ -12,11 +11,11 @@ import {
 import { html, nothing } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 import {
-	MENU_NAVIGATE_DOWN,
-	MENU_NAVIGATE_END,
-	MENU_NAVIGATE_HOME,
-	MENU_NAVIGATE_UP,
-} from './menu-keybindings';
+	getGroupItems,
+	GROUP_SELECTOR,
+	ITEM_SELECTOR,
+	useMenuNavigation,
+} from './use-menu-navigation';
 
 const style = css`
 	:host {
@@ -94,26 +93,6 @@ interface MenuProps {
 	placeholder?: string;
 }
 
-const ITEM_SELECTOR = 'cosmoz-button';
-const GROUP_SELECTOR = 'cosmoz-dropdown-menu-group-next';
-const VISIBLE_ITEM_SELECTOR = `${ITEM_SELECTOR}:not([hidden]):not([disabled])`;
-
-/**
- * Get the slot element from a group's shadow root
- */
-const getGroupSlot = (group: Element): HTMLSlotElement | null =>
-	(group as HTMLElement).shadowRoot?.querySelector(
-		'slot:not([name])',
-	) as HTMLSlotElement | null;
-
-/**
- * Get items from a group element
- */
-const getGroupItems = (group: Element): Element[] => {
-	const slot = getGroupSlot(group);
-	return slot ? slot.assignedElements({ flatten: true }) : [];
-};
-
 /**
  * Filter a single item based on search text
  */
@@ -121,34 +100,6 @@ const filterItem = (item: Element, normalizedSearch: string) => {
 	const text = item.textContent?.toLowerCase() || '';
 	const matches = !normalizedSearch || text.includes(normalizedSearch);
 	item.toggleAttribute('hidden', !matches);
-};
-
-/**
- * Get all visible menu items from slotted content.
- * Traverses through groups to find nested items.
- */
-const getVisibleItems = (slot: HTMLSlotElement | null): HTMLElement[] => {
-	if (!slot) return [];
-
-	const items: HTMLElement[] = [];
-	const elements = slot.assignedElements({ flatten: true });
-
-	for (const el of elements) {
-		if (el.matches('[hidden]')) continue;
-
-		if (el.matches(VISIBLE_ITEM_SELECTOR)) {
-			items.push(el as HTMLElement);
-		} else if (el.matches(GROUP_SELECTOR)) {
-			const groupItems = getGroupItems(el);
-			for (const item of groupItems) {
-				if (item.matches(VISIBLE_ITEM_SELECTOR)) {
-					items.push(item as HTMLElement);
-				}
-			}
-		}
-	}
-
-	return items;
 };
 
 /**
@@ -175,97 +126,6 @@ const filterItems = (slot: HTMLSlotElement | null, searchText: string) => {
 	}
 };
 
-/**
- * Custom hook for menu keyboard navigation.
- * Registers activity handlers for arrow key navigation.
- */
-const useMenuNavigation = (
-	slotRef: { current: HTMLSlotElement | undefined },
-	host: HTMLElement,
-) => {
-	// Navigate to next item (with wrap)
-	const navigateDown = useCallback(() => {
-		const items = getVisibleItems(slotRef.current ?? null);
-		if (items.length === 0) return;
-
-		const root = host.getRootNode() as Document | ShadowRoot;
-		const activeElement = root?.activeElement;
-
-		const currentIndex = items.findIndex(
-			(item) => item === activeElement || item.contains(activeElement as Node),
-		);
-		const nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % items.length;
-		items[nextIndex]?.focus();
-	}, [slotRef, host]);
-
-	// Navigate to previous item (with wrap)
-	const navigateUp = useCallback(() => {
-		const items = getVisibleItems(slotRef.current ?? null);
-		if (items.length === 0) return;
-
-		const root = host.getRootNode() as Document | ShadowRoot;
-		const activeElement = root?.activeElement;
-
-		const currentIndex = items.findIndex(
-			(item) => item === activeElement || item.contains(activeElement as Node),
-		);
-		const prevIndex =
-			currentIndex < 0
-				? items.length - 1
-				: (currentIndex - 1 + items.length) % items.length;
-		items[prevIndex]?.focus();
-	}, [slotRef, host]);
-
-	// Navigate to first item
-	const navigateHome = useCallback(() => {
-		const items = getVisibleItems(slotRef.current ?? null);
-		items[0]?.focus();
-	}, [slotRef]);
-
-	// Navigate to last item
-	const navigateEnd = useCallback(() => {
-		const items = getVisibleItems(slotRef.current ?? null);
-		items[items.length - 1]?.focus();
-	}, [slotRef]);
-
-	// Register activity handlers
-	useActivity(
-		{
-			activity: MENU_NAVIGATE_DOWN,
-			callback: navigateDown,
-			element: () => host,
-		},
-		[navigateDown, host],
-	);
-
-	useActivity(
-		{
-			activity: MENU_NAVIGATE_UP,
-			callback: navigateUp,
-			element: () => host,
-		},
-		[navigateUp, host],
-	);
-
-	useActivity(
-		{
-			activity: MENU_NAVIGATE_HOME,
-			callback: navigateHome,
-			element: () => host,
-		},
-		[navigateHome, host],
-	);
-
-	useActivity(
-		{
-			activity: MENU_NAVIGATE_END,
-			callback: navigateEnd,
-			element: () => host,
-		},
-		[navigateEnd, host],
-	);
-};
-
 const CosmozDropdownMenuNext = ({
 	searchable = false,
 	placeholder = 'Search...',
@@ -286,6 +146,11 @@ const CosmozDropdownMenuNext = ({
 
 	// Set up keyboard navigation
 	useMenuNavigation(slotRef, host);
+
+	// Set role on host element
+	useEffect(() => {
+		host.setAttribute('role', 'menu');
+	}, [host]);
 
 	// Close popover when a button is clicked
 	useEffect(() => {
@@ -320,7 +185,7 @@ const CosmozDropdownMenuNext = ({
 					</div>
 				`
 			: nothing}
-		<div class="items" role="menu">
+		<div class="items">
 			<slot
 				${ref((el) => {
 					slotRef.current = el as HTMLSlotElement | undefined;
