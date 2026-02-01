@@ -7,9 +7,27 @@ import '../src/cosmoz-dropdown-menu-next';
 import '../src/cosmoz-dropdown-next';
 import { menuBindings } from '../src/menu-keybindings';
 
+/**
+ * Wrapper component that provides keybindings context for all stories.
+ * This enables keyboard navigation (Arrow keys, Home/End) in the menu.
+ */
+const KeybindingsWrapper = () => {
+	const register = useKeybindings(menuBindings);
+	return html`
+		<cosmoz-keybinding-provider .value=${register}>
+			<slot></slot>
+		</cosmoz-keybinding-provider>
+	`;
+};
+
+customElements.define('keybindings-wrapper', component(KeybindingsWrapper));
+
 const meta: Meta = {
 	title: 'Cosmoz Dropdown Menu Next',
 	component: 'cosmoz-dropdown-menu-next',
+	decorators: [
+		(story) => html`<keybindings-wrapper>${story()}</keybindings-wrapper>`,
+	],
 };
 
 export default meta;
@@ -291,55 +309,4 @@ export const FullExample: Story = {
 			</cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
-};
-
-/**
- * Keyboard navigation demo with useKeybindings
- * This story demonstrates arrow key navigation
- */
-const KeyboardNavWrapper = () => {
-	// Set up keybindings at the app level
-	useKeybindings(menuBindings);
-
-	return html`
-		<div>
-			<p style="margin-bottom: 16px; color: #475467;">
-				Open the menu and use Arrow keys to navigate. Home/End to jump to
-				first/last item.
-			</p>
-			<cosmoz-dropdown-next>
-				<button slot="button">Keyboard Navigation Demo</button>
-				<cosmoz-dropdown-menu-next searchable>
-					<cosmoz-dropdown-menu-group-next label="Navigation">
-						<cosmoz-dropdown-menu-item-next>
-							${copyIcon} First Item
-						</cosmoz-dropdown-menu-item-next>
-						<cosmoz-dropdown-menu-item-next>
-							${editIcon} Second Item
-						</cosmoz-dropdown-menu-item-next>
-						<cosmoz-dropdown-menu-item-next>
-							${shareIcon} Third Item
-						</cosmoz-dropdown-menu-item-next>
-					</cosmoz-dropdown-menu-group-next>
-					<cosmoz-dropdown-menu-group-next label="More Items">
-						<cosmoz-dropdown-menu-item-next>
-							${downloadIcon} Fourth Item
-						</cosmoz-dropdown-menu-item-next>
-						<cosmoz-dropdown-menu-item-next>
-							${deleteIcon} Fifth Item
-						</cosmoz-dropdown-menu-item-next>
-					</cosmoz-dropdown-menu-group-next>
-				</cosmoz-dropdown-menu-next>
-			</cosmoz-dropdown-next>
-		</div>
-	`;
-};
-
-customElements.define(
-	'keyboard-nav-wrapper',
-	component(KeyboardNavWrapper, { shadowRootInit: { mode: 'open' } }),
-);
-
-export const KeyboardNavigation: Story = {
-	render: () => html`<keyboard-nav-wrapper></keyboard-nav-wrapper>`,
 };
