@@ -7,4 +7,13 @@ export default {
 	docs: {
 		autodocs: 'tag',
 	},
+	async viteFinal(config) {
+		return {
+			...config,
+			resolve: {
+				...config.resolve,
+				dedupe: ['@pionjs/pion', '@neovici/cosmoz-utils'],
+			},
+		};
+	},
 };

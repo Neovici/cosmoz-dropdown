@@ -5,19 +5,22 @@ import { component, html } from '@pionjs/pion';
 import { menuBindings } from '../src/menu-keybindings';
 
 /**
- * Wrapper component that provides keybindings context for all stories.
- * This enables keyboard navigation (Arrow keys, Home/End) in the menu.
+ * Component that provides keybindings context for all stories.
+ * Uses children prop instead of slot since shadow DOM is disabled
+ * to allow context events to bubble up to the provider.
  */
-const KeybindingsWrapper = () => {
+const KeybindingsProvider = function (props) {
 	const register = useKeybindings(menuBindings);
-	return html`
-		<cosmoz-keybinding-provider .value=${register}>
-			<slot></slot>
-		</cosmoz-keybinding-provider>
-	`;
+
+	return html`<cosmoz-keybinding-provider .value=${register}>
+		${props.content}
+	</cosmoz-keybinding-provider>`;
 };
 
-customElements.define('keybindings-wrapper', component(KeybindingsWrapper));
+customElements.define(
+	'storybook-keybindings',
+	component(KeybindingsProvider, { useShadowDOM: false }),
+);
 
 export default {
 	decorators: [
@@ -46,9 +49,9 @@ export default {
 							color 0.2s;
 					}
 				</style>
-				<keybindings-wrapper>
-					<div class="story-root">${story()}</div>
-				</keybindings-wrapper>
+				<storybook-keybindings
+					.content=${html`<div class="story-root">${story()}</div>`}
+				></storybook-keybindings>
 			`;
 		},
 	],

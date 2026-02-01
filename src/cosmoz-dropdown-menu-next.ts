@@ -5,6 +5,7 @@ import {
 	css,
 	useCallback,
 	useEffect,
+	useHost,
 	useProperty,
 	useRef,
 } from '@pionjs/pion';
@@ -180,15 +181,14 @@ const filterItems = (slot: HTMLSlotElement | null, searchText: string) => {
  */
 const useMenuNavigation = (
 	slotRef: { current: HTMLSlotElement | undefined },
-	hostRef: { current: HTMLElement | undefined },
+	host: HTMLElement,
 ) => {
 	// Navigate to next item (with wrap)
 	const navigateDown = useCallback(() => {
 		const items = getVisibleItems(slotRef.current ?? null);
 		if (items.length === 0) return;
 
-		const host = hostRef.current;
-		const root = host?.getRootNode() as Document | ShadowRoot;
+		const root = host.getRootNode() as Document | ShadowRoot;
 		const activeElement = root?.activeElement;
 
 		const currentIndex = items.findIndex(
@@ -196,15 +196,14 @@ const useMenuNavigation = (
 		);
 		const nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % items.length;
 		items[nextIndex]?.focus();
-	}, [slotRef, hostRef]);
+	}, [slotRef, host]);
 
 	// Navigate to previous item (with wrap)
 	const navigateUp = useCallback(() => {
 		const items = getVisibleItems(slotRef.current ?? null);
 		if (items.length === 0) return;
 
-		const host = hostRef.current;
-		const root = host?.getRootNode() as Document | ShadowRoot;
+		const root = host.getRootNode() as Document | ShadowRoot;
 		const activeElement = root?.activeElement;
 
 		const currentIndex = items.findIndex(
@@ -215,7 +214,7 @@ const useMenuNavigation = (
 				? items.length - 1
 				: (currentIndex - 1 + items.length) % items.length;
 		items[prevIndex]?.focus();
-	}, [slotRef, hostRef]);
+	}, [slotRef, host]);
 
 	// Navigate to first item
 	const navigateHome = useCallback(() => {
@@ -229,36 +228,41 @@ const useMenuNavigation = (
 		items[items.length - 1]?.focus();
 	}, [slotRef]);
 
-	// Check if menu is visible (for useActivity visibility check)
-	const isVisible = useCallback(() => hostRef.current ?? null, [hostRef]);
-
 	// Register activity handlers
 	useActivity(
 		{
 			activity: MENU_NAVIGATE_DOWN,
 			callback: navigateDown,
-			element: isVisible,
+			element: () => host,
 		},
-		[navigateDown, isVisible],
+		[navigateDown, host],
 	);
 
 	useActivity(
-		{ activity: MENU_NAVIGATE_UP, callback: navigateUp, element: isVisible },
-		[navigateUp, isVisible],
+		{
+			activity: MENU_NAVIGATE_UP,
+			callback: navigateUp,
+			element: () => host,
+		},
+		[navigateUp, host],
 	);
 
 	useActivity(
 		{
 			activity: MENU_NAVIGATE_HOME,
 			callback: navigateHome,
-			element: isVisible,
+			element: () => host,
 		},
-		[navigateHome, isVisible],
+		[navigateHome, host],
 	);
 
 	useActivity(
-		{ activity: MENU_NAVIGATE_END, callback: navigateEnd, element: isVisible },
-		[navigateEnd, isVisible],
+		{
+			activity: MENU_NAVIGATE_END,
+			callback: navigateEnd,
+			element: () => host,
+		},
+		[navigateEnd, host],
 	);
 };
 
@@ -266,9 +270,9 @@ const CosmozDropdownMenuNext = ({
 	searchable = false,
 	placeholder = 'Search...',
 }: MenuProps) => {
+	const host = useHost();
 	const [search, setSearch] = useProperty<string>('search', '');
 	const slotRef = useRef<HTMLSlotElement>();
-	const hostRef = useRef<HTMLElement>();
 
 	// Handle search input
 	const handleSearch = useCallback(
@@ -281,13 +285,10 @@ const CosmozDropdownMenuNext = ({
 	);
 
 	// Set up keyboard navigation
-	useMenuNavigation(slotRef, hostRef);
+	useMenuNavigation(slotRef, host);
 
 	// Close popover when a button is clicked
 	useEffect(() => {
-		const host = hostRef.current;
-		if (!host) return;
-
 		const handleClick = (e: Event) => {
 			const target = e.target as HTMLElement;
 			const button = target.closest('cosmoz-button');
@@ -301,38 +302,30 @@ const CosmozDropdownMenuNext = ({
 
 		host.addEventListener('click', handleClick);
 		return () => host.removeEventListener('click', handleClick);
-	}, [hostRef]);
+	}, [host]);
 
 	return html`
-		<div
-			${ref((el) => {
-				hostRef.current = el?.closest('cosmoz-dropdown-menu-next') as
-					| HTMLElement
-					| undefined;
-			})}
-		>
-			${searchable
-				? html`
-						<div class="search">
-							${searchIcon}
-							<input
-								class="search-input"
-								type="text"
-								placeholder=${placeholder}
-								.value=${search}
-								@input=${handleSearch}
-								autofocus
-							/>
-						</div>
-					`
-				: nothing}
-			<div class="items" role="menu">
-				<slot
-					${ref((el) => {
-						slotRef.current = el as HTMLSlotElement | undefined;
-					})}
-				></slot>
-			</div>
+		${searchable
+			? html`
+					<div class="search">
+						${searchIcon}
+						<input
+							class="search-input"
+							type="text"
+							placeholder=${placeholder}
+							.value=${search}
+							@input=${handleSearch}
+							autofocus
+						/>
+					</div>
+				`
+			: nothing}
+		<div class="items" role="menu">
+			<slot
+				${ref((el) => {
+					slotRef.current = el as HTMLSlotElement | undefined;
+				})}
+			></slot>
 		</div>
 	`;
 };
