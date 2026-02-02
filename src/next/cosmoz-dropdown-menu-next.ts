@@ -103,6 +103,12 @@ const style = css`
 	cosmoz-button[data-highlighted] {
 		background: var(--cz-color-bg-primary-hover, #f9fafb);
 	}
+
+	/* Hide built-in focus ring, use fake highlighting instead */
+	cosmoz-button::part(button):focus-visible {
+		box-shadow: none;
+		outline: none;
+	}
 `;
 
 // Search icon SVG
