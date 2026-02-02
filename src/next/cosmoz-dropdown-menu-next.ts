@@ -1,21 +1,21 @@
 import { normalize } from '@neovici/cosmoz-tokens/normalize';
+import { usePromise } from '@neovici/cosmoz-utils/hooks/use-promise';
 import {
 	component,
 	css,
 	useCallback,
 	useEffect,
 	useHost,
-	useProperty,
+	useMemo,
 	useRef,
+	useState,
 } from '@pionjs/pion';
 import { html, nothing } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
-import {
-	getGroupItems,
-	GROUP_SELECTOR,
-	ITEM_SELECTOR,
-	useMenuNavigation,
-} from './use-menu-navigation';
+import type { MenuItem, MenuSource } from './types';
+import { useLazyProperty } from './use-lazy-property';
+import { useMenuItems } from './use-menu-items';
+import { useSlotSource } from './use-slot-source';
 
 const style = css`
 	:host {
@@ -70,6 +70,39 @@ const style = css`
 		padding: calc(var(--cz-spacing, 0.25rem) * 2);
 		overflow-y: auto;
 	}
+
+	.no-results {
+		padding: calc(var(--cz-spacing, 0.25rem) * 4);
+		text-align: center;
+		color: var(--cz-color-text-tertiary, #475467);
+		font-size: var(--cz-text-sm, 0.875rem);
+	}
+
+	.loading {
+		padding: calc(var(--cz-spacing, 0.25rem) * 4);
+		text-align: center;
+		color: var(--cz-color-text-tertiary, #475467);
+	}
+
+	.group-label {
+		padding: calc(var(--cz-spacing, 0.25rem) * 1)
+			calc(var(--cz-spacing, 0.25rem) * 3);
+		font-size: var(--cz-text-xs, 0.75rem);
+		font-weight: var(--cz-font-weight-semibold, 600);
+		color: var(--cz-color-text-tertiary, #475467);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.group:not(:first-child) {
+		border-top: 1px solid var(--cz-color-border-secondary, #eaecf0);
+		margin-top: calc(var(--cz-spacing, 0.25rem) * 2);
+		padding-top: calc(var(--cz-spacing, 0.25rem) * 2);
+	}
+
+	cosmoz-button[data-highlighted] {
+		background: var(--cz-color-bg-primary-hover, #f9fafb);
+	}
 `;
 
 // Search icon SVG
@@ -88,94 +121,151 @@ const searchIcon = html`
 /* eslint-enable max-len */
 
 interface MenuProps {
+	source?: MenuSource;
 	searchable?: boolean;
-	search?: string;
 	placeholder?: string;
 }
 
-/**
- * Filter a single item based on search text.
- * Returns true if the item matches (is visible).
- */
-const filterItem = (item: Element, normalizedSearch: string): boolean => {
-	const text = item.textContent?.toLowerCase() || '';
-	const matches = !normalizedSearch || text.includes(normalizedSearch);
-	item.toggleAttribute('hidden', !matches);
-	return matches;
+interface RenderItemOptions {
+	item: MenuItem;
+	index: number;
+	highlightedIndex: number;
+	highlight: (i: number) => void;
+	select: (item: MenuItem) => void;
+}
+
+const renderItem = ({
+	item,
+	index,
+	highlightedIndex,
+	highlight,
+	select,
+}: RenderItemOptions) => html`
+	<cosmoz-button
+		variant="tertiary"
+		full-width
+		role="menuitem"
+		?disabled=${item.disabled}
+		?data-highlighted=${index === highlightedIndex}
+		data-index=${index}
+		@mouseenter=${() => highlight(index)}
+		@click=${() => !item.disabled && select(item)}
+		@mousedown=${(e: Event) => e.preventDefault()}
+	>
+		${item.icon ?? nothing}
+		<cosmoz-menu-label>${item.label}</cosmoz-menu-label>
+		${item.suffix ?? nothing}
+	</cosmoz-button>
+`;
+
+interface RenderGroupedItemsOptions {
+	grouped: Map<string, MenuItem[]>;
+	items: MenuItem[];
+	highlightedIndex: number;
+	highlight: (i: number) => void;
+	select: (item: MenuItem) => void;
+}
+
+const renderGroupedItems = ({
+	grouped,
+	items,
+	highlightedIndex,
+	highlight,
+	select,
+}: RenderGroupedItemsOptions) => {
+	// Build a map from item to its global index
+	const itemIndexMap = new Map<MenuItem, number>();
+	items.forEach((item, i) => itemIndexMap.set(item, i));
+
+	return Array.from(grouped.entries()).map(([groupLabel, groupItems]) => {
+		const renderedItems = groupItems.map((item) =>
+			renderItem({
+				item,
+				index: itemIndexMap.get(item) ?? -1,
+				highlightedIndex,
+				highlight,
+				select,
+			}),
+		);
+
+		if (groupLabel) {
+			return html`
+				<div class="group">
+					<div class="group-label">${groupLabel}</div>
+					${renderedItems}
+				</div>
+			`;
+		}
+		return renderedItems;
+	});
 };
 
-/**
- * Filter menu items based on search text.
- * Sets [hidden] attribute on items that don't match.
- * Also hides groups when all their items are hidden.
- */
-const filterItems = (slot: HTMLSlotElement | null, searchText: string) => {
-	if (!slot) return;
-
-	const normalizedSearch = searchText.toLowerCase().trim();
-	const elements = slot.assignedElements({ flatten: true });
-
-	for (const el of elements) {
-		if (el.matches(ITEM_SELECTOR)) {
-			filterItem(el, normalizedSearch);
-			continue;
-		}
-
-		if (el.matches(GROUP_SELECTOR)) {
-			const groupItems = getGroupItems(el).filter((item) =>
-				item.matches(ITEM_SELECTOR),
-			);
-			// Filter all items and collect visibility results
-			const visibleItems = groupItems.map((item) =>
-				filterItem(item, normalizedSearch),
-			);
-			el.toggleAttribute('hidden', !visibleItems.includes(true));
-		}
+const groupItems = (items: MenuItem[]): Map<string, MenuItem[]> => {
+	const groups = new Map<string, MenuItem[]>();
+	for (const item of items) {
+		const key = item.group || '';
+		if (!groups.has(key)) groups.set(key, []);
+		groups.get(key)!.push(item);
 	}
+	return groups;
 };
 
 const CosmozDropdownMenuNext = ({
+	source,
 	searchable = false,
 	placeholder = 'Search...',
 }: MenuProps) => {
 	const host = useHost();
-	const [search, setSearch] = useProperty<string>('search', '');
 	const slotRef = useRef<HTMLSlotElement>();
+	const itemsContainerRef = useRef<HTMLElement>();
+	const [query, setQuery] = useState('');
 
-	// Handle search input
-	const handleSearch = useCallback(
-		(e: Event) => {
-			const value = (e.target as HTMLInputElement).value;
-			setSearch(value);
-			filterItems(slotRef.current ?? null, value);
+	// Convert slot to source function (if no source prop)
+	const slotSource = useSlotSource(slotRef);
+	const effectiveSource = source ?? slotSource;
+
+	// Resolve source (handles array, promise, or function)
+	const itemsPromise = useLazyProperty(effectiveSource, query);
+	const [items, , state] = usePromise(itemsPromise) as [
+		MenuItem[] | undefined,
+		unknown,
+		string,
+	];
+	const resolvedItems = items ?? [];
+	const loading = state === 'pending';
+
+	// Group items by group property
+	const grouped = useMemo(() => groupItems(resolvedItems), [resolvedItems]);
+
+	// Handle selection
+	const handleSelect = useCallback(
+		(item: MenuItem) => {
+			host.dispatchEvent(
+				new CustomEvent('select', {
+					bubbles: true,
+					composed: true,
+					detail: { item },
+				}),
+			);
 		},
-		[setSearch],
+		[host],
 	);
 
-	// Set up keyboard navigation
-	useMenuNavigation(slotRef, host);
+	// Fake focus navigation
+	const { index, highlight } = useMenuItems({
+		items: resolvedItems,
+		onSelect: handleSelect,
+		host,
+		itemsContainerRef,
+	});
 
-	// Set role on host element
+	// Set role on host
 	useEffect(() => {
 		host.setAttribute('role', 'menu');
 	}, [host]);
 
-	// Close popover when a button is clicked
-	useEffect(() => {
-		const handleClick = (e: Event) => {
-			const target = e.target as HTMLElement;
-			const button = target.closest('cosmoz-button');
-			if (button && !button.hasAttribute('disabled')) {
-				const popover = host.closest('[popover]');
-				if (popover instanceof HTMLElement) {
-					popover.hidePopover();
-				}
-			}
-		};
-
-		host.addEventListener('click', handleClick);
-		return () => host.removeEventListener('click', handleClick);
-	}, [host]);
+	const hasItems = resolvedItems.length > 0;
+	const showNoResults = !loading && !hasItems && query.trim().length > 0;
 
 	return html`
 		${searchable
@@ -184,20 +274,46 @@ const CosmozDropdownMenuNext = ({
 						${searchIcon}
 						<input
 							class="search-input"
-							type="text"
+							.value=${query}
+							@input=${(e: InputEvent) =>
+								setQuery((e.target as HTMLInputElement).value)}
 							placeholder=${placeholder}
-							.value=${search}
-							@input=${handleSearch}
 							autofocus
 						/>
 					</div>
 				`
 			: nothing}
-		<div class="items">
+
+		<div
+			class="items"
+			${ref((el) => {
+				itemsContainerRef.current = el as HTMLElement | undefined;
+			})}
+		>
+			${loading ? html`<div class="loading">Loading...</div>` : nothing}
+			${showNoResults
+				? html`
+						<slot name="no-results">
+							<div class="no-results">No results found</div>
+						</slot>
+					`
+				: nothing}
+			${hasItems
+				? renderGroupedItems({
+						grouped,
+						items: resolvedItems,
+						highlightedIndex: index,
+						highlight,
+						select: handleSelect,
+					})
+				: nothing}
+
+			<!-- Hidden slot for DOM-based items -->
 			<slot
 				${ref((el) => {
 					slotRef.current = el as HTMLSlotElement | undefined;
 				})}
+				style="display: none"
 			></slot>
 		</div>
 	`;
@@ -207,6 +323,13 @@ customElements.define(
 	'cosmoz-dropdown-menu-next',
 	component<MenuProps>(CosmozDropdownMenuNext, {
 		styleSheets: [normalize, style],
-		observedAttributes: ['searchable', 'search', 'placeholder'],
+		observedAttributes: ['searchable', 'placeholder'],
+		shadowRootInit: {
+			mode: 'open',
+			delegatesFocus: true,
+		},
 	}),
 );
+
+export { CosmozDropdownMenuNext };
+export type { MenuItem, MenuProps, MenuSource };

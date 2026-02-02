@@ -8,6 +8,7 @@ export const MENU_NAVIGATE_UP = Symbol('menu-navigate-up');
 export const MENU_NAVIGATE_DOWN = Symbol('menu-navigate-down');
 export const MENU_NAVIGATE_HOME = Symbol('menu-navigate-home');
 export const MENU_NAVIGATE_END = Symbol('menu-navigate-end');
+export const MENU_SELECT = Symbol('menu-select');
 
 /**
  * Suggested keybindings for menu navigation.
@@ -38,6 +39,18 @@ export const menuBindings: readonly KeyBinding[] = [
 		{ allowInEditable: true },
 	],
 	[
+		{ key: 'Tab', shiftKey: true },
+		[MENU_NAVIGATE_UP],
+		{ title: 'Shift+Tab', description: 'Navigate to previous menu item' },
+		{ allowInEditable: true },
+	],
+	[
+		{ key: 'Tab' },
+		[MENU_NAVIGATE_DOWN],
+		{ title: 'Tab', description: 'Navigate to next menu item' },
+		{ allowInEditable: true },
+	],
+	[
 		{ key: 'Home' },
 		[MENU_NAVIGATE_HOME],
 		{ title: 'Home', description: 'Navigate to first menu item' },
@@ -47,6 +60,12 @@ export const menuBindings: readonly KeyBinding[] = [
 		{ key: 'End' },
 		[MENU_NAVIGATE_END],
 		{ title: 'End', description: 'Navigate to last menu item' },
+		{ allowInEditable: true },
+	],
+	[
+		{ key: 'Enter' },
+		[MENU_SELECT],
+		{ title: 'Enter', description: 'Select current menu item' },
 		{ allowInEditable: true },
 	],
 ];

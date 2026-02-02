@@ -1,10 +1,13 @@
 import { html } from '@pionjs/pion';
 import type { Meta, StoryObj } from '@storybook/web-components';
-import '../src/next/cosmoz-dropdown-menu-group-next';
 import '../src/next/cosmoz-dropdown-menu-next';
 import '../src/next/cosmoz-dropdown-next';
 import '../src/next/cosmoz-keybinding-badge';
 import '../src/next/cosmoz-menu-label';
+import type { MenuItem } from '../src/next/types';
+
+// eslint-disable-next-line no-console
+const onSelect = (e: CustomEvent) => console.log('Selected:', e.detail.item);
 
 const meta: Meta = {
 	title: 'Cosmoz Dropdown Menu Next',
@@ -101,24 +104,52 @@ const downloadIcon = html`
 `;
 /* eslint-enable max-len */
 
+// Sample menu items for data-driven examples
+const basicItems: MenuItem[] = [
+	{ label: 'Copy', value: 'copy' },
+	{ label: 'Edit', value: 'edit' },
+	{ label: 'Delete', value: 'delete' },
+];
+
+const searchableItems: MenuItem[] = [
+	{ label: 'Copy', value: 'copy' },
+	{ label: 'Cut', value: 'cut' },
+	{ label: 'Paste', value: 'paste' },
+	{ label: 'Edit', value: 'edit' },
+	{ label: 'Delete', value: 'delete' },
+	{ label: 'Duplicate', value: 'duplicate' },
+	{ label: 'Share', value: 'share' },
+	{ label: 'Download', value: 'download' },
+];
+
+const groupedItems: MenuItem[] = [
+	{ label: 'Copy', value: 'copy', group: 'Clipboard' },
+	{ label: 'Cut', value: 'cut', group: 'Clipboard' },
+	{ label: 'Paste', value: 'paste', group: 'Clipboard' },
+	{ label: 'Edit', value: 'edit', group: 'Actions' },
+	{ label: 'Share', value: 'share', group: 'Actions' },
+	{ label: 'Download', value: 'download', group: 'Actions' },
+	{ label: 'Delete', value: 'delete', group: 'Danger Zone' },
+];
+
+const itemsWithDisabled: MenuItem[] = [
+	{ label: 'Copy', value: 'copy' },
+	{ label: 'Edit (disabled)', value: 'edit', disabled: true },
+	{ label: 'Share', value: 'share' },
+	{ label: 'Delete (disabled)', value: 'delete', disabled: true },
+];
+
 /**
- * Basic menu with items
+ * Basic menu with items using data-driven source
  */
 export const Basic: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
 			<cosmoz-button slot="button">Open Menu</cosmoz-button>
-			<cosmoz-dropdown-menu-next>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Copy</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Edit</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Delete</cosmoz-menu-label>
-				</cosmoz-button>
-			</cosmoz-dropdown-menu-next>
+			<cosmoz-dropdown-menu-next
+				.source=${basicItems}
+				@select=${onSelect}
+			></cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
 };
@@ -130,32 +161,12 @@ export const WithSearch: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
 			<cosmoz-button slot="button">Open Searchable Menu</cosmoz-button>
-			<cosmoz-dropdown-menu-next searchable placeholder="Search actions...">
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Copy</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Cut</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Paste</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Edit</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Delete</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Duplicate</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Share</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Download</cosmoz-menu-label>
-				</cosmoz-button>
-			</cosmoz-dropdown-menu-next>
+			<cosmoz-dropdown-menu-next
+				searchable
+				placeholder="Search actions..."
+				.source=${searchableItems}
+				@select=${onSelect}
+			></cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
 };
@@ -167,44 +178,94 @@ export const WithGroups: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
 			<cosmoz-button slot="button">Open Grouped Menu</cosmoz-button>
-			<cosmoz-dropdown-menu-next>
-				<cosmoz-dropdown-menu-group-next label="Edit">
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						<cosmoz-menu-label>Copy</cosmoz-menu-label>
-					</cosmoz-button>
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						<cosmoz-menu-label>Cut</cosmoz-menu-label>
-					</cosmoz-button>
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						<cosmoz-menu-label>Paste</cosmoz-menu-label>
-					</cosmoz-button>
-				</cosmoz-dropdown-menu-group-next>
-				<cosmoz-dropdown-menu-group-next label="Actions">
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						<cosmoz-menu-label>Share</cosmoz-menu-label>
-					</cosmoz-button>
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						<cosmoz-menu-label>Download</cosmoz-menu-label>
-					</cosmoz-button>
-				</cosmoz-dropdown-menu-group-next>
-				<cosmoz-dropdown-menu-group-next label="Danger Zone">
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						<cosmoz-menu-label>Delete</cosmoz-menu-label>
-					</cosmoz-button>
-				</cosmoz-dropdown-menu-group-next>
+			<cosmoz-dropdown-menu-next
+				.source=${groupedItems}
+				@select=${onSelect}
+			></cosmoz-dropdown-menu-next>
+		</cosmoz-dropdown-next>
+	`,
+};
+
+/**
+ * Menu with grouped items and search
+ */
+export const WithGroupsAndSearch: Story = {
+	render: () => html`
+		<cosmoz-dropdown-next>
+			<cosmoz-button slot="button">Open Grouped Searchable Menu</cosmoz-button>
+			<cosmoz-dropdown-menu-next
+				searchable
+				placeholder="Type a command..."
+				.source=${groupedItems}
+				@select=${onSelect}
+			>
+				<div slot="no-results">
+					<p style="padding: 16px; text-align: center; color: #666;">
+						No commands found. Try a different search term.
+					</p>
+				</div>
 			</cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
 };
 
 /**
- * Menu items with icons
+ * Disabled menu items
  */
-export const WithIcons: Story = {
+export const WithDisabledItems: Story = {
 	render: () => html`
 		<cosmoz-dropdown-next>
-			<cosmoz-button slot="button">Open Menu with Icons</cosmoz-button>
-			<cosmoz-dropdown-menu-next>
+			<cosmoz-button slot="button">Open Menu with Disabled Items</cosmoz-button>
+			<cosmoz-dropdown-menu-next
+				.source=${itemsWithDisabled}
+				@select=${onSelect}
+			></cosmoz-dropdown-menu-next>
+		</cosmoz-dropdown-next>
+	`,
+};
+
+/**
+ * Async source - simulates loading items from an API
+ */
+export const AsyncSource: Story = {
+	render: () => {
+		const asyncSource = async (query: string): Promise<MenuItem[]> => {
+			// Simulate API delay
+			await new Promise((resolve) => setTimeout(resolve, 500));
+
+			const allItems = searchableItems;
+			if (!query.trim()) return allItems;
+
+			const q = query.toLowerCase();
+			return allItems.filter((item) => item.label.toLowerCase().includes(q));
+		};
+
+		return html`
+			<cosmoz-dropdown-next>
+				<cosmoz-button slot="button">Open Async Menu</cosmoz-button>
+				<cosmoz-dropdown-menu-next
+					searchable
+					placeholder="Search (async)..."
+					.source=${asyncSource}
+					@select=${onSelect}
+				></cosmoz-dropdown-menu-next>
+			</cosmoz-dropdown-next>
+		`;
+	},
+};
+
+/**
+ * Legacy slot-based approach (backwards compatible)
+ */
+export const SlotBased: Story = {
+	render: () => html`
+		<cosmoz-dropdown-next>
+			<cosmoz-button slot="button">Open Slot-Based Menu</cosmoz-button>
+			<cosmoz-dropdown-menu-next
+				searchable
+				placeholder="Search..."
+				@select=${onSelect}
+			>
 				<cosmoz-button variant="tertiary" full-width role="menuitem">
 					${copyIcon}
 					<cosmoz-menu-label>Copy</cosmoz-menu-label>
@@ -221,127 +282,10 @@ export const WithIcons: Story = {
 					${downloadIcon}
 					<cosmoz-menu-label>Download</cosmoz-menu-label>
 				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${deleteIcon}
-					<cosmoz-menu-label>Delete</cosmoz-menu-label>
-				</cosmoz-button>
-			</cosmoz-dropdown-menu-next>
-		</cosmoz-dropdown-next>
-	`,
-};
-
-/**
- * Menu items with keyboard shortcut badges
- */
-export const WithKeybindings: Story = {
-	render: () => html`
-		<cosmoz-dropdown-next>
-			<cosmoz-button slot="button">Open Menu with Shortcuts</cosmoz-button>
-			<cosmoz-dropdown-menu-next>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${copyIcon}
-					<cosmoz-menu-label>Copy</cosmoz-menu-label>
-					<cosmoz-keybinding-badge slot="suffix">⌘C</cosmoz-keybinding-badge>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Cut</cosmoz-menu-label>
-					<cosmoz-keybinding-badge slot="suffix">⌘X</cosmoz-keybinding-badge>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					<cosmoz-menu-label>Paste</cosmoz-menu-label>
-					<cosmoz-keybinding-badge slot="suffix">⌘V</cosmoz-keybinding-badge>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${editIcon}
-					<cosmoz-menu-label>Edit</cosmoz-menu-label>
-					<cosmoz-keybinding-badge slot="suffix">⌘E</cosmoz-keybinding-badge>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${deleteIcon}
-					<cosmoz-menu-label>Delete</cosmoz-menu-label>
-					<cosmoz-keybinding-badge slot="suffix">⌘⌫</cosmoz-keybinding-badge>
-				</cosmoz-button>
-			</cosmoz-dropdown-menu-next>
-		</cosmoz-dropdown-next>
-	`,
-};
-
-/**
- * Disabled menu items
- */
-export const WithDisabledItems: Story = {
-	render: () => html`
-		<cosmoz-dropdown-next>
-			<cosmoz-button slot="button">Open Menu with Disabled Items</cosmoz-button>
-			<cosmoz-dropdown-menu-next>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${copyIcon}
-					<cosmoz-menu-label>Copy</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem" disabled>
-					${editIcon}
-					<cosmoz-menu-label>Edit (disabled)</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${shareIcon}
-					<cosmoz-menu-label>Share</cosmoz-menu-label>
-				</cosmoz-button>
 				<cosmoz-button variant="tertiary" full-width role="menuitem" disabled>
 					${deleteIcon}
 					<cosmoz-menu-label>Delete (disabled)</cosmoz-menu-label>
 				</cosmoz-button>
-			</cosmoz-dropdown-menu-next>
-		</cosmoz-dropdown-next>
-	`,
-};
-
-/**
- * Full featured example matching Untitled UI command menu design
- */
-export const FullExample: Story = {
-	render: () => html`
-		<cosmoz-dropdown-next>
-			<cosmoz-button slot="button">Command Menu</cosmoz-button>
-			<cosmoz-dropdown-menu-next searchable placeholder="Type a command...">
-				<cosmoz-dropdown-menu-group-next label="Clipboard">
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						${copyIcon}
-						<cosmoz-menu-label>Copy</cosmoz-menu-label>
-						<cosmoz-keybinding-badge slot="suffix">⌘C</cosmoz-keybinding-badge>
-					</cosmoz-button>
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						<cosmoz-menu-label>Cut</cosmoz-menu-label>
-						<cosmoz-keybinding-badge slot="suffix">⌘X</cosmoz-keybinding-badge>
-					</cosmoz-button>
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						<cosmoz-menu-label>Paste</cosmoz-menu-label>
-						<cosmoz-keybinding-badge slot="suffix">⌘V</cosmoz-keybinding-badge>
-					</cosmoz-button>
-				</cosmoz-dropdown-menu-group-next>
-				<cosmoz-dropdown-menu-group-next label="Actions">
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						${editIcon}
-						<cosmoz-menu-label>Edit</cosmoz-menu-label>
-						<cosmoz-keybinding-badge slot="suffix">⌘E</cosmoz-keybinding-badge>
-					</cosmoz-button>
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						${shareIcon}
-						<cosmoz-menu-label>Share</cosmoz-menu-label>
-						<cosmoz-keybinding-badge slot="suffix">⌘S</cosmoz-keybinding-badge>
-					</cosmoz-button>
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						${downloadIcon}
-						<cosmoz-menu-label>Download</cosmoz-menu-label>
-						<cosmoz-keybinding-badge slot="suffix">⌘D</cosmoz-keybinding-badge>
-					</cosmoz-button>
-				</cosmoz-dropdown-menu-group-next>
-				<cosmoz-dropdown-menu-group-next label="Danger Zone">
-					<cosmoz-button variant="tertiary" full-width role="menuitem">
-						${deleteIcon}
-						<cosmoz-menu-label>Delete</cosmoz-menu-label>
-						<cosmoz-keybinding-badge slot="suffix">⌘⌫</cosmoz-keybinding-badge>
-					</cosmoz-button>
-				</cosmoz-dropdown-menu-group-next>
 			</cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
