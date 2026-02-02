@@ -32,6 +32,7 @@ const style = css`
 			0px 4px 6px -2px rgba(10, 13, 18, 0.03)
 		);
 		overflow: hidden;
+		border: 1px solid var(--cz-color-border-secondary, #eaecf0);
 	}
 
 	.search {
@@ -67,7 +68,6 @@ const style = css`
 	.items {
 		display: flex;
 		flex-direction: column;
-		padding: calc(var(--cz-spacing, 0.25rem) * 2);
 		overflow-y: auto;
 	}
 
