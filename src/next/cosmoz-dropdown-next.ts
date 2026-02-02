@@ -13,7 +13,6 @@ const style = css`
 		position-anchor: --dropdown-anchor;
 		inset: unset;
 		margin: 0;
-		position-area: bottom span-right;
 		position-try-fallbacks:
 			flip-block,
 			flip-inline,
@@ -26,7 +25,13 @@ const style = css`
 	}
 `;
 
-const CosmozDropdownNext = () => {
+interface DropdownProps {
+	placement?: string;
+}
+
+const CosmozDropdownNext = ({
+	placement = 'bottom span-right',
+}: DropdownProps) => {
 	const popover = useRef<HTMLElement>();
 
 	const toggle = () => {
@@ -37,6 +42,7 @@ const CosmozDropdownNext = () => {
 		<slot name="button" @click=${toggle}></slot>
 		<div
 			popover
+			style="position-area: ${placement}"
 			${ref((el) => {
 				popover.current = el as HTMLElement | undefined;
 			})}
@@ -48,8 +54,9 @@ const CosmozDropdownNext = () => {
 
 customElements.define(
 	'cosmoz-dropdown-next',
-	component(CosmozDropdownNext, {
+	component<DropdownProps>(CosmozDropdownNext, {
 		styleSheets: [style],
+		observedAttributes: ['placement'],
 		shadowRootInit: { mode: 'open', delegatesFocus: true },
 	}),
 );

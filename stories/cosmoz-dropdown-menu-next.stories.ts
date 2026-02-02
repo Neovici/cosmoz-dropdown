@@ -1,22 +1,37 @@
 import { html } from '@pionjs/pion';
 import type { Meta, StoryObj } from '@storybook/web-components';
+import { fn } from 'storybook/test';
 import '../src/next/cosmoz-dropdown-menu-next';
 import '../src/next/cosmoz-dropdown-next';
 import '../src/next/cosmoz-keybinding-badge';
 import '../src/next/cosmoz-menu-label';
 import type { MenuItem } from '../src/next/types';
 
-// eslint-disable-next-line no-console
-const onSelect = (e: CustomEvent) => console.log('Selected:', e.detail.item);
-
-const meta: Meta = {
-	title: 'Cosmoz Dropdown Menu Next',
-	component: 'cosmoz-dropdown-menu-next',
-};
-
-export default meta;
-
-export type Story = StoryObj;
+/**
+ * Common CSS anchor position-area values for dropdown placement.
+ * See MDN position-area for the full list of available values.
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/position-area
+ */
+const placementOptions = [
+	// Most common - dropdown below/above anchor
+	'bottom span-right',
+	'bottom span-left',
+	'bottom',
+	'top span-right',
+	'top span-left',
+	'top',
+	// Side placements
+	'right span-bottom',
+	'right span-top',
+	'right',
+	'left span-bottom',
+	'left span-top',
+	'left',
+	// Centered variants
+	'bottom center',
+	'top center',
+	'center',
+];
 
 // Icons for the stories
 // prettier-ignore
@@ -139,69 +154,128 @@ const itemsWithDisabled: MenuItem[] = [
 	{ label: 'Delete (disabled)', value: 'delete', disabled: true },
 ];
 
+interface StoryArgs {
+	searchable: boolean;
+	placeholder: string;
+	placement: string;
+	onSelect: (e: CustomEvent) => void;
+}
+
+const meta: Meta<StoryArgs> = {
+	title: 'Cosmoz Dropdown Menu Next',
+	component: 'cosmoz-dropdown-menu-next',
+	tags: ['autodocs'],
+	argTypes: {
+		searchable: {
+			control: 'boolean',
+			description: 'Show search input',
+		},
+		placeholder: {
+			control: 'text',
+			description: 'Search input placeholder text',
+		},
+		placement: {
+			control: 'select',
+			options: placementOptions,
+			description:
+				'CSS anchor position-area value. See MDN for all available options.',
+		},
+		onSelect: {
+			action: 'select',
+			description: 'Fired when a menu item is selected',
+		},
+	},
+	args: {
+		searchable: false,
+		placeholder: 'Search...',
+		placement: 'bottom span-right',
+		onSelect: fn(),
+	},
+};
+
+export default meta;
+
+type Story = StoryObj<StoryArgs>;
+
 /**
- * Basic menu with items using data-driven source
+ * Basic menu with items using data-driven source.
+ * Click the button to open the dropdown menu.
  */
 export const Basic: Story = {
-	render: () => html`
-		<cosmoz-dropdown-next>
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
 			<cosmoz-button slot="button">Open Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
 				autofocus
+				?searchable=${args.searchable}
+				placeholder=${args.placeholder}
 				.source=${basicItems}
-				@select=${onSelect}
+				@select=${args.onSelect}
 			></cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
 };
 
 /**
- * Menu with search functionality
+ * Menu with search functionality.
+ * Type to filter menu items.
  */
 export const WithSearch: Story = {
-	render: () => html`
-		<cosmoz-dropdown-next>
+	args: {
+		searchable: true,
+		placeholder: 'Search actions...',
+	},
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
 			<cosmoz-button slot="button">Open Searchable Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
 				autofocus
-				searchable
-				placeholder="Search actions..."
+				?searchable=${args.searchable}
+				placeholder=${args.placeholder}
 				.source=${searchableItems}
-				@select=${onSelect}
+				@select=${args.onSelect}
 			></cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
 };
 
 /**
- * Menu with grouped items
+ * Menu with grouped items.
+ * Items are organized into sections with labels.
  */
 export const WithGroups: Story = {
-	render: () => html`
-		<cosmoz-dropdown-next>
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
 			<cosmoz-button slot="button">Open Grouped Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
 				autofocus
+				?searchable=${args.searchable}
+				placeholder=${args.placeholder}
 				.source=${groupedItems}
-				@select=${onSelect}
+				@select=${args.onSelect}
 			></cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
 };
 
 /**
- * Menu with grouped items and search
+ * Menu with grouped items and search.
+ * Combines grouping with filtering capability.
  */
 export const WithGroupsAndSearch: Story = {
-	render: () => html`
-		<cosmoz-dropdown-next>
+	args: {
+		searchable: true,
+		placeholder: 'Type a command...',
+	},
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
 			<cosmoz-button slot="button">Open Grouped Searchable Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
 				autofocus
-				searchable
-				placeholder="Type a command..."
+				?searchable=${args.searchable}
+				placeholder=${args.placeholder}
 				.source=${groupedItems}
-				@select=${onSelect}
+				@select=${args.onSelect}
 			>
 				<div slot="no-results">
 					<p style="padding: 16px; text-align: center; color: #666;">
@@ -214,26 +288,34 @@ export const WithGroupsAndSearch: Story = {
 };
 
 /**
- * Disabled menu items
+ * Menu with disabled items.
+ * Disabled items cannot be selected and are skipped during keyboard navigation.
  */
 export const WithDisabledItems: Story = {
-	render: () => html`
-		<cosmoz-dropdown-next>
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
 			<cosmoz-button slot="button">Open Menu with Disabled Items</cosmoz-button>
 			<cosmoz-dropdown-menu-next
 				autofocus
+				?searchable=${args.searchable}
+				placeholder=${args.placeholder}
 				.source=${itemsWithDisabled}
-				@select=${onSelect}
+				@select=${args.onSelect}
 			></cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
 };
 
 /**
- * Async source - simulates loading items from an API
+ * Async source - simulates loading items from an API.
+ * Shows a loading state while fetching data.
  */
 export const AsyncSource: Story = {
-	render: () => {
+	args: {
+		searchable: true,
+		placeholder: 'Search (async)...',
+	},
+	render: (args) => {
 		const asyncSource = async (query: string): Promise<MenuItem[]> => {
 			// Simulate API delay
 			await new Promise((resolve) => setTimeout(resolve, 500));
@@ -246,14 +328,14 @@ export const AsyncSource: Story = {
 		};
 
 		return html`
-			<cosmoz-dropdown-next>
+			<cosmoz-dropdown-next placement=${args.placement}>
 				<cosmoz-button slot="button">Open Async Menu</cosmoz-button>
 				<cosmoz-dropdown-menu-next
 					autofocus
-					searchable
-					placeholder="Search (async)..."
+					?searchable=${args.searchable}
+					placeholder=${args.placeholder}
 					.source=${asyncSource}
-					@select=${onSelect}
+					@select=${args.onSelect}
 				></cosmoz-dropdown-menu-next>
 			</cosmoz-dropdown-next>
 		`;
@@ -261,17 +343,22 @@ export const AsyncSource: Story = {
 };
 
 /**
- * Legacy slot-based approach (backwards compatible)
+ * Legacy slot-based approach (backwards compatible).
+ * Menu items are provided as slotted elements instead of a data source.
  */
 export const SlotBased: Story = {
-	render: () => html`
-		<cosmoz-dropdown-next>
+	args: {
+		searchable: true,
+		placeholder: 'Search...',
+	},
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
 			<cosmoz-button slot="button">Open Slot-Based Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
 				autofocus
-				searchable
-				placeholder="Search..."
-				@select=${onSelect}
+				?searchable=${args.searchable}
+				placeholder=${args.placeholder}
+				@select=${args.onSelect}
 			>
 				<cosmoz-button variant="tertiary" full-width role="menuitem">
 					${copyIcon}
