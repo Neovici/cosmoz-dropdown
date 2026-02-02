@@ -154,6 +154,19 @@ const itemsWithDisabled: MenuItem[] = [
 	{ label: 'Delete (disabled)', value: 'delete', disabled: true },
 ];
 
+/**
+ * Creates a searchable source function from a static array.
+ * Filters items by label matching the query (case-insensitive).
+ *
+ * TODO: Investigate making the component filter static arrays automatically
+ * when `searchable` is enabled, to simplify the API for common use cases.
+ */
+const makeSearchable = (items: MenuItem[]) => (query: string) => {
+	if (!query.trim()) return items;
+	const q = query.toLowerCase();
+	return items.filter((item) => item.label.toLowerCase().includes(q));
+};
+
 interface StoryArgs {
 	searchable: boolean;
 	placeholder: string;
@@ -232,7 +245,7 @@ export const WithSearch: Story = {
 				autofocus
 				?searchable=${args.searchable}
 				placeholder=${args.placeholder}
-				.source=${searchableItems}
+				.source=${makeSearchable(searchableItems)}
 				@select=${args.onSelect}
 			></cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
@@ -274,7 +287,7 @@ export const WithGroupsAndSearch: Story = {
 				autofocus
 				?searchable=${args.searchable}
 				placeholder=${args.placeholder}
-				.source=${groupedItems}
+				.source=${makeSearchable(groupedItems)}
 				@select=${args.onSelect}
 			>
 				<div slot="no-results">
