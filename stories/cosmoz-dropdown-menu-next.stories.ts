@@ -147,6 +147,7 @@ export const Basic: Story = {
 		<cosmoz-dropdown-next>
 			<cosmoz-button slot="button">Open Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
+				autofocus
 				.source=${basicItems}
 				@select=${onSelect}
 			></cosmoz-dropdown-menu-next>
@@ -162,6 +163,7 @@ export const WithSearch: Story = {
 		<cosmoz-dropdown-next>
 			<cosmoz-button slot="button">Open Searchable Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
+				autofocus
 				searchable
 				placeholder="Search actions..."
 				.source=${searchableItems}
@@ -179,6 +181,7 @@ export const WithGroups: Story = {
 		<cosmoz-dropdown-next>
 			<cosmoz-button slot="button">Open Grouped Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
+				autofocus
 				.source=${groupedItems}
 				@select=${onSelect}
 			></cosmoz-dropdown-menu-next>
@@ -194,6 +197,7 @@ export const WithGroupsAndSearch: Story = {
 		<cosmoz-dropdown-next>
 			<cosmoz-button slot="button">Open Grouped Searchable Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
+				autofocus
 				searchable
 				placeholder="Type a command..."
 				.source=${groupedItems}
@@ -217,6 +221,7 @@ export const WithDisabledItems: Story = {
 		<cosmoz-dropdown-next>
 			<cosmoz-button slot="button">Open Menu with Disabled Items</cosmoz-button>
 			<cosmoz-dropdown-menu-next
+				autofocus
 				.source=${itemsWithDisabled}
 				@select=${onSelect}
 			></cosmoz-dropdown-menu-next>
@@ -244,6 +249,7 @@ export const AsyncSource: Story = {
 			<cosmoz-dropdown-next>
 				<cosmoz-button slot="button">Open Async Menu</cosmoz-button>
 				<cosmoz-dropdown-menu-next
+					autofocus
 					searchable
 					placeholder="Search (async)..."
 					.source=${asyncSource}
@@ -262,6 +268,7 @@ export const SlotBased: Story = {
 		<cosmoz-dropdown-next>
 			<cosmoz-button slot="button">Open Slot-Based Menu</cosmoz-button>
 			<cosmoz-dropdown-menu-next
+				autofocus
 				searchable
 				placeholder="Search..."
 				@select=${onSelect}
