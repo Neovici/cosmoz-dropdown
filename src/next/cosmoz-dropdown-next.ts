@@ -69,12 +69,17 @@ const CosmozDropdownNext = ({
 		popover.current?.togglePopover();
 	};
 
+	const close = () => {
+		popover.current?.hidePopover();
+	};
+
 	return html`
 		<slot name="button" @click=${toggle}></slot>
 		<div
 			popover
 			style="position-area: ${placement}"
 			@toggle=${autofocus}
+			@select=${close}
 			${ref((el) => {
 				popover.current = el as HTMLElement | undefined;
 			})}
