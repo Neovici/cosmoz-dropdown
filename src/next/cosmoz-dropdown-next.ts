@@ -43,7 +43,7 @@ const style = css`
 		position: fixed;
 		position-anchor: --dropdown-anchor;
 		inset: unset;
-		margin: 0;
+		margin: var(--cz-spacing, 0.25rem);
 		position-try-fallbacks:
 			flip-block,
 			flip-inline,
@@ -53,6 +53,31 @@ const style = css`
 		padding: 0;
 		background: transparent;
 		overflow: visible;
+
+		/* Animation - open state */
+		opacity: 1;
+		transform: translateY(0) scale(1);
+
+		/* Transitions for smooth open/close animation */
+		transition:
+			opacity 150ms ease-out,
+			transform 150ms ease-out,
+			overlay 150ms ease-out allow-discrete,
+			display 150ms ease-out allow-discrete;
+	}
+
+	/* Starting state when popover opens */
+	@starting-style {
+		[popover]:popover-open {
+			opacity: 0;
+			transform: translateY(-4px) scale(0.96);
+		}
+	}
+
+	/* Closing state */
+	[popover]:not(:popover-open) {
+		opacity: 0;
+		transform: translateY(-4px) scale(0.96);
 	}
 `;
 
