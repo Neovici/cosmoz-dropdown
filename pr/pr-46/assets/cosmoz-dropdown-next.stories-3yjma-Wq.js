@@ -1,4 +1,4 @@
-import{b as i}from"./iframe-DCH9ByOY.js";import"./cosmoz-dropdown-next-DoemZQmN.js";import{p as d}from"./story-helpers-BZ4qBkkK.js";import"./preload-helper-PPVm8Dsz.js";const r={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:d,description:"CSS anchor position-area value. See MDN for all available options."}},args:{placement:"bottom span-right"}},e=`
+import{b as i}from"./iframe-DO-sCaDZ.js";import"./cosmoz-dropdown-next-Cz8EMp8e.js";import"./preload-helper-PPVm8Dsz.js";const d=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],c={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:d,description:"CSS anchor position-area value. See MDN for all available options."}},args:{placement:"bottom span-right"}},e=`
     background: var(--cz-color-bg-primary);
     border-radius: var(--cz-radius-md);
     box-shadow: var(--cz-shadow-lg);
@@ -153,4 +153,4 @@ Click the button to toggle the popover.`,...o.parameters?.docs?.description}}};n
         </div>
     \`
 }`,...n.parameters?.docs?.source},description:{story:`Demonstrates position fallbacks when near viewport edges.
-The dropdown will flip to stay visible when there's not enough space.`,...n.parameters?.docs?.description}}};const a=["Basic","PositionFallbacks"];export{o as Basic,n as PositionFallbacks,a as __namedExportsOrder,r as default};
+The dropdown will flip to stay visible when there's not enough space.`,...n.parameters?.docs?.description}}};const r=["Basic","PositionFallbacks"];export{o as Basic,n as PositionFallbacks,r as __namedExportsOrder,c as default};
