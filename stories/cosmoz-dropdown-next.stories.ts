@@ -2,32 +2,7 @@ import '@neovici/cosmoz-button';
 import { html } from '@pionjs/pion';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import '../src/next/cosmoz-dropdown-next';
-
-/**
- * Common CSS anchor position-area values for dropdown placement.
- * See MDN position-area for the full list of available values.
- * @see https://developer.mozilla.org/en-US/docs/Web/CSS/position-area
- */
-const placementOptions = [
-	// Most common - dropdown below/above anchor
-	'bottom span-right',
-	'bottom span-left',
-	'bottom',
-	'top span-right',
-	'top span-left',
-	'top',
-	// Side placements
-	'right span-bottom',
-	'right span-top',
-	'right',
-	'left span-bottom',
-	'left span-top',
-	'left',
-	// Centered variants
-	'bottom center',
-	'top center',
-	'center',
-];
+import { placementOptions } from './story-helpers';
 
 interface StoryArgs {
 	placement: string;

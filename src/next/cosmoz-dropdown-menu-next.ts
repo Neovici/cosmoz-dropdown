@@ -13,6 +13,7 @@ import { html, nothing } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 import type { MenuItem, MenuSource } from './types';
 import { useMenuItems } from './use-menu-items';
+import { useSourceLoader } from './use-source-loader';
 
 const style = css`
 	:host {
@@ -253,16 +254,6 @@ const groupItems = (items: MenuItem[]): Map<string, MenuItem[]> => {
 	return groups;
 };
 
-// Resolve source value (handles array, promise, or function)
-const resolveSource = (
-	source: MenuSource | undefined,
-	query: string,
-): Promise<MenuItem[]> => {
-	if (!source) return Promise.resolve([]);
-	const result = typeof source === 'function' ? source(query) : source;
-	return Promise.resolve(result).then((items) => items ?? []);
-};
-
 const CosmozDropdownMenuNext = ({
 	source,
 	searchable = false,
@@ -270,49 +261,11 @@ const CosmozDropdownMenuNext = ({
 }: MenuProps) => {
 	const host = useHost();
 	const itemsContainerRef = useRef<HTMLElement>();
-	const [cachedItems, setCachedItems] = useState<MenuItem[]>([]);
 	const [query, setQuery] = useState('');
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
-
-	// Client-side filtering (instant feedback)
-	const filteredItems = useMemo(() => {
-		if (!query.trim()) return cachedItems;
-		const q = query.toLowerCase();
-		return cachedItems.filter((item) => item.label.toLowerCase().includes(q));
-	}, [cachedItems, query]);
-
-	// Fetch from source on mount and query change
-	useEffect(() => {
-		let cancelled = false;
-
-		setLoading(true);
-		setError(null);
-
-		resolveSource(source, query)
-			.then((items) => {
-				if (!cancelled) {
-					setCachedItems(items);
-				}
-			})
-			.catch((err) => {
-				if (!cancelled) {
-					setError(err?.message ?? 'Failed to load items');
-				}
-			})
-			.finally(() => {
-				if (!cancelled) {
-					setLoading(false);
-				}
-			});
-
-		return () => {
-			cancelled = true;
-		};
-	}, [source, query]);
+	const { items, loading, error } = useSourceLoader(source, query);
 
 	// Group items by group property
-	const grouped = useMemo(() => groupItems(filteredItems), [filteredItems]);
+	const grouped = useMemo(() => groupItems(items), [items]);
 
 	// Handle selection
 	const handleSelect = useCallback(
@@ -330,7 +283,7 @@ const CosmozDropdownMenuNext = ({
 
 	// Fake focus navigation
 	const { index, highlight } = useMenuItems({
-		items: filteredItems,
+		items,
 		onSelect: handleSelect,
 		host,
 		itemsContainerRef,
@@ -341,9 +294,7 @@ const CosmozDropdownMenuNext = ({
 		host.setAttribute('role', 'menu');
 	}, [host]);
 
-	const hasItems = filteredItems.length > 0;
-	const showInitialLoading = loading && cachedItems.length === 0;
-	const showNoResults = !loading && !hasItems && query.trim().length > 0;
+	const hasItems = items.length > 0;
 
 	return html`
 		${searchable
@@ -369,10 +320,10 @@ const CosmozDropdownMenuNext = ({
 			})}
 		>
 			${error ? html`<div class="error">${error}</div>` : nothing}
-			${showInitialLoading
+			${loading && items.length === 0
 				? html`<div class="loading">Loading...</div>`
 				: nothing}
-			${showNoResults
+			${!loading && !hasItems && query.trim().length > 0
 				? html`
 						<slot name="no-results">
 							<div class="no-results">No results found</div>
@@ -382,7 +333,7 @@ const CosmozDropdownMenuNext = ({
 			${hasItems
 				? renderGroupedItems({
 						grouped,
-						items: filteredItems,
+						items,
 						highlightedIndex: index,
 						highlight,
 						select: handleSelect,
