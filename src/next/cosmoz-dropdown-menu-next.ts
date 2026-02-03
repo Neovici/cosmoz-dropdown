@@ -1,5 +1,4 @@
 import { normalize } from '@neovici/cosmoz-tokens/normalize';
-import { usePromise } from '@neovici/cosmoz-utils/hooks/use-promise';
 import {
 	component,
 	css,
@@ -13,7 +12,6 @@ import {
 import { html, nothing } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 import type { MenuItem, MenuSource } from './types';
-import { useLazyProperty } from './use-lazy-property';
 import { useMenuItems } from './use-menu-items';
 
 const style = css`
@@ -40,6 +38,39 @@ const style = css`
 		gap: calc(var(--cz-spacing, 0.25rem) * 2);
 		padding: calc(var(--cz-spacing, 0.25rem) * 3);
 		border-bottom: 1px solid var(--cz-color-border-secondary, #eaecf0);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.search::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: linear-gradient(
+			90deg,
+			transparent,
+			var(--cz-color-brand-500, #7c3aed),
+			transparent
+		);
+		opacity: 0;
+		transform: translateX(-100%);
+	}
+
+	.search.loading::after {
+		opacity: 1;
+		animation: shimmer 1.5s infinite linear;
+	}
+
+	@keyframes shimmer {
+		0% {
+			transform: translateX(-100%);
+		}
+		100% {
+			transform: translateX(100%);
+		}
 	}
 
 	.search-icon {
@@ -81,6 +112,13 @@ const style = css`
 		padding: calc(var(--cz-spacing, 0.25rem) * 4);
 		text-align: center;
 		color: var(--cz-color-text-tertiary, #475467);
+	}
+
+	.error {
+		padding: calc(var(--cz-spacing, 0.25rem) * 4);
+		text-align: center;
+		color: var(--cz-color-text-error, #dc2626);
+		font-size: var(--cz-text-sm, 0.875rem);
 	}
 
 	.group-label {
@@ -215,6 +253,16 @@ const groupItems = (items: MenuItem[]): Map<string, MenuItem[]> => {
 	return groups;
 };
 
+// Resolve source value (handles array, promise, or function)
+const resolveSource = (
+	source: MenuSource | undefined,
+	query: string,
+): Promise<MenuItem[]> => {
+	if (!source) return Promise.resolve([]);
+	const result = typeof source === 'function' ? source(query) : source;
+	return Promise.resolve(result).then((items) => items ?? []);
+};
+
 const CosmozDropdownMenuNext = ({
 	source,
 	searchable = false,
@@ -222,20 +270,49 @@ const CosmozDropdownMenuNext = ({
 }: MenuProps) => {
 	const host = useHost();
 	const itemsContainerRef = useRef<HTMLElement>();
+	const [cachedItems, setCachedItems] = useState<MenuItem[]>([]);
 	const [query, setQuery] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
-	// Resolve source (handles array, promise, or function)
-	const itemsPromise = useLazyProperty(source, query);
-	const [items, , state] = usePromise(itemsPromise) as [
-		MenuItem[] | undefined,
-		unknown,
-		string,
-	];
-	const resolvedItems = items ?? [];
-	const loading = state === 'pending';
+	// Client-side filtering (instant feedback)
+	const filteredItems = useMemo(() => {
+		if (!query.trim()) return cachedItems;
+		const q = query.toLowerCase();
+		return cachedItems.filter((item) => item.label.toLowerCase().includes(q));
+	}, [cachedItems, query]);
+
+	// Fetch from source on mount and query change
+	useEffect(() => {
+		let cancelled = false;
+
+		setLoading(true);
+		setError(null);
+
+		resolveSource(source, query)
+			.then((items) => {
+				if (!cancelled) {
+					setCachedItems(items);
+				}
+			})
+			.catch((err) => {
+				if (!cancelled) {
+					setError(err?.message ?? 'Failed to load items');
+				}
+			})
+			.finally(() => {
+				if (!cancelled) {
+					setLoading(false);
+				}
+			});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [source, query]);
 
 	// Group items by group property
-	const grouped = useMemo(() => groupItems(resolvedItems), [resolvedItems]);
+	const grouped = useMemo(() => groupItems(filteredItems), [filteredItems]);
 
 	// Handle selection
 	const handleSelect = useCallback(
@@ -253,7 +330,7 @@ const CosmozDropdownMenuNext = ({
 
 	// Fake focus navigation
 	const { index, highlight } = useMenuItems({
-		items: resolvedItems,
+		items: filteredItems,
 		onSelect: handleSelect,
 		host,
 		itemsContainerRef,
@@ -264,13 +341,14 @@ const CosmozDropdownMenuNext = ({
 		host.setAttribute('role', 'menu');
 	}, [host]);
 
-	const hasItems = resolvedItems.length > 0;
+	const hasItems = filteredItems.length > 0;
+	const showInitialLoading = loading && cachedItems.length === 0;
 	const showNoResults = !loading && !hasItems && query.trim().length > 0;
 
 	return html`
 		${searchable
 			? html`
-					<div class="search">
+					<div class="search${loading ? ' loading' : ''}">
 						${searchIcon}
 						<input
 							class="search-input"
@@ -290,7 +368,10 @@ const CosmozDropdownMenuNext = ({
 				itemsContainerRef.current = el as HTMLElement | undefined;
 			})}
 		>
-			${loading ? html`<div class="loading">Loading...</div>` : nothing}
+			${error ? html`<div class="error">${error}</div>` : nothing}
+			${showInitialLoading
+				? html`<div class="loading">Loading...</div>`
+				: nothing}
 			${showNoResults
 				? html`
 						<slot name="no-results">
@@ -301,7 +382,7 @@ const CosmozDropdownMenuNext = ({
 			${hasItems
 				? renderGroupedItems({
 						grouped,
-						items: resolvedItems,
+						items: filteredItems,
 						highlightedIndex: index,
 						highlight,
 						select: handleSelect,
