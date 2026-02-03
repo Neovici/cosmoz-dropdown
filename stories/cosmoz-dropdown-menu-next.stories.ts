@@ -117,41 +117,273 @@ const downloadIcon = html`
 		/>
 	</svg>
 `;
+
+const cutIcon = html`
+	<svg slot="prefix" viewBox="0 0 20 20" fill="none">
+		<path
+			d="M5 7.5C6.38071 7.5 7.5 6.38071 7.5 5C7.5 3.61929 6.38071 2.5 5 2.5C3.61929 2.5 2.5 3.61929 2.5 5C2.5 6.38071 3.61929 7.5 5 7.5Z"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path
+			d="M5 17.5C6.38071 17.5 7.5 16.3807 7.5 15C7.5 13.6193 6.38071 12.5 5 12.5C3.61929 12.5 2.5 13.6193 2.5 15C2.5 16.3807 3.61929 17.5 5 17.5Z"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path
+			d="M6.91667 6.91667L17.5 17.5M17.5 2.5L6.91667 13.0833"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+	</svg>
+`;
+
+const pasteIcon = html`
+	<svg slot="prefix" viewBox="0 0 20 20" fill="none">
+		<path
+			d="M13.3333 3.33333H15C15.442 3.33333 15.866 3.50893 16.1785 3.82149C16.4911 4.13405 16.6667 4.55797 16.6667 5V16.6667C16.6667 17.1087 16.4911 17.5326 16.1785 17.8452C15.866 18.1577 15.442 18.3333 15 18.3333H5C4.55797 18.3333 4.13405 18.1577 3.82149 17.8452C3.50893 17.5326 3.33333 17.1087 3.33333 16.6667V5C3.33333 4.55797 3.50893 4.13405 3.82149 3.82149C4.13405 3.50893 4.55797 3.33333 5 3.33333H6.66667"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path
+			d="M12.5 1.66667H7.5C7.03976 1.66667 6.66667 2.03976 6.66667 2.5V4.16667C6.66667 4.6269 7.03976 5 7.5 5H12.5C12.9602 5 13.3333 4.6269 13.3333 4.16667V2.5C13.3333 2.03976 12.9602 1.66667 12.5 1.66667Z"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+	</svg>
+`;
+
+const duplicateIcon = html`
+	<svg slot="prefix" viewBox="0 0 20 20" fill="none">
+		<path
+			d="M16.6667 7.5H9.16667C8.24619 7.5 7.5 8.24619 7.5 9.16667V16.6667C7.5 17.5871 8.24619 18.3333 9.16667 18.3333H16.6667C17.5871 18.3333 18.3333 17.5871 18.3333 16.6667V9.16667C18.3333 8.24619 17.5871 7.5 16.6667 7.5Z"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path
+			d="M4.16667 12.5H3.33333C2.89131 12.5 2.46738 12.3244 2.15482 12.0118C1.84226 11.6993 1.66667 11.2754 1.66667 10.8333V3.33333C1.66667 2.89131 1.84226 2.46738 2.15482 2.15482C2.46738 1.84226 2.89131 1.66667 3.33333 1.66667H10.8333C11.2754 1.66667 11.6993 1.84226 12.0118 2.15482C12.3244 2.46738 12.5 2.89131 12.5 3.33333V4.16667"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+	</svg>
+`;
+
+const filterIcon = html`
+	<svg slot="prefix" viewBox="0 0 20 20" fill="none">
+		<path
+			d="M18.3333 2.5H1.66667L8.33333 10.3833V15.8333L11.6667 17.5V10.3833L18.3333 2.5Z"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+	</svg>
+`;
 /* eslint-enable max-len */
+
+// Helper to create keybinding badges
+const keybinding = (keys: string) => html`
+	<cosmoz-keybinding-badge>${keys}</cosmoz-keybinding-badge>
+`;
+
+// Helper to create count badges for filter items
+const count = (n: number) => html`
+	<span
+		style="
+			font-size: var(--cz-text-xs, 0.75rem);
+			color: var(--cz-color-text-tertiary, #667085);
+			background: var(--cz-color-bg-secondary, #f9fafb);
+			padding: 2px 8px;
+			border-radius: var(--cz-radius-full, 9999px);
+		"
+		>${n}</span
+	>
+`;
 
 // Sample menu items for data-driven examples
 const basicItems: MenuItem[] = [
-	{ label: 'Copy', value: 'copy' },
-	{ label: 'Edit', value: 'edit' },
-	{ label: 'Delete', value: 'delete' },
+	{ label: 'Copy', value: 'copy', icon: copyIcon, suffix: keybinding('⌘C') },
+	{ label: 'Edit', value: 'edit', icon: editIcon, suffix: keybinding('⌘E') },
+	{
+		label: 'Delete',
+		value: 'delete',
+		icon: deleteIcon,
+		suffix: keybinding('⌘⌫'),
+	},
 ];
 
 const searchableItems: MenuItem[] = [
-	{ label: 'Copy', value: 'copy' },
-	{ label: 'Cut', value: 'cut' },
-	{ label: 'Paste', value: 'paste' },
-	{ label: 'Edit', value: 'edit' },
-	{ label: 'Delete', value: 'delete' },
-	{ label: 'Duplicate', value: 'duplicate' },
-	{ label: 'Share', value: 'share' },
-	{ label: 'Download', value: 'download' },
+	{ label: 'Copy', value: 'copy', icon: copyIcon, suffix: keybinding('⌘C') },
+	{ label: 'Cut', value: 'cut', icon: cutIcon, suffix: keybinding('⌘X') },
+	{ label: 'Paste', value: 'paste', icon: pasteIcon, suffix: keybinding('⌘V') },
+	{ label: 'Edit', value: 'edit', icon: editIcon, suffix: keybinding('⌘E') },
+	{
+		label: 'Delete',
+		value: 'delete',
+		icon: deleteIcon,
+		suffix: keybinding('⌘⌫'),
+	},
+	{
+		label: 'Duplicate',
+		value: 'duplicate',
+		icon: duplicateIcon,
+		suffix: keybinding('⌘D'),
+	},
+	{
+		label: 'Share',
+		value: 'share',
+		icon: shareIcon,
+		suffix: keybinding('⌘⇧S'),
+	},
+	{
+		label: 'Download',
+		value: 'download',
+		icon: downloadIcon,
+		suffix: keybinding('⌘⇧D'),
+	},
 ];
 
 const groupedItems: MenuItem[] = [
-	{ label: 'Copy', value: 'copy', group: 'Clipboard' },
-	{ label: 'Cut', value: 'cut', group: 'Clipboard' },
-	{ label: 'Paste', value: 'paste', group: 'Clipboard' },
-	{ label: 'Edit', value: 'edit', group: 'Actions' },
-	{ label: 'Share', value: 'share', group: 'Actions' },
-	{ label: 'Download', value: 'download', group: 'Actions' },
-	{ label: 'Delete', value: 'delete', group: 'Danger Zone' },
+	{
+		label: 'Copy',
+		value: 'copy',
+		group: 'Clipboard',
+		icon: copyIcon,
+		suffix: keybinding('⌘C'),
+	},
+	{
+		label: 'Cut',
+		value: 'cut',
+		group: 'Clipboard',
+		icon: cutIcon,
+		suffix: keybinding('⌘X'),
+	},
+	{
+		label: 'Paste',
+		value: 'paste',
+		group: 'Clipboard',
+		icon: pasteIcon,
+		suffix: keybinding('⌘V'),
+	},
+	{
+		label: 'Edit',
+		value: 'edit',
+		group: 'Actions',
+		icon: editIcon,
+		suffix: keybinding('⌘E'),
+	},
+	{
+		label: 'Share',
+		value: 'share',
+		group: 'Actions',
+		icon: shareIcon,
+		suffix: keybinding('⌘⇧S'),
+	},
+	{
+		label: 'Download',
+		value: 'download',
+		group: 'Actions',
+		icon: downloadIcon,
+		suffix: keybinding('⌘⇧D'),
+	},
+	{
+		label: 'Delete',
+		value: 'delete',
+		group: 'Danger Zone',
+		icon: deleteIcon,
+		suffix: keybinding('⌘⌫'),
+	},
 ];
 
 const itemsWithDisabled: MenuItem[] = [
-	{ label: 'Copy', value: 'copy' },
-	{ label: 'Edit (disabled)', value: 'edit', disabled: true },
-	{ label: 'Share', value: 'share' },
-	{ label: 'Delete (disabled)', value: 'delete', disabled: true },
+	{ label: 'Copy', value: 'copy', icon: copyIcon, suffix: keybinding('⌘C') },
+	{
+		label: 'Edit',
+		value: 'edit',
+		icon: editIcon,
+		suffix: keybinding('⌘E'),
+		disabled: true,
+	},
+	{
+		label: 'Share',
+		value: 'share',
+		icon: shareIcon,
+		suffix: keybinding('⌘⇧S'),
+	},
+	{
+		label: 'Delete',
+		value: 'delete',
+		icon: deleteIcon,
+		suffix: keybinding('⌘⌫'),
+		disabled: true,
+	},
+];
+
+// Filter menu items with grouped options and counts
+const filterItems: MenuItem[] = [
+	// Status group
+	{
+		label: 'Active',
+		value: 'status:active',
+		group: 'Status',
+		suffix: count(24),
+	},
+	{
+		label: 'Pending',
+		value: 'status:pending',
+		group: 'Status',
+		suffix: count(12),
+	},
+	{
+		label: 'Completed',
+		value: 'status:completed',
+		group: 'Status',
+		suffix: count(89),
+	},
+	{
+		label: 'Archived',
+		value: 'status:archived',
+		group: 'Status',
+		suffix: count(5),
+	},
+	// Priority group
+	{
+		label: 'Urgent',
+		value: 'priority:urgent',
+		group: 'Priority',
+		suffix: count(3),
+	},
+	{
+		label: 'High',
+		value: 'priority:high',
+		group: 'Priority',
+		suffix: count(8),
+	},
+	{
+		label: 'Medium',
+		value: 'priority:medium',
+		group: 'Priority',
+		suffix: count(45),
+	},
+	{ label: 'Low', value: 'priority:low', group: 'Priority', suffix: count(67) },
+	// Type group
+	{ label: 'Bug', value: 'type:bug', group: 'Type', suffix: count(15) },
+	{ label: 'Feature', value: 'type:feature', group: 'Type', suffix: count(32) },
+	{ label: 'Task', value: 'type:task', group: 'Type', suffix: count(78) },
 ];
 
 /**
@@ -356,44 +588,26 @@ export const AsyncSource: Story = {
 };
 
 /**
- * Legacy slot-based approach (backwards compatible).
- * Menu items are provided as slotted elements instead of a data source.
+ * Filter menu with grouped options and counts.
+ * Useful for filtering lists or tables by multiple criteria.
  */
-export const SlotBased: Story = {
+export const FilterMenu: Story = {
 	args: {
 		searchable: true,
-		placeholder: 'Search...',
+		placeholder: 'Filter by...',
 	},
 	render: (args) => html`
 		<cosmoz-dropdown-next placement=${args.placement}>
-			<cosmoz-button slot="button">Open Slot-Based Menu</cosmoz-button>
+			<cosmoz-button slot="button" variant="secondary">
+				${filterIcon} Filters
+			</cosmoz-button>
 			<cosmoz-dropdown-menu-next
 				autofocus
 				?searchable=${args.searchable}
 				placeholder=${args.placeholder}
+				.source=${makeSearchable(filterItems)}
 				@select=${args.onSelect}
-			>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${copyIcon}
-					<cosmoz-menu-label>Copy</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${editIcon}
-					<cosmoz-menu-label>Edit</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${shareIcon}
-					<cosmoz-menu-label>Share</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem">
-					${downloadIcon}
-					<cosmoz-menu-label>Download</cosmoz-menu-label>
-				</cosmoz-button>
-				<cosmoz-button variant="tertiary" full-width role="menuitem" disabled>
-					${deleteIcon}
-					<cosmoz-menu-label>Delete (disabled)</cosmoz-menu-label>
-				</cosmoz-button>
-			</cosmoz-dropdown-menu-next>
+			></cosmoz-dropdown-menu-next>
 		</cosmoz-dropdown-next>
 	`,
 };

@@ -15,7 +15,6 @@ import { ref } from 'lit-html/directives/ref.js';
 import type { MenuItem, MenuSource } from './types';
 import { useLazyProperty } from './use-lazy-property';
 import { useMenuItems } from './use-menu-items';
-import { useSlotSource } from './use-slot-source';
 
 const style = css`
 	:host {
@@ -222,16 +221,11 @@ const CosmozDropdownMenuNext = ({
 	placeholder = 'Search...',
 }: MenuProps) => {
 	const host = useHost();
-	const slotRef = useRef<HTMLSlotElement>();
 	const itemsContainerRef = useRef<HTMLElement>();
 	const [query, setQuery] = useState('');
 
-	// Convert slot to source function (if no source prop)
-	const slotSource = useSlotSource(slotRef);
-	const effectiveSource = source ?? slotSource;
-
 	// Resolve source (handles array, promise, or function)
-	const itemsPromise = useLazyProperty(effectiveSource, query);
+	const itemsPromise = useLazyProperty(source, query);
 	const [items, , state] = usePromise(itemsPromise) as [
 		MenuItem[] | undefined,
 		unknown,
@@ -313,14 +307,6 @@ const CosmozDropdownMenuNext = ({
 						select: handleSelect,
 					})
 				: nothing}
-
-			<!-- Hidden slot for DOM-based items -->
-			<slot
-				${ref((el) => {
-					slotRef.current = el as HTMLSlotElement | undefined;
-				})}
-				style="display: none"
-			></slot>
 		</div>
 	`;
 };
