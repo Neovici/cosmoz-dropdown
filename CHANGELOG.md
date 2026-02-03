@@ -1,3 +1,9 @@
+## [7.1.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.0.2...v7.1.0) (2026-02-03)
+
+### Features
+
+* cosmoz-dropdown-next with Popover API and CSS Anchor Positioning ([#46](https://github.com/Neovici/cosmoz-dropdown/issues/46)) ([882faf4](https://github.com/Neovici/cosmoz-dropdown/commit/882faf4073afc5557bf2799d3153e0370e5ecd35)), closes [whatwg/html#9245](https://github.com/whatwg/html/issues/9245)
+
 ## [7.0.2](https://github.com/Neovici/cosmoz-dropdown/compare/v7.0.1...v7.0.2) (2026-01-30)
 
 ### Bug Fixes
