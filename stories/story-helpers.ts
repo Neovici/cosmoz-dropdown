@@ -1,0 +1,17 @@
+export const placementOptions = [
+	'bottom span-right',
+	'bottom span-left',
+	'bottom',
+	'top span-right',
+	'top span-left',
+	'top',
+	'right span-bottom',
+	'right span-top',
+	'right',
+	'left span-bottom',
+	'left span-top',
+	'left',
+	'bottom center',
+	'top center',
+	'center',
+];

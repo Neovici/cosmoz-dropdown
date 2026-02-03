@@ -1,103 +1,107 @@
 {
-  "name": "@neovici/cosmoz-dropdown",
-  "version": "7.0.2",
-  "description": "A simple dropdown web component",
-  "keywords": [
-    "lit-html",
-    "web-components"
-  ],
-  "homepage": "https://github.com/Neovici/cosmoz-dropdown#readme",
-  "bugs": {
-    "url": "https://github.com/Neovici/cosmoz-dropdown/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Neovici/cosmoz-dropdown.git"
-  },
-  "license": "Apache-2.0",
-  "author": "",
-  "main": "dist/index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "lint": "tsc && eslint --cache .",
-    "check:duplicates": "check-duplicate-components",
-    "build": "tsc -p tsconfig.build.json",
-    "start": "wds",
-    "test": "wtr --coverage",
-    "test:watch": "wtr --watch",
-    "storybook:start": "storybook dev -p 8000",
-    "storybook:build": "storybook build",
-    "storybook:deploy": "storybook-to-ghpages",
-    "storybook:preview": "npm run storybook:build && http-server -d ./storybook-static/",
-    "prepare": "husky"
-  },
-  "release": {
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      "@semantic-release/github",
-      "@semantic-release/npm",
-      "@semantic-release/git"
-    ],
-    "branch": "master",
-    "preset": "conventionalcommits"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "dist/",
-    "types"
-  ],
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
-    "rules": {
-      "body-max-line-length": [
-        1,
-        "always",
-        600
-      ]
-    }
-  },
-  "exports": {
-    ".": "./dist/index.js",
-    "./use-focus": "./dist/use-focus.js",
-    "./use-floating": "./dist/use-floating.js",
-    "./connectable": "./dist/connectable.js",
-    "./src/use-focus.js": "./dist/use-focus.js"
-  },
-  "dependencies": {
-    "@floating-ui/dom": "^1.6.12",
-    "@neovici/cosmoz-utils": "^6.8.1",
-    "@pionjs/pion": "^2.5.2",
-    "lit-html": "^3.1.2"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^20.0.0",
-    "@commitlint/config-conventional": "^20.0.0",
-    "@neovici/cfg": "^2.8.0",
-    "@open-wc/testing": "^4.0.0",
-    "@semantic-release/changelog": "^6.0.0",
-    "@semantic-release/git": "^10.0.0",
-    "@storybook/web-components-vite": "^9.1.5",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^24.0.0",
-    "esbuild": "^0.25.0",
-    "http-server": "^14.1.1",
-    "husky": "^9.0.11",
-    "lint-staged": "^16.2.7",
-    "rollup-plugin-esbuild": "^6.1.1",
-    "semantic-release": "^25.0.0",
-    "sinon": "^21.0.0",
-    "storybook": "^9.1.5",
-    "typescript": "^5.4.3"
-  },
-  "overrides": {
-    "conventional-changelog-conventionalcommits": ">= 8.0.0"
-  }
+	"name": "@neovici/cosmoz-dropdown",
+	"version": "7.0.2",
+	"description": "A simple dropdown web component",
+	"keywords": [
+		"lit-html",
+		"web-components"
+	],
+	"homepage": "https://github.com/Neovici/cosmoz-dropdown#readme",
+	"bugs": {
+		"url": "https://github.com/Neovici/cosmoz-dropdown/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Neovici/cosmoz-dropdown.git"
+	},
+	"license": "Apache-2.0",
+	"author": "",
+	"main": "dist/index.js",
+	"directories": {
+		"test": "test"
+	},
+	"scripts": {
+		"lint": "tsc && eslint --cache .",
+		"check:duplicates": "check-duplicate-components",
+		"build": "tsc -p tsconfig.build.json",
+		"start": "wds",
+		"test": "wtr --coverage",
+		"test:watch": "wtr --watch",
+		"storybook:start": "storybook dev -p 8000",
+		"storybook:build": "storybook build",
+		"storybook:deploy": "storybook-to-ghpages",
+		"storybook:preview": "npm run storybook:build && http-server -d ./storybook-static/",
+		"prepare": "husky"
+	},
+	"release": {
+		"plugins": [
+			"@semantic-release/commit-analyzer",
+			"@semantic-release/release-notes-generator",
+			"@semantic-release/changelog",
+			"@semantic-release/github",
+			"@semantic-release/npm",
+			"@semantic-release/git"
+		],
+		"branch": "master",
+		"preset": "conventionalcommits"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist/",
+		"types"
+	],
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		],
+		"rules": {
+			"body-max-line-length": [
+				1,
+				"always",
+				600
+			]
+		}
+	},
+	"exports": {
+		".": "./dist/index.js",
+		"./cosmoz-dropdown-next": "./dist/next/cosmoz-dropdown-next.js",
+		"./use-focus": "./dist/use-focus.js",
+		"./use-floating": "./dist/use-floating.js",
+		"./connectable": "./dist/connectable.js",
+		"./src/use-focus.js": "./dist/use-focus.js"
+	},
+	"dependencies": {
+		"@floating-ui/dom": "^1.6.12",
+		"@neovici/cosmoz-utils": "^6.8.1",
+		"@pionjs/pion": "^2.5.2",
+		"lit-html": "^3.1.2"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^20.0.0",
+		"@commitlint/config-conventional": "^20.0.0",
+		"@neovici/cfg": "^2.8.0",
+		"@neovici/cosmoz-button": "^1.0.0",
+		"@neovici/cosmoz-tokens": "^3.2.1",
+		"@open-wc/testing": "^4.0.0",
+		"@semantic-release/changelog": "^6.0.0",
+		"@semantic-release/git": "^10.0.0",
+		"@storybook/addon-docs": "^10.0.0",
+		"@storybook/web-components-vite": "^10.0.0",
+		"@types/mocha": "^10.0.6",
+		"@types/node": "^24.0.0",
+		"esbuild": "^0.25.0",
+		"http-server": "^14.1.1",
+		"husky": "^9.0.11",
+		"lint-staged": "^16.2.7",
+		"rollup-plugin-esbuild": "^6.1.1",
+		"semantic-release": "^25.0.0",
+		"sinon": "^21.0.0",
+		"storybook": "^10.0.0",
+		"typescript": "^5.4.3"
+	},
+	"overrides": {
+		"conventional-changelog-conventionalcommits": ">= 8.0.0"
+	}
 }
