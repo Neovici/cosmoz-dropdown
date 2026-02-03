@@ -66,6 +66,7 @@
 	},
 	"exports": {
 		".": "./dist/index.js",
+		"./cosmoz-dropdown-next": "./dist/next/cosmoz-dropdown-next.js",
 		"./use-focus": "./dist/use-focus.js",
 		"./use-floating": "./dist/use-floating.js",
 		"./connectable": "./dist/connectable.js",
@@ -73,8 +74,6 @@
 	},
 	"dependencies": {
 		"@floating-ui/dom": "^1.6.12",
-		"@neovici/cosmoz-button": "^1.0.0",
-		"@neovici/cosmoz-tokens": "^3.2.1",
 		"@neovici/cosmoz-utils": "^6.8.1",
 		"@pionjs/pion": "^2.5.2",
 		"lit-html": "^3.1.2"
@@ -83,6 +82,8 @@
 		"@commitlint/cli": "^20.0.0",
 		"@commitlint/config-conventional": "^20.0.0",
 		"@neovici/cfg": "^2.8.0",
+		"@neovici/cosmoz-button": "^1.0.0",
+		"@neovici/cosmoz-tokens": "^3.2.1",
 		"@open-wc/testing": "^4.0.0",
 		"@semantic-release/changelog": "^6.0.0",
 		"@semantic-release/git": "^10.0.0",

@@ -1,26 +1,6 @@
 import '@neovici/cosmoz-button';
 import '@neovici/cosmoz-tokens';
-import { useKeybindings } from '@neovici/cosmoz-utils/keybindings';
-import { component, html } from '@pionjs/pion';
-import { menuBindings } from '../src/next/menu-keybindings';
-
-/**
- * Component that provides keybindings context for all stories.
- * Uses children prop instead of slot since shadow DOM is disabled
- * to allow context events to bubble up to the provider.
- */
-const KeybindingsProvider = function (props) {
-	const register = useKeybindings(menuBindings);
-
-	return html`<cosmoz-keybinding-provider .value=${register}>
-		${props.content}
-	</cosmoz-keybinding-provider>`;
-};
-
-customElements.define(
-	'storybook-keybindings',
-	component(KeybindingsProvider, { useShadowDOM: false }),
-);
+import { html } from '@pionjs/pion';
 
 export default {
 	decorators: [
@@ -49,9 +29,7 @@ export default {
 							color 0.2s;
 					}
 				</style>
-				<storybook-keybindings
-					.content=${html`<div class="story-root">${story()}</div>`}
-				></storybook-keybindings>
+				<div class="story-root">${story()}</div>
 			`;
 		},
 	],
