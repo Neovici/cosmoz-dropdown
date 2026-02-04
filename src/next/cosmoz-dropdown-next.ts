@@ -1,4 +1,11 @@
-import { component, css, useEffect, useHost, useRef } from '@pionjs/pion';
+import {
+	component,
+	css,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from '@pionjs/pion';
 import { html } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 
@@ -86,56 +93,96 @@ interface DropdownProps {
 	hover?: boolean;
 }
 
-const CosmozDropdownNext = ({
-	placement = 'bottom span-right',
-	hover = false,
-}: DropdownProps) => {
-	const host = useHost();
-	const popover = useRef<HTMLElement>();
+const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
+	const { placement = 'bottom span-right', hover } = host;
+	const [popoverEl, setPopoverEl] = useState<HTMLElement>();
+	const hoverState = useRef<{
+		hoveringHost: boolean;
+		hoveringPopover: boolean;
+		closeTimeout?: ReturnType<typeof setTimeout>;
+	}>({ hoveringHost: false, hoveringPopover: false });
+
+	// Only update state when the element actually changes
+	const popoverRef = useCallback(
+		(el: Element | undefined) => {
+			const htmlEl = el as HTMLElement | undefined;
+			if (htmlEl !== popoverEl) {
+				setPopoverEl(htmlEl);
+			}
+		},
+		[popoverEl],
+	);
 
 	const open = () => {
-		popover.current?.showPopover();
+		popoverEl?.showPopover();
 	};
 
 	const close = () => {
-		popover.current?.hidePopover();
+		popoverEl?.hidePopover();
 	};
 
 	const toggle = () => {
-		popover.current?.togglePopover();
+		popoverEl?.togglePopover();
 	};
 
-	// Hover mode: open on pointer enter, close on pointer leave
+	// Set up hover listeners when hover prop is true and popover is available
 	useEffect(() => {
-		if (!hover) return;
+		if (!hover || !popoverEl) return;
 
-		let closeTimeout: ReturnType<typeof setTimeout>;
+		const state = hoverState.current;
 
-		const handleEnter = () => {
-			clearTimeout(closeTimeout);
+		const scheduleClose = () => {
+			state.closeTimeout = setTimeout(() => {
+				if (!state.hoveringHost && !state.hoveringPopover) {
+					close();
+				}
+			}, 100);
+		};
+
+		const handleHostEnter = () => {
+			clearTimeout(state.closeTimeout);
+			state.hoveringHost = true;
 			open();
 		};
 
-		const handleLeave = () => {
-			// Small delay before closing to allow moving between trigger and popover
-			closeTimeout = setTimeout(close, 100);
+		const handleHostLeave = () => {
+			state.hoveringHost = false;
+			scheduleClose();
 		};
 
-		host.addEventListener('pointerenter', handleEnter);
-		host.addEventListener('pointerleave', handleLeave);
+		const handlePopoverEnter = () => {
+			clearTimeout(state.closeTimeout);
+			state.hoveringPopover = true;
+		};
 
-		const pop = popover.current;
-		pop?.addEventListener('pointerenter', handleEnter);
-		pop?.addEventListener('pointerleave', handleLeave);
+		const handlePopoverLeave = () => {
+			state.hoveringPopover = false;
+			scheduleClose();
+		};
+
+		const handleToggle = (e: ToggleEvent) => {
+			const pop = e.target as HTMLElement;
+			if (e.newState === 'open') {
+				pop.addEventListener('pointerenter', handlePopoverEnter);
+				pop.addEventListener('pointerleave', handlePopoverLeave);
+			} else {
+				pop.removeEventListener('pointerenter', handlePopoverEnter);
+				pop.removeEventListener('pointerleave', handlePopoverLeave);
+				state.hoveringPopover = false;
+			}
+		};
+
+		host.addEventListener('pointerenter', handleHostEnter);
+		host.addEventListener('pointerleave', handleHostLeave);
+		popoverEl.addEventListener('toggle', handleToggle as EventListener);
 
 		return () => {
-			clearTimeout(closeTimeout);
-			host.removeEventListener('pointerenter', handleEnter);
-			host.removeEventListener('pointerleave', handleLeave);
-			pop?.removeEventListener('pointerenter', handleEnter);
-			pop?.removeEventListener('pointerleave', handleLeave);
+			clearTimeout(state.closeTimeout);
+			host.removeEventListener('pointerenter', handleHostEnter);
+			host.removeEventListener('pointerleave', handleHostLeave);
+			popoverEl.removeEventListener('toggle', handleToggle as EventListener);
 		};
-	}, [hover, host]);
+	}, [hover, host, popoverEl]);
 
 	return html`
 		<slot name="button" @click=${toggle}></slot>
@@ -144,9 +191,7 @@ const CosmozDropdownNext = ({
 			style="position-area: ${placement}"
 			@toggle=${autofocus}
 			@select=${close}
-			${ref((el) => {
-				popover.current = el as HTMLElement | undefined;
-			})}
+			${ref(popoverRef)}
 		>
 			<slot></slot>
 		</div>
