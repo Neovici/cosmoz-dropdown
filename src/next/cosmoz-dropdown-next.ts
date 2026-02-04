@@ -1,4 +1,4 @@
-import { component, css, useRef } from '@pionjs/pion';
+import { component, css, useEffect, useHost, useRef } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 
@@ -83,20 +83,59 @@ const style = css`
 
 interface DropdownProps {
 	placement?: string;
+	hover?: boolean;
 }
 
 const CosmozDropdownNext = ({
 	placement = 'bottom span-right',
+	hover = false,
 }: DropdownProps) => {
+	const host = useHost();
 	const popover = useRef<HTMLElement>();
 
-	const toggle = () => {
-		popover.current?.togglePopover();
+	const open = () => {
+		popover.current?.showPopover();
 	};
 
 	const close = () => {
 		popover.current?.hidePopover();
 	};
+
+	const toggle = () => {
+		popover.current?.togglePopover();
+	};
+
+	// Hover mode: open on pointer enter, close on pointer leave
+	useEffect(() => {
+		if (!hover) return;
+
+		let closeTimeout: ReturnType<typeof setTimeout>;
+
+		const handleEnter = () => {
+			clearTimeout(closeTimeout);
+			open();
+		};
+
+		const handleLeave = () => {
+			// Small delay before closing to allow moving between trigger and popover
+			closeTimeout = setTimeout(close, 100);
+		};
+
+		host.addEventListener('pointerenter', handleEnter);
+		host.addEventListener('pointerleave', handleLeave);
+
+		const pop = popover.current;
+		pop?.addEventListener('pointerenter', handleEnter);
+		pop?.addEventListener('pointerleave', handleLeave);
+
+		return () => {
+			clearTimeout(closeTimeout);
+			host.removeEventListener('pointerenter', handleEnter);
+			host.removeEventListener('pointerleave', handleLeave);
+			pop?.removeEventListener('pointerenter', handleEnter);
+			pop?.removeEventListener('pointerleave', handleLeave);
+		};
+	}, [hover, host]);
 
 	return html`
 		<slot name="button" @click=${toggle}></slot>
@@ -118,7 +157,7 @@ customElements.define(
 	'cosmoz-dropdown-next',
 	component<DropdownProps>(CosmozDropdownNext, {
 		styleSheets: [style],
-		observedAttributes: ['placement'],
+		observedAttributes: ['placement', 'hover'],
 		shadowRootInit: { mode: 'open', delegatesFocus: true },
 	}),
 );
