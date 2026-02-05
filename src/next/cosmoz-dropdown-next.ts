@@ -116,21 +116,6 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		}, 100);
 	};
 
-	const handleToggle = (e: ToggleEvent) => {
-		autofocus(e);
-
-		if (!openOnHover) return;
-
-		const pop = e.target as HTMLElement;
-		if (e.newState === 'open') {
-			pop.addEventListener('pointerenter', cancelClose);
-			pop.addEventListener('pointerleave', scheduleClose);
-		} else {
-			pop.removeEventListener('pointerenter', cancelClose);
-			pop.removeEventListener('pointerleave', scheduleClose);
-		}
-	};
-
 	// Auto-open on hover and/or focus when enabled
 	useEffect(() => {
 		if (!openOnHover && !openOnFocus) return;
@@ -168,7 +153,7 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		<div
 			popover
 			style="position-area: ${placement}"
-			@toggle=${handleToggle}
+			@toggle=${autofocus}
 			@select=${close}
 			${ref((el) => el && (popoverRef.current = el as HTMLElement))}
 		>
