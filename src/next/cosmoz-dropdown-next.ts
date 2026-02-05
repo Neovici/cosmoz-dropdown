@@ -86,6 +86,12 @@ const style = css`
 		opacity: 0;
 		transform: translateY(-4px) scale(0.96);
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		[popover] {
+			transition: none;
+		}
+	}
 `;
 
 interface DropdownProps {
