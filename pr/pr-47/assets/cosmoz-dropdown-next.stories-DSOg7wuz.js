@@ -1,4 +1,4 @@
-import{b as l}from"./iframe-DowZj-MQ.js";import"./cosmoz-dropdown-next-DD-C4eGL.js";import"./preload-helper-PPVm8Dsz.js";const w=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:e,userEvent:u,waitFor:d}=__STORYBOOK_MODULE_TEST__,x={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:w,description:"CSS anchor position-area value. See MDN for all available options."},hover:{control:"boolean",description:"Open dropdown on hover instead of click."}},args:{placement:"bottom span-right",hover:!1}},i={render:o=>l`
+import{b as l}from"./iframe-WnEBNH8H.js";import"./cosmoz-dropdown-next-CnkC1oWm.js";import"./preload-helper-PPVm8Dsz.js";const h=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:n,userEvent:w,waitFor:d}=__STORYBOOK_MODULE_TEST__,y={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:h,description:"CSS anchor position-area value. See MDN for all available options."},hover:{control:"boolean",description:"Open dropdown on hover instead of click."}},args:{placement:"bottom span-right",hover:!1}},p={render:o=>l`
         <cosmoz-dropdown-next placement=${o.placement} ?hover=${o.hover}>
             <cosmoz-button slot="button">Open Menu</cosmoz-button>
             <div class="dropdown-content">
@@ -13,7 +13,7 @@ import{b as l}from"./iframe-DowZj-MQ.js";import"./cosmoz-dropdown-next-DD-C4eGL.
                 <div>Item 3</div>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:o})=>{const n=o.querySelector("cosmoz-dropdown-next"),s=n.querySelector('[slot="button"]'),r=()=>n.shadowRoot.querySelector("[popover]");await d(()=>{e(r()).toBeTruthy()}),await u.click(s),await d(()=>{const t=r();e(t?.matches(":popover-open")).toBe(!0)}),await u.click(s),await d(()=>{const t=r();e(t?.matches(":popover-open")).toBe(!1)})}},c={args:{hover:!0},render:o=>l`
+    `,play:async({canvasElement:o})=>{const s=o.querySelector("cosmoz-dropdown-next"),r=s.querySelector('[slot="button"]'),e=()=>s.shadowRoot.querySelector("[popover]");await d(()=>{n(e()).toBeTruthy()}),await w.click(r),await d(()=>{const t=e();n(t?.matches(":popover-open")).toBe(!0)}),await w.click(r),await d(()=>{const t=e();n(t?.matches(":popover-open")).toBe(!1)})}},c={args:{hover:!0},render:o=>l`
         <cosmoz-dropdown-next placement=${o.placement} ?hover=${o.hover}>
             <cosmoz-button slot="button">Hover me</cosmoz-button>
             <div class="dropdown-content">
@@ -22,7 +22,7 @@ import{b as l}from"./iframe-DowZj-MQ.js";import"./cosmoz-dropdown-next-DD-C4eGL.
                 <div>Item 3</div>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:o,step:n})=>{const s=o.querySelector("cosmoz-dropdown-next"),r=s.querySelector('[slot="button"]'),t=()=>s.shadowRoot.querySelector("[popover]");await d(()=>{e(t()).toBeTruthy()}),await n("Dropdown has hover attribute",async()=>{e(s.hasAttribute("hover")).toBe(!0)}),await n("Click toggles the dropdown",async()=>{const a=t()?.matches(":popover-open");r.click(),await new Promise(m=>setTimeout(m,50));const v=t()?.matches(":popover-open");e(v).toBe(!a)}),await n("Click again toggles the dropdown back",async()=>{const a=t()?.matches(":popover-open");r.click(),await new Promise(m=>setTimeout(m,50));const v=t()?.matches(":popover-open");e(v).toBe(!a)})}},p={render:o=>l`
+    `,play:async({canvasElement:o,step:s})=>{const r=o.querySelector("cosmoz-dropdown-next"),e=r.querySelector('[slot="button"]'),t=()=>r.shadowRoot.querySelector("[popover]");await d(()=>{n(t()).toBeTruthy()}),await s("Dropdown has hover attribute",async()=>{n(r.hasAttribute("hover")).toBe(!0)}),await s("Click toggles the dropdown",async()=>{const i=t()?.matches(":popover-open");e.click(),await new Promise(m=>setTimeout(m,50));const v=t()?.matches(":popover-open");n(v).toBe(!i)}),await s("Click again toggles the dropdown back",async()=>{const i=t()?.matches(":popover-open");e.click(),await new Promise(m=>setTimeout(m,50));const v=t()?.matches(":popover-open");n(v).toBe(!i)}),await s("Focus opens the dropdown",async()=>{t()?.matches(":popover-open")&&(e.click(),await new Promise(i=>setTimeout(i,50))),e.focus(),await d(()=>{n(t()?.matches(":popover-open")).toBe(!0)})})}},a={render:o=>l`
         <div class="position-grid">
             <!-- Top Left -->
             <div class="position-top-left">
@@ -72,7 +72,7 @@ import{b as l}from"./iframe-DowZj-MQ.js";import"./cosmoz-dropdown-next-DD-C4eGL.
                 </cosmoz-dropdown-next>
             </div>
         </div>
-    `};i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:`{
+    `};p.parameters={...p.parameters,docs:{...p.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <cosmoz-dropdown-next placement=\${args.placement} ?hover=\${args.hover}>
             <cosmoz-button slot="button">Open Menu</cosmoz-button>
@@ -115,8 +115,8 @@ import{b as l}from"./iframe-DowZj-MQ.js";import"./cosmoz-dropdown-next-DD-C4eGL.
       expect(popover?.matches(':popover-open')).toBe(false);
     });
   }
-}`,...i.parameters?.docs?.source},description:{story:`Basic dropdown with custom content.
-Click the button to toggle the popover.`,...i.parameters?.docs?.description}}};c.parameters={...c.parameters,docs:{...c.parameters?.docs,source:{originalSource:`{
+}`,...p.parameters?.docs?.source},description:{story:`Basic dropdown with custom content.
+Click the button to toggle the popover.`,...p.parameters?.docs?.description}}};c.parameters={...c.parameters,docs:{...c.parameters?.docs,source:{originalSource:`{
   args: {
     hover: true
   },
@@ -173,9 +173,21 @@ Click the button to toggle the popover.`,...i.parameters?.docs?.description}}};c
       const isOpen = getPopover()?.matches(':popover-open');
       expect(isOpen).toBe(!wasOpen);
     });
+    await step('Focus opens the dropdown', async () => {
+      // Ensure closed first
+      const popover = getPopover();
+      if (popover?.matches(':popover-open')) {
+        button.click();
+        await new Promise(r => setTimeout(r, 50));
+      }
+      button.focus();
+      await waitFor(() => {
+        expect(getPopover()?.matches(':popover-open')).toBe(true);
+      });
+    });
   }
 }`,...c.parameters?.docs?.source},description:{story:`Hover mode opens the dropdown on pointer enter and closes on pointer leave.
-Click still works as a fallback for accessibility and mobile.`,...c.parameters?.docs?.description}}};p.parameters={...p.parameters,docs:{...p.parameters?.docs,source:{originalSource:`{
+Click still works as a fallback for accessibility and mobile.`,...c.parameters?.docs?.description}}};a.parameters={...a.parameters,docs:{...a.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <div class="position-grid">
             <!-- Top Left -->
@@ -227,5 +239,5 @@ Click still works as a fallback for accessibility and mobile.`,...c.parameters?.
             </div>
         </div>
     \`
-}`,...p.parameters?.docs?.source},description:{story:`Demonstrates position fallbacks when near viewport edges.
-The dropdown will flip to stay visible when there's not enough space.`,...p.parameters?.docs?.description}}};const y=["Basic","HoverMode","PositionFallbacks"];export{i as Basic,c as HoverMode,p as PositionFallbacks,y as __namedExportsOrder,x as default};
+}`,...a.parameters?.docs?.source},description:{story:`Demonstrates position fallbacks when near viewport edges.
+The dropdown will flip to stay visible when there's not enough space.`,...a.parameters?.docs?.description}}};const x=["Basic","HoverMode","PositionFallbacks"];export{p as Basic,c as HoverMode,a as PositionFallbacks,x as __namedExportsOrder,y as default};
