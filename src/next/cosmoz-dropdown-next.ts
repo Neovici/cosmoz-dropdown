@@ -1,6 +1,7 @@
-import { component, css, useEffect, useRef } from '@pionjs/pion';
+import { component, css, useRef } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
+import { useAutoOpen } from './use-auto-open.js';
 
 /**
  * Autofocus polyfill for slotted content.
@@ -96,65 +97,12 @@ interface DropdownProps {
 const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const { placement = 'bottom span-right', openOnHover, openOnFocus } = host;
 	const popoverRef = useRef<HTMLElement>();
-	const closeTimeout = useRef<ReturnType<typeof setTimeout>>();
 
 	const open = () => popoverRef.current?.showPopover();
 	const close = () => popoverRef.current?.hidePopover();
 	const toggle = () => popoverRef.current?.togglePopover();
 
-	const cancelClose = () => clearTimeout(closeTimeout.current);
-
-	const scheduleClose = () => {
-		clearTimeout(closeTimeout.current);
-		closeTimeout.current = setTimeout(() => {
-			const popover = popoverRef.current;
-			if (
-				openOnHover &&
-				(host.matches(':hover') || popover?.matches(':hover'))
-			) {
-				return;
-			}
-			if (
-				openOnFocus &&
-				(host.matches(':focus-within') || popover?.matches(':focus-within'))
-			) {
-				return;
-			}
-			close();
-		}, 100);
-	};
-
-	// Auto-open on hover and/or focus when enabled
-	useEffect(() => {
-		if (!openOnHover && !openOnFocus) return;
-
-		const handleEnter = () => {
-			cancelClose();
-			open();
-		};
-
-		if (openOnHover) {
-			host.addEventListener('pointerenter', handleEnter);
-			host.addEventListener('pointerleave', scheduleClose);
-		}
-
-		if (openOnFocus) {
-			host.addEventListener('focusin', handleEnter);
-			host.addEventListener('focusout', scheduleClose);
-		}
-
-		return () => {
-			cancelClose();
-			if (openOnHover) {
-				host.removeEventListener('pointerenter', handleEnter);
-				host.removeEventListener('pointerleave', scheduleClose);
-			}
-			if (openOnFocus) {
-				host.removeEventListener('focusin', handleEnter);
-				host.removeEventListener('focusout', scheduleClose);
-			}
-		};
-	}, [openOnHover, openOnFocus, host]);
+	useAutoOpen({ host, popoverRef, openOnHover, openOnFocus, open, close });
 
 	return html`
 		<slot name="button" @click=${toggle}></slot>
