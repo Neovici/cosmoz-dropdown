@@ -96,35 +96,24 @@ interface DropdownProps {
 const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const { placement = 'bottom span-right', openOnHover, openOnFocus } = host;
 	const popoverRef = useRef<HTMLElement>();
-	const autoOpenState = useRef<{
-		hoveringHost: boolean;
-		hoveringPopover: boolean;
-		focusedHost: boolean;
-		closeTimeout?: ReturnType<typeof setTimeout>;
-	}>({ hoveringHost: false, hoveringPopover: false, focusedHost: false });
+	const closeTimeout = useRef<ReturnType<typeof setTimeout>>();
 
 	const open = () => popoverRef.current?.showPopover();
 	const close = () => popoverRef.current?.hidePopover();
 	const toggle = () => popoverRef.current?.togglePopover();
 
-	const state = autoOpenState.current;
+	const cancelClose = () => clearTimeout(closeTimeout.current);
 
 	const scheduleClose = () => {
-		state.closeTimeout = setTimeout(() => {
-			if (!state.hoveringHost && !state.hoveringPopover && !state.focusedHost) {
-				close();
+		clearTimeout(closeTimeout.current);
+		closeTimeout.current = setTimeout(() => {
+			const popover = popoverRef.current;
+			if (host.matches(':hover') || popover?.matches(':hover')) return;
+			if (host.matches(':focus-within') || popover?.matches(':focus-within')) {
+				return;
 			}
+			close();
 		}, 100);
-	};
-
-	const handlePopoverEnter = () => {
-		clearTimeout(state.closeTimeout);
-		state.hoveringPopover = true;
-	};
-
-	const handlePopoverLeave = () => {
-		state.hoveringPopover = false;
-		scheduleClose();
 	};
 
 	const handleToggle = (e: ToggleEvent) => {
@@ -134,12 +123,11 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 
 		const pop = e.target as HTMLElement;
 		if (e.newState === 'open') {
-			pop.addEventListener('pointerenter', handlePopoverEnter);
-			pop.addEventListener('pointerleave', handlePopoverLeave);
+			pop.addEventListener('pointerenter', cancelClose);
+			pop.addEventListener('pointerleave', scheduleClose);
 		} else {
-			pop.removeEventListener('pointerenter', handlePopoverEnter);
-			pop.removeEventListener('pointerleave', handlePopoverLeave);
-			state.hoveringPopover = false;
+			pop.removeEventListener('pointerenter', cancelClose);
+			pop.removeEventListener('pointerleave', scheduleClose);
 		}
 	};
 
@@ -147,47 +135,30 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	useEffect(() => {
 		if (!openOnHover && !openOnFocus) return;
 
-		const handleHostEnter = () => {
-			clearTimeout(state.closeTimeout);
-			state.hoveringHost = true;
+		const handleEnter = () => {
+			cancelClose();
 			open();
-		};
-
-		const handleHostLeave = () => {
-			state.hoveringHost = false;
-			scheduleClose();
-		};
-
-		const handleFocusIn = () => {
-			clearTimeout(state.closeTimeout);
-			state.focusedHost = true;
-			open();
-		};
-
-		const handleFocusOut = () => {
-			state.focusedHost = false;
-			scheduleClose();
 		};
 
 		if (openOnHover) {
-			host.addEventListener('pointerenter', handleHostEnter);
-			host.addEventListener('pointerleave', handleHostLeave);
+			host.addEventListener('pointerenter', handleEnter);
+			host.addEventListener('pointerleave', scheduleClose);
 		}
 
 		if (openOnFocus) {
-			host.addEventListener('focusin', handleFocusIn);
-			host.addEventListener('focusout', handleFocusOut);
+			host.addEventListener('focusin', handleEnter);
+			host.addEventListener('focusout', scheduleClose);
 		}
 
 		return () => {
-			clearTimeout(state.closeTimeout);
+			cancelClose();
 			if (openOnHover) {
-				host.removeEventListener('pointerenter', handleHostEnter);
-				host.removeEventListener('pointerleave', handleHostLeave);
+				host.removeEventListener('pointerenter', handleEnter);
+				host.removeEventListener('pointerleave', scheduleClose);
 			}
 			if (openOnFocus) {
-				host.removeEventListener('focusin', handleFocusIn);
-				host.removeEventListener('focusout', handleFocusOut);
+				host.removeEventListener('focusin', handleEnter);
+				host.removeEventListener('focusout', scheduleClose);
 			}
 		};
 	}, [openOnHover, openOnFocus, host]);
