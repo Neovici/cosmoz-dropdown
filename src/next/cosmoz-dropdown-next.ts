@@ -1,11 +1,4 @@
-import {
-	component,
-	css,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from '@pionjs/pion';
+import { component, css, useEffect, useRef } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 
@@ -102,7 +95,7 @@ interface DropdownProps {
 
 const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const { placement = 'bottom span-right', openOnHover, openOnFocus } = host;
-	const [popoverEl, setPopoverEl] = useState<HTMLElement>();
+	const popoverRef = useRef<HTMLElement>();
 	const autoOpenState = useRef<{
 		hoveringHost: boolean;
 		hoveringPopover: boolean;
@@ -110,46 +103,49 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		closeTimeout?: ReturnType<typeof setTimeout>;
 	}>({ hoveringHost: false, hoveringPopover: false, focusedHost: false });
 
-	// Only update state when the element actually changes
-	const popoverRef = useCallback(
-		(el: Element | undefined) => {
-			const htmlEl = el as HTMLElement | undefined;
-			if (htmlEl !== popoverEl) {
-				setPopoverEl(htmlEl);
+	const open = () => popoverRef.current?.showPopover();
+	const close = () => popoverRef.current?.hidePopover();
+	const toggle = () => popoverRef.current?.togglePopover();
+
+	const state = autoOpenState.current;
+
+	const scheduleClose = () => {
+		state.closeTimeout = setTimeout(() => {
+			if (!state.hoveringHost && !state.hoveringPopover && !state.focusedHost) {
+				close();
 			}
-		},
-		[popoverEl],
-	);
-
-	const open = () => {
-		popoverEl?.showPopover();
+		}, 100);
 	};
 
-	const close = () => {
-		popoverEl?.hidePopover();
+	const handlePopoverEnter = () => {
+		clearTimeout(state.closeTimeout);
+		state.hoveringPopover = true;
 	};
 
-	const toggle = () => {
-		popoverEl?.togglePopover();
+	const handlePopoverLeave = () => {
+		state.hoveringPopover = false;
+		scheduleClose();
+	};
+
+	const handleToggle = (e: ToggleEvent) => {
+		autofocus(e);
+
+		if (!openOnHover) return;
+
+		const pop = e.target as HTMLElement;
+		if (e.newState === 'open') {
+			pop.addEventListener('pointerenter', handlePopoverEnter);
+			pop.addEventListener('pointerleave', handlePopoverLeave);
+		} else {
+			pop.removeEventListener('pointerenter', handlePopoverEnter);
+			pop.removeEventListener('pointerleave', handlePopoverLeave);
+			state.hoveringPopover = false;
+		}
 	};
 
 	// Auto-open on hover and/or focus when enabled
 	useEffect(() => {
-		if ((!openOnHover && !openOnFocus) || !popoverEl) return;
-
-		const state = autoOpenState.current;
-
-		const scheduleClose = () => {
-			state.closeTimeout = setTimeout(() => {
-				if (
-					!state.hoveringHost &&
-					!state.hoveringPopover &&
-					!state.focusedHost
-				) {
-					close();
-				}
-			}, 100);
-		};
+		if (!openOnHover && !openOnFocus) return;
 
 		const handleHostEnter = () => {
 			clearTimeout(state.closeTimeout);
@@ -173,32 +169,9 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 			scheduleClose();
 		};
 
-		const handlePopoverEnter = () => {
-			clearTimeout(state.closeTimeout);
-			state.hoveringPopover = true;
-		};
-
-		const handlePopoverLeave = () => {
-			state.hoveringPopover = false;
-			scheduleClose();
-		};
-
-		const handleToggle = (e: ToggleEvent) => {
-			const pop = e.target as HTMLElement;
-			if (e.newState === 'open') {
-				pop.addEventListener('pointerenter', handlePopoverEnter);
-				pop.addEventListener('pointerleave', handlePopoverLeave);
-			} else {
-				pop.removeEventListener('pointerenter', handlePopoverEnter);
-				pop.removeEventListener('pointerleave', handlePopoverLeave);
-				state.hoveringPopover = false;
-			}
-		};
-
 		if (openOnHover) {
 			host.addEventListener('pointerenter', handleHostEnter);
 			host.addEventListener('pointerleave', handleHostLeave);
-			popoverEl.addEventListener('toggle', handleToggle as EventListener);
 		}
 
 		if (openOnFocus) {
@@ -211,23 +184,22 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 			if (openOnHover) {
 				host.removeEventListener('pointerenter', handleHostEnter);
 				host.removeEventListener('pointerleave', handleHostLeave);
-				popoverEl.removeEventListener('toggle', handleToggle as EventListener);
 			}
 			if (openOnFocus) {
 				host.removeEventListener('focusin', handleFocusIn);
 				host.removeEventListener('focusout', handleFocusOut);
 			}
 		};
-	}, [openOnHover, openOnFocus, host, popoverEl]);
+	}, [openOnHover, openOnFocus, host]);
 
 	return html`
 		<slot name="button" @click=${toggle}></slot>
 		<div
 			popover
 			style="position-area: ${placement}"
-			@toggle=${autofocus}
+			@toggle=${handleToggle}
 			@select=${close}
-			${ref(popoverRef)}
+			${ref((el) => el && (popoverRef.current = el as HTMLElement))}
 		>
 			<slot></slot>
 		</div>
