@@ -96,13 +96,14 @@ const style = css`
 
 interface DropdownProps {
 	placement?: string;
-	hover?: boolean;
+	openOnHover?: boolean;
+	openOnFocus?: boolean;
 }
 
 const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
-	const { placement = 'bottom span-right', hover } = host;
+	const { placement = 'bottom span-right', openOnHover, openOnFocus } = host;
 	const [popoverEl, setPopoverEl] = useState<HTMLElement>();
-	const hoverState = useRef<{
+	const autoOpenState = useRef<{
 		hoveringHost: boolean;
 		hoveringPopover: boolean;
 		focusedHost: boolean;
@@ -132,11 +133,11 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		popoverEl?.togglePopover();
 	};
 
-	// Set up hover listeners when hover prop is true and popover is available
+	// Auto-open on hover and/or focus when enabled
 	useEffect(() => {
-		if (!hover || !popoverEl) return;
+		if ((!openOnHover && !openOnFocus) || !popoverEl) return;
 
-		const state = hoverState.current;
+		const state = autoOpenState.current;
 
 		const scheduleClose = () => {
 			state.closeTimeout = setTimeout(() => {
@@ -194,21 +195,30 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 			}
 		};
 
-		host.addEventListener('pointerenter', handleHostEnter);
-		host.addEventListener('pointerleave', handleHostLeave);
-		host.addEventListener('focusin', handleFocusIn);
-		host.addEventListener('focusout', handleFocusOut);
-		popoverEl.addEventListener('toggle', handleToggle as EventListener);
+		if (openOnHover) {
+			host.addEventListener('pointerenter', handleHostEnter);
+			host.addEventListener('pointerleave', handleHostLeave);
+			popoverEl.addEventListener('toggle', handleToggle as EventListener);
+		}
+
+		if (openOnFocus) {
+			host.addEventListener('focusin', handleFocusIn);
+			host.addEventListener('focusout', handleFocusOut);
+		}
 
 		return () => {
 			clearTimeout(state.closeTimeout);
-			host.removeEventListener('pointerenter', handleHostEnter);
-			host.removeEventListener('pointerleave', handleHostLeave);
-			host.removeEventListener('focusin', handleFocusIn);
-			host.removeEventListener('focusout', handleFocusOut);
-			popoverEl.removeEventListener('toggle', handleToggle as EventListener);
+			if (openOnHover) {
+				host.removeEventListener('pointerenter', handleHostEnter);
+				host.removeEventListener('pointerleave', handleHostLeave);
+				popoverEl.removeEventListener('toggle', handleToggle as EventListener);
+			}
+			if (openOnFocus) {
+				host.removeEventListener('focusin', handleFocusIn);
+				host.removeEventListener('focusout', handleFocusOut);
+			}
 		};
-	}, [hover, host, popoverEl]);
+	}, [openOnHover, openOnFocus, host, popoverEl]);
 
 	return html`
 		<slot name="button" @click=${toggle}></slot>
@@ -228,7 +238,7 @@ customElements.define(
 	'cosmoz-dropdown-next',
 	component<DropdownProps>(CosmozDropdownNext, {
 		styleSheets: [style],
-		observedAttributes: ['placement', 'hover'],
+		observedAttributes: ['placement', 'open-on-hover', 'open-on-focus'],
 		shadowRootInit: { mode: 'open', delegatesFocus: true },
 	}),
 );

@@ -29,27 +29,40 @@ Modern dropdown using the Popover API and CSS Anchor Positioning.
 
 #### Properties
 
-| Property    | Type      | Default               | Description                                                                                                              |
-| ----------- | --------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `placement` | `string`  | `'bottom span-right'` | CSS anchor `position-area` value. See [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/position-area) for options. |
-| `hover`     | `boolean` | `false`               | Open on hover instead of click.                                                                                          |
+| Property        | Type      | Default               | Description                                                                                                              |
+| --------------- | --------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `placement`     | `string`  | `'bottom span-right'` | CSS anchor `position-area` value. See [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/position-area) for options. |
+| `open-on-hover` | `boolean` | `false`               | Open on pointer hover.                                                                                                   |
+| `open-on-focus` | `boolean` | `false`               | Open when the trigger receives focus.                                                                                    |
 
-#### Hover Mode
+#### Auto-open Modes
 
-Enable hover-based opening by adding the `hover` attribute:
+The `open-on-hover` and `open-on-focus` attributes can be used independently or together:
 
 ```html
-<cosmoz-dropdown-next hover>
+<!-- Open on hover only -->
+<cosmoz-dropdown-next open-on-hover>
 	<button slot="button">Hover me</button>
 	<div>Content appears on hover</div>
 </cosmoz-dropdown-next>
+
+<!-- Open on focus only -->
+<cosmoz-dropdown-next open-on-focus>
+	<button slot="button">Focus me</button>
+	<div>Content appears on focus</div>
+</cosmoz-dropdown-next>
+
+<!-- Open on hover or focus -->
+<cosmoz-dropdown-next open-on-hover open-on-focus>
+	<button slot="button">Hover or focus</button>
+	<div>Content appears on either</div>
+</cosmoz-dropdown-next>
 ```
 
-When `hover` is enabled:
+When auto-open is enabled:
 
-- Dropdown opens on `pointerenter` or `focusin`
-- Dropdown closes on `pointerleave` / `focusout` (with 100ms delay to allow moving between trigger and content)
-- Click still works as a toggle for accessibility and mobile fallback
+- The dropdown closes with a 100ms delay to allow moving between trigger and content
+- Click still works as a toggle regardless of these settings
 
 #### Slots
 
