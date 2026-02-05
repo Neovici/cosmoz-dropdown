@@ -108,8 +108,16 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		clearTimeout(closeTimeout.current);
 		closeTimeout.current = setTimeout(() => {
 			const popover = popoverRef.current;
-			if (host.matches(':hover') || popover?.matches(':hover')) return;
-			if (host.matches(':focus-within') || popover?.matches(':focus-within')) {
+			if (
+				openOnHover &&
+				(host.matches(':hover') || popover?.matches(':hover'))
+			) {
+				return;
+			}
+			if (
+				openOnFocus &&
+				(host.matches(':focus-within') || popover?.matches(':focus-within'))
+			) {
 				return;
 			}
 			close();
