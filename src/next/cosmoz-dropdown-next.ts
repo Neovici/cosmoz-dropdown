@@ -99,8 +99,9 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const hoverState = useRef<{
 		hoveringHost: boolean;
 		hoveringPopover: boolean;
+		focusedHost: boolean;
 		closeTimeout?: ReturnType<typeof setTimeout>;
-	}>({ hoveringHost: false, hoveringPopover: false });
+	}>({ hoveringHost: false, hoveringPopover: false, focusedHost: false });
 
 	// Only update state when the element actually changes
 	const popoverRef = useCallback(
@@ -133,7 +134,11 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 
 		const scheduleClose = () => {
 			state.closeTimeout = setTimeout(() => {
-				if (!state.hoveringHost && !state.hoveringPopover) {
+				if (
+					!state.hoveringHost &&
+					!state.hoveringPopover &&
+					!state.focusedHost
+				) {
 					close();
 				}
 			}, 100);
@@ -147,6 +152,17 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 
 		const handleHostLeave = () => {
 			state.hoveringHost = false;
+			scheduleClose();
+		};
+
+		const handleFocusIn = () => {
+			clearTimeout(state.closeTimeout);
+			state.focusedHost = true;
+			open();
+		};
+
+		const handleFocusOut = () => {
+			state.focusedHost = false;
 			scheduleClose();
 		};
 
@@ -174,12 +190,16 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 
 		host.addEventListener('pointerenter', handleHostEnter);
 		host.addEventListener('pointerleave', handleHostLeave);
+		host.addEventListener('focusin', handleFocusIn);
+		host.addEventListener('focusout', handleFocusOut);
 		popoverEl.addEventListener('toggle', handleToggle as EventListener);
 
 		return () => {
 			clearTimeout(state.closeTimeout);
 			host.removeEventListener('pointerenter', handleHostEnter);
 			host.removeEventListener('pointerleave', handleHostLeave);
+			host.removeEventListener('focusin', handleFocusIn);
+			host.removeEventListener('focusout', handleFocusOut);
 			popoverEl.removeEventListener('toggle', handleToggle as EventListener);
 		};
 	}, [hover, host, popoverEl]);

@@ -47,8 +47,8 @@ Enable hover-based opening by adding the `hover` attribute:
 
 When `hover` is enabled:
 
-- Dropdown opens on `pointerenter`
-- Dropdown closes on `pointerleave` (with 100ms delay to allow moving between trigger and content)
+- Dropdown opens on `pointerenter` or `focusin`
+- Dropdown closes on `pointerleave` / `focusout` (with 100ms delay to allow moving between trigger and content)
 - Click still works as a toggle for accessibility and mobile fallback
 
 #### Slots

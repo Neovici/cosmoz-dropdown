@@ -152,6 +152,20 @@ export const HoverMode: Story = {
 			const isOpen = getPopover()?.matches(':popover-open');
 			expect(isOpen).toBe(!wasOpen);
 		});
+
+		await step('Focus opens the dropdown', async () => {
+			// Ensure closed first
+			const popover = getPopover();
+			if (popover?.matches(':popover-open')) {
+				button.click();
+				await new Promise((r) => setTimeout(r, 50));
+			}
+
+			button.focus();
+			await waitFor(() => {
+				expect(getPopover()?.matches(':popover-open')).toBe(true);
+			});
+		});
 	},
 };
 
