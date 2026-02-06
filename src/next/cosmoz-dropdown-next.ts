@@ -1,6 +1,7 @@
 import { component, css, useRef } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
+import { useAutoOpen } from './use-auto-open.js';
 
 /**
  * Autofocus polyfill for slotted content.
@@ -79,24 +80,29 @@ const style = css`
 		opacity: 0;
 		transform: translateY(-4px) scale(0.96);
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		[popover] {
+			transition: none;
+		}
+	}
 `;
 
 interface DropdownProps {
 	placement?: string;
+	openOnHover?: boolean;
+	openOnFocus?: boolean;
 }
 
-const CosmozDropdownNext = ({
-	placement = 'bottom span-right',
-}: DropdownProps) => {
-	const popover = useRef<HTMLElement>();
+const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
+	const { placement = 'bottom span-right', openOnHover, openOnFocus } = host;
+	const popoverRef = useRef<HTMLElement>();
 
-	const toggle = () => {
-		popover.current?.togglePopover();
-	};
+	const open = () => popoverRef.current?.showPopover();
+	const close = () => popoverRef.current?.hidePopover();
+	const toggle = () => popoverRef.current?.togglePopover();
 
-	const close = () => {
-		popover.current?.hidePopover();
-	};
+	useAutoOpen({ host, popoverRef, openOnHover, openOnFocus, open, close });
 
 	return html`
 		<slot name="button" @click=${toggle}></slot>
@@ -105,9 +111,7 @@ const CosmozDropdownNext = ({
 			style="position-area: ${placement}"
 			@toggle=${autofocus}
 			@select=${close}
-			${ref((el) => {
-				popover.current = el as HTMLElement | undefined;
-			})}
+			${ref((el) => el && (popoverRef.current = el as HTMLElement))}
 		>
 			<slot></slot>
 		</div>
@@ -118,7 +122,7 @@ customElements.define(
 	'cosmoz-dropdown-next',
 	component<DropdownProps>(CosmozDropdownNext, {
 		styleSheets: [style],
-		observedAttributes: ['placement'],
+		observedAttributes: ['placement', 'open-on-hover', 'open-on-focus'],
 		shadowRootInit: { mode: 'open', delegatesFocus: true },
 	}),
 );

@@ -1,8 +1,13 @@
 import '@neovici/cosmoz-button';
 import '@neovici/cosmoz-tokens';
 import { html } from '@pionjs/pion';
+import { within as withinShadow } from 'shadow-dom-testing-library';
 
 export default {
+	// Augment the canvas with shadow-dom-testing-library queries
+	beforeEach({ canvasElement, canvas }) {
+		Object.assign(canvas, { ...withinShadow(canvasElement) });
+	},
 	decorators: [
 		(story, context) => {
 			const isDark = context.globals?.theme === 'dark';
