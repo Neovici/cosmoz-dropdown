@@ -1,3 +1,9 @@
+## [7.2.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.1.0...v7.2.0) (2026-02-06)
+
+### Features
+
+* **dropdown-next:** add open-on-hover and open-on-focus props ([#47](https://github.com/Neovici/cosmoz-dropdown/issues/47)) ([0b8bb15](https://github.com/Neovici/cosmoz-dropdown/commit/0b8bb15387e435708413975a65ae6bcd2b2ce8ea))
+
 ## [7.1.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.0.2...v7.1.0) (2026-02-03)
 
 ### Features
