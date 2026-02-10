@@ -1,3 +1,10 @@
+## [7.3.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.2.0...v7.3.0) (2026-02-10)
+
+### Features
+
+* **dropdown-next:** re-dispatch toggle event as composed, fix click race ([#49](https://github.com/Neovici/cosmoz-dropdown/issues/49)) ([ecd8814](https://github.com/Neovici/cosmoz-dropdown/commit/ecd881426daf139e1158b031a87c3e4bb57fc94e))
+* **dropdown-next:** set popover min-width to anchor width ([#51](https://github.com/Neovici/cosmoz-dropdown/issues/51)) ([b44e312](https://github.com/Neovici/cosmoz-dropdown/commit/b44e3122110c40fcc94f2717e1e643dfc67c450c))
+
 ## [7.2.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.1.0...v7.2.0) (2026-02-06)
 
 ### Features
