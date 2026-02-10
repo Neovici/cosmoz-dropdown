@@ -5,6 +5,7 @@ interface UseAutoOpenOptions {
 	popoverRef: { current?: HTMLElement };
 	openOnHover?: boolean;
 	openOnFocus?: boolean;
+	openOnClick?: boolean;
 	open: () => void;
 	close: () => void;
 }
@@ -14,6 +15,7 @@ export const useAutoOpen = ({
 	popoverRef,
 	openOnHover,
 	openOnFocus,
+	openOnClick,
 	open,
 	close,
 }: UseAutoOpenOptions) => {
@@ -73,4 +75,17 @@ export const useAutoOpen = ({
 			host.removeEventListener('focusout', scheduleClose);
 		};
 	}, [openOnFocus, host]);
+
+	// Auto-open on click
+	// Useful after light-dismiss: focus may still be within the host,
+	// so focusin won't fire again, but click always does.
+	useEffect(() => {
+		if (!openOnClick) return;
+
+		host.addEventListener('click', open);
+
+		return () => {
+			host.removeEventListener('click', open);
+		};
+	}, [openOnClick, host]);
 };

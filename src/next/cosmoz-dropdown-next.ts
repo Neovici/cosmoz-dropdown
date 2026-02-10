@@ -92,17 +92,31 @@ interface DropdownProps {
 	placement?: string;
 	openOnHover?: boolean;
 	openOnFocus?: boolean;
+	openOnClick?: boolean;
 }
 
 const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
-	const { placement = 'bottom span-right', openOnHover, openOnFocus } = host;
+	const {
+		placement = 'bottom span-right',
+		openOnHover,
+		openOnFocus,
+		openOnClick,
+	} = host;
 	const popoverRef = useRef<HTMLElement>();
 
 	const open = () => popoverRef.current?.showPopover();
 	const close = () => popoverRef.current?.hidePopover();
 	const toggle = () => popoverRef.current?.togglePopover();
 
-	useAutoOpen({ host, popoverRef, openOnHover, openOnFocus, open, close });
+	useAutoOpen({
+		host,
+		popoverRef,
+		openOnHover,
+		openOnFocus,
+		openOnClick,
+		open,
+		close,
+	});
 
 	// When open-on-focus is active, clicking the button should only open
 	// (not toggle), since focusin already handles opening and toggle would
@@ -141,7 +155,12 @@ customElements.define(
 	'cosmoz-dropdown-next',
 	component<DropdownProps>(CosmozDropdownNext, {
 		styleSheets: [style],
-		observedAttributes: ['placement', 'open-on-hover', 'open-on-focus'],
+		observedAttributes: [
+			'placement',
+			'open-on-hover',
+			'open-on-focus',
+			'open-on-click',
+		],
 		shadowRootInit: { mode: 'open', delegatesFocus: true },
 	}),
 );
