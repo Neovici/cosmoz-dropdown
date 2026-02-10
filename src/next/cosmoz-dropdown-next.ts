@@ -115,7 +115,7 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		// shadow boundaries can observe popover state changes.
 		// The native ToggleEvent is composed: false, bubbles: false.
 		host.dispatchEvent(
-			new ToggleEvent('toggle', {
+			new ToggleEvent('dropdown-toggle', {
 				newState: e.newState,
 				oldState: e.oldState,
 				composed: true,
