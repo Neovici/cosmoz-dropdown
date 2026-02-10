@@ -54,6 +54,7 @@ const style = css`
 		padding: 0;
 		background: transparent;
 		overflow: visible;
+		min-width: anchor-size(width);
 
 		/* Animation - open state */
 		opacity: 1;
