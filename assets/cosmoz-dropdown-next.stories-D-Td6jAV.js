@@ -1,4 +1,4 @@
-import{b as i}from"./iframe-DzsSxsiH.js";import"./cosmoz-dropdown-next-B30FbQwv.js";import"./preload-helper-PPVm8Dsz.js";const b=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:r,userEvent:g,waitFor:a}=__STORYBOOK_MODULE_TEST__,T={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:b,description:"CSS anchor position-area value. See MDN for all available options."},openOnHover:{control:"boolean",description:"Open dropdown on hover."},openOnFocus:{control:"boolean",description:"Open dropdown when the trigger receives focus."}},args:{placement:"bottom span-right",openOnHover:!1,openOnFocus:!1}},p=(o,n,t)=>i`
+import{b as i}from"./iframe-BMCLGNNP.js";import"./cosmoz-dropdown-next-DvvZPkNs.js";import"./preload-helper-PPVm8Dsz.js";const b=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:r,userEvent:g,waitFor:p}=__STORYBOOK_MODULE_TEST__,T={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:b,description:"CSS anchor position-area value. See MDN for all available options."},openOnHover:{control:"boolean",description:"Open dropdown on hover."},openOnFocus:{control:"boolean",description:"Open dropdown when the trigger receives focus."}},args:{placement:"bottom span-right",openOnHover:!1,openOnFocus:!1}},a=(o,n,t)=>i`
     <cosmoz-dropdown-next
         placement=${o.placement}
         ?open-on-hover=${o.openOnHover}
@@ -7,7 +7,7 @@ import{b as i}from"./iframe-DzsSxsiH.js";import"./cosmoz-dropdown-next-B30FbQwv.
         <cosmoz-button slot="button">${n}</cosmoz-button>
         ${t}
     </cosmoz-dropdown-next>
-`,c={render:o=>p(o,"Open Menu",i`<div class="dropdown-content">
+`,d={render:o=>a(o,"Open Menu",i`<div class="dropdown-content">
                 <input
                     type="text"
                     placeholder="Search..."
@@ -17,19 +17,31 @@ import{b as i}from"./iframe-DzsSxsiH.js";import"./cosmoz-dropdown-next-B30FbQwv.
                 <div>Item 1</div>
                 <div>Item 2</div>
                 <div>Item 3</div>
-            </div>`),play:async({canvasElement:o})=>{const n=o.querySelector("cosmoz-dropdown-next"),t=n.querySelector('[slot="button"]'),s=()=>n.shadowRoot.querySelector("[popover]");await a(()=>{r(s()).toBeTruthy()}),await g.click(t),await a(()=>{const e=s();r(e?.matches(":popover-open")).toBe(!0)}),await g.click(t),await a(()=>{const e=s();r(e?.matches(":popover-open")).toBe(!1)})}},v={args:{openOnHover:!0},render:o=>p(o,"Hover me",i`<div class="dropdown-content">
+            </div>`),play:async({canvasElement:o})=>{const n=o.querySelector("cosmoz-dropdown-next"),t=n.querySelector('[slot="button"]'),s=()=>n.shadowRoot.querySelector("[popover]");await p(()=>{r(s()).toBeTruthy()}),await g.click(t),await p(()=>{const e=s();r(e?.matches(":popover-open")).toBe(!0)}),await g.click(t),await p(()=>{const e=s();r(e?.matches(":popover-open")).toBe(!1)})}},v={args:{openOnHover:!0},render:o=>a(o,"Hover me",i`<div class="dropdown-content">
                 <div>Item 1</div>
                 <div>Item 2</div>
                 <div>Item 3</div>
-            </div>`),play:async({canvasElement:o,step:n})=>{const t=o.querySelector("cosmoz-dropdown-next"),s=t.querySelector('[slot="button"]'),e=()=>t.shadowRoot.querySelector("[popover]");await a(()=>{r(e()).toBeTruthy()}),await n("Dropdown has open-on-hover attribute",async()=>{r(t.hasAttribute("open-on-hover")).toBe(!0)}),await n("Click toggles the dropdown",async()=>{const d=e()?.matches(":popover-open");s.click(),await new Promise(w=>setTimeout(w,50));const u=e()?.matches(":popover-open");r(u).toBe(!d)}),await n("Click again toggles the dropdown back",async()=>{const d=e()?.matches(":popover-open");s.click(),await new Promise(w=>setTimeout(w,50));const u=e()?.matches(":popover-open");r(u).toBe(!d)})}},l={args:{openOnFocus:!0},render:o=>p(o,"Focus me",i`<div class="dropdown-content">
+            </div>`),play:async({canvasElement:o,step:n})=>{const t=o.querySelector("cosmoz-dropdown-next"),s=t.querySelector('[slot="button"]'),e=()=>t.shadowRoot.querySelector("[popover]");await p(()=>{r(e()).toBeTruthy()}),await n("Dropdown has open-on-hover attribute",async()=>{r(t.hasAttribute("open-on-hover")).toBe(!0)}),await n("Click toggles the dropdown",async()=>{const c=e()?.matches(":popover-open");s.click(),await new Promise(h=>setTimeout(h,50));const w=e()?.matches(":popover-open");r(w).toBe(!c)}),await n("Click again toggles the dropdown back",async()=>{const c=e()?.matches(":popover-open");s.click(),await new Promise(h=>setTimeout(h,50));const w=e()?.matches(":popover-open");r(w).toBe(!c)})}},l={args:{openOnFocus:!0},render:o=>a(o,"Focus me",i`<div class="dropdown-content">
                 <div>Item 1</div>
                 <div>Item 2</div>
                 <div>Item 3</div>
-            </div>`),play:async({canvasElement:o,step:n})=>{const t=o.querySelector("cosmoz-dropdown-next"),s=t.querySelector('[slot="button"]'),e=()=>t.shadowRoot.querySelector("[popover]");await a(()=>{r(e()).toBeTruthy()}),await n("Dropdown has open-on-focus attribute",async()=>{r(t.hasAttribute("open-on-focus")).toBe(!0)}),await n("Focus opens the dropdown",async()=>{e()?.matches(":popover-open")&&(s.click(),await new Promise(d=>setTimeout(d,50))),s.focus(),await a(()=>{r(e()?.matches(":popover-open")).toBe(!0)})})}},m={render:o=>i`
+            </div>`),play:async({canvasElement:o,step:n})=>{const t=o.querySelector("cosmoz-dropdown-next"),s=t.querySelector('[slot="button"]'),e=()=>t.shadowRoot.querySelector("[popover]");await p(()=>{r(e()).toBeTruthy()}),await n("Dropdown has open-on-focus attribute",async()=>{r(t.hasAttribute("open-on-focus")).toBe(!0)}),await n("Focus opens the dropdown",async()=>{e()?.matches(":popover-open")&&(s.click(),await new Promise(c=>setTimeout(c,50))),s.focus(),await p(()=>{r(e()?.matches(":popover-open")).toBe(!0)})})}},m={args:{openOnFocus:!0},render:o=>i`
+        <cosmoz-dropdown-next
+            placement=${o.placement}
+            ?open-on-focus=${o.openOnFocus}
+        >
+            <input slot="button" type="text" placeholder="Click to open..." />
+            <div class="dropdown-content">
+                <div>Item 1</div>
+                <div>Item 2</div>
+                <div>Item 3</div>
+            </div>
+        </cosmoz-dropdown-next>
+    `,play:async({canvasElement:o,step:n})=>{const t=o.querySelector("cosmoz-dropdown-next"),s=t.querySelector('input[slot="button"]'),e=()=>t.shadowRoot.querySelector("[popover]");await p(()=>{r(e()).toBeTruthy()}),await n("Clicking the input opens and keeps the dropdown open",async()=>{await g.click(s),await p(()=>{r(e()?.matches(":popover-open")).toBe(!0)})})}},u={render:o=>i`
         <div class="position-grid">
             <!-- Top Left -->
             <div class="position-top-left">
-                ${p(o,"Top Left",i`<div class="dropdown-content">
+                ${a(o,"Top Left",i`<div class="dropdown-content">
                         <div>Item 1</div>
                         <div>Item 2</div>
                         <div>Item 3</div>
@@ -38,7 +50,7 @@ import{b as i}from"./iframe-DzsSxsiH.js";import"./cosmoz-dropdown-next-B30FbQwv.
 
             <!-- Top Right -->
             <div class="position-top-right">
-                ${p(o,"Top Right",i`<div class="dropdown-content">
+                ${a(o,"Top Right",i`<div class="dropdown-content">
                         <div>Item 1</div>
                         <div>Item 2</div>
                         <div>Item 3</div>
@@ -47,7 +59,7 @@ import{b as i}from"./iframe-DzsSxsiH.js";import"./cosmoz-dropdown-next-B30FbQwv.
 
             <!-- Bottom Left -->
             <div class="position-bottom-left">
-                ${p(o,"Bottom Left",i`<div class="dropdown-content">
+                ${a(o,"Bottom Left",i`<div class="dropdown-content">
                         <div>Item 1</div>
                         <div>Item 2</div>
                         <div>Item 3</div>
@@ -56,14 +68,14 @@ import{b as i}from"./iframe-DzsSxsiH.js";import"./cosmoz-dropdown-next-B30FbQwv.
 
             <!-- Bottom Right -->
             <div class="position-bottom-right">
-                ${p(o,"Bottom Right",i`<div class="dropdown-content">
+                ${a(o,"Bottom Right",i`<div class="dropdown-content">
                         <div>Item 1</div>
                         <div>Item 2</div>
                         <div>Item 3</div>
                     </div>`)}
             </div>
         </div>
-    `};c.parameters={...c.parameters,docs:{...c.parameters?.docs,source:{originalSource:`{
+    `};d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`{
   render: args => renderDropdown(args, 'Open Menu', html\`<div class="dropdown-content">
                 <input
                     type="text"
@@ -101,8 +113,8 @@ import{b as i}from"./iframe-DzsSxsiH.js";import"./cosmoz-dropdown-next-B30FbQwv.
       expect(popover?.matches(':popover-open')).toBe(false);
     });
   }
-}`,...c.parameters?.docs?.source},description:{story:`Basic dropdown with custom content.
-Click the button to toggle the popover.`,...c.parameters?.docs?.description}}};v.parameters={...v.parameters,docs:{...v.parameters?.docs,source:{originalSource:`{
+}`,...d.parameters?.docs?.source},description:{story:`Basic dropdown with custom content.
+Click the button to toggle the popover.`,...d.parameters?.docs?.description}}};v.parameters={...v.parameters,docs:{...v.parameters?.docs,source:{originalSource:`{
   args: {
     openOnHover: true
   },
@@ -188,6 +200,48 @@ Click still works as a fallback for accessibility and mobile.`,...v.parameters?.
   }
 }`,...l.parameters?.docs?.source},description:{story:`Focus mode opens the dropdown when the trigger receives keyboard focus.
 Useful for navigation menus where keyboard accessibility is important.`,...l.parameters?.docs?.description}}};m.parameters={...m.parameters,docs:{...m.parameters?.docs,source:{originalSource:`{
+  args: {
+    openOnFocus: true
+  },
+  render: args => html\`
+        <cosmoz-dropdown-next
+            placement=\${args.placement}
+            ?open-on-focus=\${args.openOnFocus}
+        >
+            <input slot="button" type="text" placeholder="Click to open..." />
+            <div class="dropdown-content">
+                <div>Item 1</div>
+                <div>Item 2</div>
+                <div>Item 3</div>
+            </div>
+        </cosmoz-dropdown-next>
+    \`,
+  play: async ({
+    canvasElement,
+    step
+  }) => {
+    const dropdown = canvasElement.querySelector('cosmoz-dropdown-next') as HTMLElement;
+    const input = dropdown.querySelector('input[slot="button"]') as HTMLInputElement;
+    const getPopover = () => dropdown.shadowRoot!.querySelector('[popover]') as HTMLElement | null;
+    await waitFor(() => {
+      expect(getPopover()).toBeTruthy();
+    });
+    await step('Clicking the input opens and keeps the dropdown open', async () => {
+      // userEvent.click fires mousedown → focusin → mouseup → click
+      // focusin triggers useAutoOpen's handleEnter → showPopover()
+      // click reaches <slot name="button" @click=\${handleClick}>
+      // With the bug (toggle): togglePopover() closes the just-opened popover
+      // With the fix (open): showPopover() is a no-op on an already-open popover
+      await userEvent.click(input);
+      await waitFor(() => {
+        expect(getPopover()?.matches(':popover-open')).toBe(true);
+      });
+    });
+  }
+}`,...m.parameters?.docs?.source},description:{story:`Focus mode with a text input as the trigger.
+Regression test: clicking an input triggers focusin (on mousedown) before
+the click event. If the click handler used toggle() instead of open(),
+the popover would open on focusin then immediately close on click.`,...m.parameters?.docs?.description}}};u.parameters={...u.parameters,docs:{...u.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <div class="position-grid">
             <!-- Top Left -->
@@ -227,5 +281,5 @@ Useful for navigation menus where keyboard accessibility is important.`,...l.par
             </div>
         </div>
     \`
-}`,...m.parameters?.docs?.source},description:{story:`Demonstrates position fallbacks when near viewport edges.
-The dropdown will flip to stay visible when there's not enough space.`,...m.parameters?.docs?.description}}};const B=["Basic","HoverMode","FocusMode","PositionFallbacks"];export{c as Basic,l as FocusMode,v as HoverMode,m as PositionFallbacks,B as __namedExportsOrder,T as default};
+}`,...u.parameters?.docs?.source},description:{story:`Demonstrates position fallbacks when near viewport edges.
+The dropdown will flip to stay visible when there's not enough space.`,...u.parameters?.docs?.description}}};const x=["Basic","HoverMode","FocusMode","FocusModeInput","PositionFallbacks"];export{d as Basic,l as FocusMode,m as FocusModeInput,v as HoverMode,u as PositionFallbacks,x as __namedExportsOrder,T as default};
