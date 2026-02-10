@@ -62,7 +62,8 @@ The `open-on-hover` and `open-on-focus` attributes can be used independently or 
 When auto-open is enabled:
 
 - The dropdown closes with a 100ms delay to allow moving between trigger and content
-- Click still works as a toggle regardless of these settings
+- When `open-on-focus` is active, clicking the button only opens (does not toggle)
+- Otherwise, click works as a toggle
 
 #### Slots
 
@@ -77,6 +78,14 @@ The dropdown listens for a `select` event on its content and automatically close
 
 ```javascript
 menuItem.dispatchEvent(new Event('select', { bubbles: true }));
+```
+
+The dropdown dispatches a `dropdown-toggle` event (a [`ToggleEvent`](https://developer.mozilla.org/en-US/docs/Web/API/ToggleEvent)) when the popover opens or closes, allowing parent components across shadow boundaries to observe state changes:
+
+```javascript
+dropdown.addEventListener('dropdown-toggle', (e) => {
+	console.log(e.oldState, '->', e.newState); // 'closed' -> 'open' or 'open' -> 'closed'
+});
 ```
 
 ## Development

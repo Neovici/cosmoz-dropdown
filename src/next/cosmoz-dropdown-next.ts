@@ -104,12 +104,31 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 
 	useAutoOpen({ host, popoverRef, openOnHover, openOnFocus, open, close });
 
+	// When open-on-focus is active, clicking the button should only open
+	// (not toggle), since focusin already handles opening and toggle would
+	// race with the focusin handler (focusin opens, then click toggles closed).
+	const handleClick = openOnFocus ? open : toggle;
+
+	const onToggle = (e: ToggleEvent) => {
+		autofocus(e);
+		// Re-dispatch as a composed event so parent components across
+		// shadow boundaries can observe popover state changes.
+		// The native ToggleEvent is composed: false, bubbles: false.
+		host.dispatchEvent(
+			new ToggleEvent('dropdown-toggle', {
+				newState: e.newState,
+				oldState: e.oldState,
+				composed: true,
+			}),
+		);
+	};
+
 	return html`
-		<slot name="button" @click=${toggle}></slot>
+		<slot name="button" @click=${handleClick}></slot>
 		<div
 			popover
 			style="position-area: ${placement}"
-			@toggle=${autofocus}
+			@toggle=${onToggle}
 			@select=${close}
 			${ref((el) => el && (popoverRef.current = el as HTMLElement))}
 		>

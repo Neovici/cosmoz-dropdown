@@ -224,6 +224,60 @@ export const FocusMode: Story = {
 };
 
 /**
+ * Focus mode with a text input as the trigger.
+ * Regression test: clicking an input triggers focusin (on mousedown) before
+ * the click event. If the click handler used toggle() instead of open(),
+ * the popover would open on focusin then immediately close on click.
+ */
+export const FocusModeInput: Story = {
+	args: {
+		openOnFocus: true,
+	},
+	render: (args) => html`
+		<cosmoz-dropdown-next
+			placement=${args.placement}
+			?open-on-focus=${args.openOnFocus}
+		>
+			<input slot="button" type="text" placeholder="Click to open..." />
+			<div class="dropdown-content">
+				<div>Item 1</div>
+				<div>Item 2</div>
+				<div>Item 3</div>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement;
+		const input = dropdown.querySelector(
+			'input[slot="button"]',
+		) as HTMLInputElement;
+		const getPopover = () =>
+			dropdown.shadowRoot!.querySelector('[popover]') as HTMLElement | null;
+
+		await waitFor(() => {
+			expect(getPopover()).toBeTruthy();
+		});
+
+		await step(
+			'Clicking the input opens and keeps the dropdown open',
+			async () => {
+				// userEvent.click fires mousedown → focusin → mouseup → click
+				// focusin triggers useAutoOpen's handleEnter → showPopover()
+				// click reaches <slot name="button" @click=${handleClick}>
+				// With the bug (toggle): togglePopover() closes the just-opened popover
+				// With the fix (open): showPopover() is a no-op on an already-open popover
+				await userEvent.click(input);
+				await waitFor(() => {
+					expect(getPopover()?.matches(':popover-open')).toBe(true);
+				});
+			},
+		);
+	},
+};
+
+/**
  * Demonstrates position fallbacks when near viewport edges.
  * The dropdown will flip to stay visible when there's not enough space.
  */
