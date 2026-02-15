@@ -103,7 +103,14 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const close = () => popoverRef.current?.hidePopover();
 	const toggle = () => popoverRef.current?.togglePopover();
 
-	useAutoOpen({ host, popoverRef, openOnHover, openOnFocus, open, close });
+	const { scheduleClose, cancelClose } = useAutoOpen({
+		host,
+		popoverRef,
+		openOnHover,
+		openOnFocus,
+		open,
+		close,
+	});
 
 	// When open-on-focus is active, clicking the button should only open
 	// (not toggle), since focusin already handles opening and toggle would
@@ -131,6 +138,8 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 			style="position-area: ${placement}"
 			@toggle=${onToggle}
 			@select=${close}
+			@focusout=${scheduleClose}
+			@focusin=${cancelClose}
 			${ref((el) => el && (popoverRef.current = el as HTMLElement))}
 		>
 			<slot></slot>

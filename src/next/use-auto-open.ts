@@ -31,10 +31,7 @@ export const useAutoOpen = ({
 			) {
 				return;
 			}
-			if (
-				openOnFocus &&
-				(host.matches(':focus-within') || popover?.matches(':focus-within'))
-			) {
+			if (host.matches(':focus-within') || popover?.matches(':focus-within')) {
 				return;
 			}
 			close();
@@ -73,4 +70,6 @@ export const useAutoOpen = ({
 			host.removeEventListener('focusout', scheduleClose);
 		};
 	}, [openOnFocus, host]);
+
+	return { scheduleClose, cancelClose };
 };
