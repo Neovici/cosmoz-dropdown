@@ -8,6 +8,7 @@ import { placementOptions } from './story-helpers';
 
 interface StoryArgs {
 	placement: string;
+	opened: boolean;
 	openOnHover: boolean;
 	openOnFocus: boolean;
 }
@@ -23,6 +24,11 @@ const meta: Meta<StoryArgs> = {
 			description:
 				'CSS anchor position-area value. See MDN for all available options.',
 		},
+		opened: {
+			control: 'boolean',
+			description:
+				'Get/set the dropdown open state. Reflected as an attribute.',
+		},
 		openOnHover: {
 			control: 'boolean',
 			description: 'Open dropdown on hover.',
@@ -34,6 +40,7 @@ const meta: Meta<StoryArgs> = {
 	},
 	args: {
 		placement: 'bottom span-right',
+		opened: false,
 		openOnHover: false,
 		openOnFocus: false,
 	},
@@ -50,6 +57,7 @@ const renderDropdown = (
 ) => html`
 	<cosmoz-dropdown-next
 		placement=${args.placement}
+		.opened=${args.opened}
 		?open-on-hover=${args.openOnHover}
 		?open-on-focus=${args.openOnFocus}
 	>

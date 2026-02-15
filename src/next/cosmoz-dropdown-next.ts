@@ -1,4 +1,4 @@
-import { component, css, useRef } from '@pionjs/pion';
+import { component, css, useEffect, useProperty, useRef } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 import { useAutoOpen } from './use-auto-open.js';
@@ -91,6 +91,7 @@ const style = css`
 
 interface DropdownProps {
 	placement?: string;
+	opened?: boolean;
 	openOnHover?: boolean;
 	openOnFocus?: boolean;
 }
@@ -98,10 +99,24 @@ interface DropdownProps {
 const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const { placement = 'bottom span-right', openOnHover, openOnFocus } = host;
 	const popoverRef = useRef<HTMLElement>();
+	const [opened, setOpened] = useProperty<boolean>('opened', false);
 
-	const open = () => popoverRef.current?.showPopover();
-	const close = () => popoverRef.current?.hidePopover();
-	const toggle = () => popoverRef.current?.togglePopover();
+	const open = () => setOpened(true);
+	const close = () => setOpened(false);
+	const toggle = () => setOpened((v) => !v);
+
+	// Drive the native popover from the `opened` property
+	useEffect(() => {
+		const popover = popoverRef.current;
+		if (!popover) return;
+		if (opened && !popover.matches(':popover-open')) popover.showPopover();
+		if (!opened && popover.matches(':popover-open')) popover.hidePopover();
+	}, [opened]);
+
+	// Attribute reflection — sync property → attribute for CSS selectors.
+	useEffect(() => {
+		host.toggleAttribute('opened', !!opened);
+	}, [opened]);
 
 	useAutoOpen({ host, popoverRef, openOnHover, openOnFocus, open, close });
 
@@ -112,6 +127,10 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 
 	const onToggle = (e: ToggleEvent) => {
 		autofocus(e);
+		// Sync browser-initiated state changes (light-dismiss, Escape)
+		// back to the property. The useEffect guards against redundant
+		// showPopover/hidePopover calls.
+		setOpened(e.newState === 'open');
 		// Re-dispatch as a composed event so parent components across
 		// shadow boundaries can observe popover state changes.
 		// The native ToggleEvent is composed: false, bubbles: false.
