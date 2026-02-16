@@ -1,3 +1,9 @@
+## [7.4.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.3.0...v7.4.0) (2026-02-16)
+
+### Features
+
+* **dropdown-next:** add opened property with attribute reflection ([#53](https://github.com/Neovici/cosmoz-dropdown/issues/53)) ([3933c28](https://github.com/Neovici/cosmoz-dropdown/commit/3933c285dca9e2343be0903ee9b38fe28ca350cc))
+
 ## [7.3.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.2.0...v7.3.0) (2026-02-10)
 
 ### Features
