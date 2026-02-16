@@ -1,4 +1,11 @@
-import { component, css, useEffect, useProperty, useRef } from '@pionjs/pion';
+import {
+	component,
+	css,
+	useCallback,
+	useEffect,
+	useProperty,
+	useRef,
+} from '@pionjs/pion';
 import { html } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 import { useAutoOpen } from './use-auto-open.js';
@@ -101,39 +108,44 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const popoverRef = useRef<HTMLElement>();
 	const [opened, setOpened] = useProperty<boolean>('opened', false);
 
-	const open = () => setOpened(true);
-	const close = () => setOpened(false);
-	const toggle = () => setOpened((v) => !v);
+	// Call showPopover/hidePopover synchronously so the browser associates
+	// the popover with the current user-gesture. Deferring to a microtask
+	// (useEffect) causes light-dismiss to immediately close the popover.
+	const open = useCallback(() => {
+		setOpened(true);
+		popoverRef.current?.showPopover();
+	}, []);
+	const close = useCallback(() => {
+		setOpened(false);
+		popoverRef.current?.hidePopover();
+	}, []);
+	const toggle = useCallback(() => {
+		const popover = popoverRef.current;
+		if (popover?.matches(':popover-open')) close();
+		else open();
+	}, []);
 
-	// Drive the native popover from the `opened` property
+	// Sync native popover when `opened` is set externally via property binding
 	useEffect(() => {
 		const popover = popoverRef.current;
 		if (!popover) return;
-		if (opened && !popover.matches(':popover-open')) popover.showPopover();
-		if (!opened && popover.matches(':popover-open')) popover.hidePopover();
+		if (opened) popover.showPopover();
+		else popover.hidePopover();
 	}, [opened]);
 
-	// Attribute reflection — sync property → attribute for CSS selectors.
 	useEffect(() => {
 		host.toggleAttribute('opened', !!opened);
 	}, [opened]);
 
 	useAutoOpen({ host, popoverRef, openOnHover, openOnFocus, open, close });
 
-	// When open-on-focus is active, clicking the button should only open
-	// (not toggle), since focusin already handles opening and toggle would
-	// race with the focusin handler (focusin opens, then click toggles closed).
+	// With open-on-focus, only open (not toggle) on click to avoid racing
+	// with the focusin handler
 	const handleClick = openOnFocus ? open : toggle;
 
-	const onToggle = (e: ToggleEvent) => {
+	const onToggle = useCallback((e: ToggleEvent) => {
 		autofocus(e);
-		// Sync browser-initiated state changes (light-dismiss, Escape)
-		// back to the property. The useEffect guards against redundant
-		// showPopover/hidePopover calls.
 		setOpened(e.newState === 'open');
-		// Re-dispatch as a composed event so parent components across
-		// shadow boundaries can observe popover state changes.
-		// The native ToggleEvent is composed: false, bubbles: false.
 		host.dispatchEvent(
 			new ToggleEvent('dropdown-toggle', {
 				newState: e.newState,
@@ -141,7 +153,7 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 				composed: true,
 			}),
 		);
-	};
+	}, []);
 
 	return html`
 		<slot name="button" @click=${handleClick}></slot>
