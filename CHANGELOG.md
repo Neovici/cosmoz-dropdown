@@ -1,3 +1,9 @@
+## [7.4.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.4.0...v7.4.1) (2026-02-16)
+
+### Bug Fixes
+
+* **dropdown-next:** call showPopover/hidePopover synchronously in open/close/toggle ([#54](https://github.com/Neovici/cosmoz-dropdown/issues/54)) ([a35618a](https://github.com/Neovici/cosmoz-dropdown/commit/a35618af05165aca52eb59a5f56ad4a9241a7dcc))
+
 ## [7.4.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.3.0...v7.4.0) (2026-02-16)
 
 ### Features
