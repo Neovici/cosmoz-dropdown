@@ -1,6 +1,7 @@
-import{b as i}from"./iframe-DV7aURrJ.js";import"./cosmoz-dropdown-next-DZXK_KQ3.js";import"./preload-helper-PPVm8Dsz.js";const b=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:r,userEvent:g,waitFor:p}=__STORYBOOK_MODULE_TEST__,T={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:b,description:"CSS anchor position-area value. See MDN for all available options."},openOnHover:{control:"boolean",description:"Open dropdown on hover."},openOnFocus:{control:"boolean",description:"Open dropdown when the trigger receives focus."}},args:{placement:"bottom span-right",openOnHover:!1,openOnFocus:!1}},a=(o,n,t)=>i`
+import{b as i}from"./iframe-XXKC6qz0.js";import"./cosmoz-dropdown-next-C5VkpbvM.js";/* empty css                             */import"./preload-helper-PPVm8Dsz.js";const b=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:r,userEvent:g,waitFor:p}=__STORYBOOK_MODULE_TEST__,x={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:b,description:"CSS anchor position-area value. See MDN for all available options."},opened:{control:"boolean",description:"Get/set the dropdown open state. Reflected as an attribute."},openOnHover:{control:"boolean",description:"Open dropdown on hover."},openOnFocus:{control:"boolean",description:"Open dropdown when the trigger receives focus."}},args:{placement:"bottom span-right",opened:!1,openOnHover:!1,openOnFocus:!1}},a=(o,n,t)=>i`
     <cosmoz-dropdown-next
         placement=${o.placement}
+        .opened=${o.opened}
         ?open-on-hover=${o.openOnHover}
         ?open-on-focus=${o.openOnFocus}
     >
@@ -282,4 +283,4 @@ the popover would open on focusin then immediately close on click.`,...m.paramet
         </div>
     \`
 }`,...u.parameters?.docs?.source},description:{story:`Demonstrates position fallbacks when near viewport edges.
-The dropdown will flip to stay visible when there's not enough space.`,...u.parameters?.docs?.description}}};const x=["Basic","HoverMode","FocusMode","FocusModeInput","PositionFallbacks"];export{d as Basic,l as FocusMode,m as FocusModeInput,v as HoverMode,u as PositionFallbacks,x as __namedExportsOrder,T as default};
+The dropdown will flip to stay visible when there's not enough space.`,...u.parameters?.docs?.description}}};const O=["Basic","HoverMode","FocusMode","FocusModeInput","PositionFallbacks"];export{d as Basic,l as FocusMode,m as FocusModeInput,v as HoverMode,u as PositionFallbacks,O as __namedExportsOrder,x as default};
