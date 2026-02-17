@@ -1,3 +1,9 @@
+## [7.4.2](https://github.com/Neovici/cosmoz-dropdown/compare/v7.4.1...v7.4.2) (2026-02-17)
+
+### Bug Fixes
+
+* **dropdown-next:** close popover on focusout ([#52](https://github.com/Neovici/cosmoz-dropdown/issues/52)) ([cb9ca7c](https://github.com/Neovici/cosmoz-dropdown/commit/cb9ca7c66628b576b1c5d8e7f461f8d4ea2915c2))
+
 ## [7.4.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.4.0...v7.4.1) (2026-02-16)
 
 ### Bug Fixes
