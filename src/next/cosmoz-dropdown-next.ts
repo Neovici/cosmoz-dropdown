@@ -99,12 +99,18 @@ const style = css`
 interface DropdownProps {
 	placement?: string;
 	opened?: boolean;
+	disabled?: boolean;
 	openOnHover?: boolean;
 	openOnFocus?: boolean;
 }
 
 const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
-	const { placement = 'bottom span-right', openOnHover, openOnFocus } = host;
+	const {
+		placement = 'bottom span-right',
+		disabled,
+		openOnHover,
+		openOnFocus,
+	} = host;
 	const popoverRef = useRef<HTMLElement>();
 	const [opened, setOpened] = useProperty<boolean>('opened', false);
 
@@ -112,18 +118,20 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	// the popover with the current user-gesture. Deferring to a microtask
 	// (useEffect) causes light-dismiss to immediately close the popover.
 	const open = useCallback(() => {
+		if (disabled) return;
 		setOpened(true);
 		popoverRef.current?.showPopover();
-	}, []);
+	}, [disabled]);
 	const close = useCallback(() => {
 		setOpened(false);
 		popoverRef.current?.hidePopover();
 	}, []);
 	const toggle = useCallback(() => {
+		if (disabled) return;
 		const popover = popoverRef.current;
 		if (popover?.matches(':popover-open')) close();
 		else open();
-	}, []);
+	}, [disabled]);
 
 	// Sync native popover when `opened` is set externally via property binding
 	useEffect(() => {
@@ -140,6 +148,7 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const { scheduleClose, cancelClose } = useAutoOpen({
 		host,
 		popoverRef,
+		disabled,
 		openOnHover,
 		openOnFocus,
 		open,
@@ -182,7 +191,12 @@ customElements.define(
 	'cosmoz-dropdown-next',
 	component<DropdownProps>(CosmozDropdownNext, {
 		styleSheets: [style],
-		observedAttributes: ['placement', 'open-on-hover', 'open-on-focus'],
+		observedAttributes: [
+			'placement',
+			'disabled',
+			'open-on-hover',
+			'open-on-focus',
+		],
 		shadowRootInit: { mode: 'open', delegatesFocus: true },
 	}),
 );
