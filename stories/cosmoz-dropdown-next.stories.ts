@@ -286,6 +286,89 @@ export const FocusModeInput: Story = {
 };
 
 /**
+ * Disabled state prevents the dropdown from opening via click, focus, or hover.
+ */
+export const Disabled: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next
+			placement=${args.placement}
+			disabled
+			?open-on-focus=${args.openOnFocus}
+		>
+			<cosmoz-button slot="button">Disabled</cosmoz-button>
+			<div class="dropdown-content">
+				<div>Item 1</div>
+				<div>Item 2</div>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement;
+		const button = dropdown.querySelector('[slot="button"]') as HTMLElement;
+		const getPopover = () =>
+			dropdown.shadowRoot!.querySelector('[popover]') as HTMLElement | null;
+
+		await waitFor(() => {
+			expect(getPopover()).toBeTruthy();
+		});
+
+		await step('Dropdown has disabled attribute', async () => {
+			expect(dropdown.hasAttribute('disabled')).toBe(true);
+		});
+
+		await step('Click does NOT open the popover', async () => {
+			await userEvent.click(button);
+			await new Promise((r) => setTimeout(r, 100));
+			expect(getPopover()?.matches(':popover-open')).toBe(false);
+		});
+	},
+};
+
+/**
+ * Disabled state with open-on-focus prevents the dropdown from opening on focus.
+ */
+export const DisabledFocusMode: Story = {
+	args: {
+		openOnFocus: true,
+	},
+	render: (args) => html`
+		<cosmoz-dropdown-next
+			placement=${args.placement}
+			disabled
+			?open-on-focus=${args.openOnFocus}
+		>
+			<input slot="button" type="text" placeholder="Disabled input..." />
+			<div class="dropdown-content">
+				<div>Item 1</div>
+				<div>Item 2</div>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement;
+		const input = dropdown.querySelector(
+			'input[slot="button"]',
+		) as HTMLInputElement;
+		const getPopover = () =>
+			dropdown.shadowRoot!.querySelector('[popover]') as HTMLElement | null;
+
+		await waitFor(() => {
+			expect(getPopover()).toBeTruthy();
+		});
+
+		await step('Focus does NOT open the popover when disabled', async () => {
+			input.focus();
+			await new Promise((r) => setTimeout(r, 200));
+			expect(getPopover()?.matches(':popover-open')).toBe(false);
+		});
+	},
+};
+
+/**
  * Demonstrates position fallbacks when near viewport edges.
  * The dropdown will flip to stay visible when there's not enough space.
  */

@@ -3,6 +3,7 @@ import { useEffect, useRef } from '@pionjs/pion';
 interface UseAutoOpenOptions {
 	host: HTMLElement;
 	popoverRef: { current?: HTMLElement };
+	disabled?: boolean;
 	openOnHover?: boolean;
 	openOnFocus?: boolean;
 	open: () => void;
@@ -12,6 +13,7 @@ interface UseAutoOpenOptions {
 export const useAutoOpen = ({
 	host,
 	popoverRef,
+	disabled,
 	openOnHover,
 	openOnFocus,
 	open,
@@ -39,13 +41,14 @@ export const useAutoOpen = ({
 	};
 
 	const handleEnter = () => {
+		if (disabled) return;
 		cancelClose();
 		open();
 	};
 
 	// Auto-open on hover
 	useEffect(() => {
-		if (!openOnHover) return;
+		if (!openOnHover || disabled) return;
 
 		host.addEventListener('pointerenter', handleEnter);
 		host.addEventListener('pointerleave', scheduleClose);
@@ -55,11 +58,11 @@ export const useAutoOpen = ({
 			host.removeEventListener('pointerenter', handleEnter);
 			host.removeEventListener('pointerleave', scheduleClose);
 		};
-	}, [openOnHover, host]);
+	}, [openOnHover, disabled, host]);
 
 	// Auto-open on focus
 	useEffect(() => {
-		if (!openOnFocus) return;
+		if (!openOnFocus || disabled) return;
 
 		host.addEventListener('focusin', handleEnter);
 		host.addEventListener('focusout', scheduleClose);
@@ -69,7 +72,7 @@ export const useAutoOpen = ({
 			host.removeEventListener('focusin', handleEnter);
 			host.removeEventListener('focusout', scheduleClose);
 		};
-	}, [openOnFocus, host]);
+	}, [openOnFocus, disabled, host]);
 
 	return { scheduleClose, cancelClose };
 };
