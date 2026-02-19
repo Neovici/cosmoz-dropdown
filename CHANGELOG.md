@@ -1,3 +1,9 @@
+## [7.5.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.4.2...v7.5.0) (2026-02-19)
+
+### Features
+
+* add disabled support to cosmoz-dropdown-next ([#55](https://github.com/Neovici/cosmoz-dropdown/issues/55)) ([ce6a60b](https://github.com/Neovici/cosmoz-dropdown/commit/ce6a60ba21eab494ce25b6cac94d3f4f590a2080))
+
 ## [7.4.2](https://github.com/Neovici/cosmoz-dropdown/compare/v7.4.1...v7.4.2) (2026-02-17)
 
 ### Bug Fixes
