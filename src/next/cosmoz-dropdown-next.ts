@@ -51,7 +51,7 @@ const style = css`
 		position: fixed;
 		position-anchor: --dropdown-anchor;
 		inset: unset;
-		margin: var(--cz-spacing, 0.25rem);
+		margin-block: var(--cz-spacing, 0.25rem);
 		position-try-fallbacks:
 			flip-block,
 			flip-inline,
