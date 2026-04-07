@@ -1,7 +1,9 @@
-import { useEffect, useState, useCallback } from '@pionjs/pion';
 import { useMeta } from '@neovici/cosmoz-utils/hooks/use-meta';
+import { useCallback, useEffect, useState } from '@pionjs/pion';
 
 const isFocused = (t: Element) => t.matches(':focus-within');
+const hasOpenDialogInPath = (e: Event) =>
+	e.composedPath().some((el) => el instanceof HTMLDialogElement && el.open);
 
 interface FocusState {
 	focused?: boolean;
@@ -33,6 +35,9 @@ export const useFocus = ({ disabled, onFocus }: UseFocusOpts) => {
 		}
 		const handler = (e: KeyboardEvent) => {
 			if (e.defaultPrevented) {
+				return;
+			}
+			if (e.key === 'Escape' && hasOpenDialogInPath(e)) {
 				return;
 			}
 			const { closed } = meta;

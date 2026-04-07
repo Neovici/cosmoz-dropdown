@@ -44,7 +44,13 @@
 			"@semantic-release/npm",
 			"@semantic-release/git"
 		],
-		"branch": "master",
+		"branches": [
+			"master",
+			{
+				"name": "beta",
+				"prerelease": true
+			}
+		],
 		"preset": "conventionalcommits"
 	},
 	"publishConfig": {
