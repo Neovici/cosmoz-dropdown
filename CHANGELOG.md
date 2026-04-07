@@ -1,3 +1,9 @@
+## [7.6.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.5.0...v7.6.0) (2026-04-07)
+
+### Features
+
+* inline offset removed ([#56](https://github.com/Neovici/cosmoz-dropdown/issues/56)) ([b45779a](https://github.com/Neovici/cosmoz-dropdown/commit/b45779a30754fdb230eced70787240d9673688f1))
+
 ## [7.5.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.4.2...v7.5.0) (2026-02-19)
 
 ### Features
