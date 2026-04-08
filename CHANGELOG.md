@@ -1,3 +1,9 @@
+## [7.6.1-beta.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.6.0...v7.6.1-beta.1) (2026-04-08)
+
+### Bug Fixes
+
+* preserve dropdown content and dialog escape ([#57](https://github.com/Neovici/cosmoz-dropdown/issues/57)) ([11d816a](https://github.com/Neovici/cosmoz-dropdown/commit/11d816aa25f30040082236bf94dfe362ba3d4948))
+
 ## [7.6.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.5.0...v7.6.0) (2026-04-07)
 
 ### Features
