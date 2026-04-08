@@ -1,9 +1,8 @@
-import { component, css } from '@pionjs/pion';
+import { component, css, useCallback, useEffect, useRef } from '@pionjs/pion';
 import { html, nothing } from 'lit-html';
 import { guard } from 'lit-html/directives/guard.js';
 import { ref } from 'lit-html/directives/ref.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
-import { when } from 'lit-html/directives/when.js';
 import { Content } from './cosmoz-dropdown-content';
 import { useFloating, UseFloating } from './use-floating';
 import { UseFocusOpts, useHostFocus } from './use-focus';
@@ -39,12 +38,35 @@ const style = css`
 const Dropdown = (host: HTMLElement & Props) => {
 	const { placement, strategy, middleware, render } = host;
 	const { active, onToggle } = useHostFocus(host);
+	const contentRef = useRef<HTMLElement>();
 	const { styles, setReference, setFloating } = useFloating({
 		placement,
 		strategy,
 		middleware,
 	});
-	return html` <div class="anchor" part="anchor" ${ref(setReference)}>
+	const setContent = useCallback(
+		(el?: Element) => {
+			contentRef.current = el as HTMLElement | undefined;
+			setFloating(el as HTMLElement | undefined);
+		},
+		[setFloating],
+	);
+
+	useEffect(() => {
+		const content = contentRef.current;
+		if (!content) {
+			return;
+		}
+		if (active && !content.matches(':popover-open')) {
+			content.showPopover?.();
+		}
+		if (!active && content.matches(':popover-open')) {
+			content.hidePopover?.();
+		}
+	}, [active]);
+
+	return html`
+		<div class="anchor" part="anchor" ${ref(setReference)}>
 			<button
 				@mousedown=${preventDefault}
 				@click=${onToggle}
@@ -54,23 +76,19 @@ const Dropdown = (host: HTMLElement & Props) => {
 				<slot name="button">...</slot>
 			</button>
 		</div>
-		${when(
-			active,
-			() =>
-				html`<cosmoz-dropdown-content
-					popover
-					id="content"
-					part="content"
-					exportparts="wrap, content"
-					style="${styleMap(styles)}"
-					@connected=${(e: Event) => (e.target as HTMLElement).showPopover?.()}
-					${ref(setFloating)}
-					><slot></slot>${guard(
-						[render],
-						() => render?.() || nothing,
-					)}</cosmoz-dropdown-content
-				> `,
-		)}`;
+		<cosmoz-dropdown-content
+			popover
+			id="content"
+			part="content"
+			exportparts="wrap, content"
+			style="${styleMap(styles)}"
+			${ref(setContent)}
+			><slot></slot>${guard(
+				[render],
+				() => render?.() || nothing,
+			)}</cosmoz-dropdown-content
+		>
+	`;
 };
 customElements.define(
 	'cosmoz-dropdown',
