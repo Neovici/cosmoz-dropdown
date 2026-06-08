@@ -1,3 +1,9 @@
+## [7.6.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.6.0...v7.6.1) (2026-06-08)
+
+### Bug Fixes
+
+* handle Chrome 149 :focus-within top-layer boundary and focusout race ([#58](https://github.com/Neovici/cosmoz-dropdown/issues/58)) ([6f8128e](https://github.com/Neovici/cosmoz-dropdown/commit/6f8128eed95c17e1262a5ecdce8896b3310c5b39))
+
 ## [7.6.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.5.0...v7.6.0) (2026-04-07)
 
 ### Features
