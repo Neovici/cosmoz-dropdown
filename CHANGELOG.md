@@ -1,3 +1,9 @@
+## [7.7.0](https://github.com/Neovici/cosmoz-dropdown/compare/v7.6.1...v7.7.0) (2026-06-13)
+
+### Features
+
+* **next:** add passthrough attribute to cosmoz-dropdown-next ([#59](https://github.com/Neovici/cosmoz-dropdown/issues/59)) ([3b50921](https://github.com/Neovici/cosmoz-dropdown/commit/3b50921401a7b7dfc0194c76f5d7aed929752ea8))
+
 ## [7.6.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.6.0...v7.6.1) (2026-06-08)
 
 ### Bug Fixes
