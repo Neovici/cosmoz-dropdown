@@ -9,6 +9,7 @@ import { placementOptions } from './story-helpers';
 interface StoryArgs {
 	placement: string;
 	opened: boolean;
+	disabled: boolean;
 	openOnHover: boolean;
 	openOnFocus: boolean;
 	passthrough: boolean;
@@ -30,6 +31,10 @@ const meta: Meta<StoryArgs> = {
 			description:
 				'Get/set the dropdown open state. Reflected as an attribute.',
 		},
+		disabled: {
+			control: 'boolean',
+			description: 'Prevents the dropdown from opening.',
+		},
 		openOnHover: {
 			control: 'boolean',
 			description: 'Open dropdown on hover.',
@@ -47,6 +52,7 @@ const meta: Meta<StoryArgs> = {
 	args: {
 		placement: 'bottom span-right',
 		opened: false,
+		disabled: false,
 		openOnHover: false,
 		openOnFocus: false,
 		passthrough: false,
@@ -65,8 +71,10 @@ const renderDropdown = (
 	<cosmoz-dropdown-next
 		placement=${args.placement}
 		.opened=${args.opened}
+		?disabled=${args.disabled}
 		?open-on-hover=${args.openOnHover}
 		?open-on-focus=${args.openOnFocus}
+		?passthrough=${args.passthrough}
 	>
 		<cosmoz-button slot="button">${buttonLabel}</cosmoz-button>
 		${content}
@@ -296,10 +304,13 @@ export const FocusModeInput: Story = {
  * Disabled state prevents the dropdown from opening via click, focus, or hover.
  */
 export const Disabled: Story = {
+	args: {
+		disabled: true,
+	},
 	render: (args) => html`
 		<cosmoz-dropdown-next
 			placement=${args.placement}
-			disabled
+			?disabled=${args.disabled}
 			?open-on-focus=${args.openOnFocus}
 		>
 			<cosmoz-button slot="button">Disabled</cosmoz-button>
@@ -338,12 +349,13 @@ export const Disabled: Story = {
  */
 export const DisabledFocusMode: Story = {
 	args: {
+		disabled: true,
 		openOnFocus: true,
 	},
 	render: (args) => html`
 		<cosmoz-dropdown-next
 			placement=${args.placement}
-			disabled
+			?disabled=${args.disabled}
 			?open-on-focus=${args.openOnFocus}
 		>
 			<input slot="button" type="text" placeholder="Disabled input..." />
@@ -383,12 +395,13 @@ export const DisabledFocusMode: Story = {
  */
 export const Passthrough: Story = {
 	args: {
+		disabled: true,
 		passthrough: true,
 	},
 	render: (args) => html`
 		<cosmoz-dropdown-next
 			placement=${args.placement}
-			disabled
+			?disabled=${args.disabled}
 			?passthrough=${args.passthrough}
 		>
 			<cosmoz-button slot="button">Toggle</cosmoz-button>
