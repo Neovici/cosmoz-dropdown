@@ -100,6 +100,7 @@ interface DropdownProps {
 	placement?: string;
 	opened?: boolean;
 	disabled?: boolean;
+	passthrough?: boolean;
 	openOnHover?: boolean;
 	openOnFocus?: boolean;
 }
@@ -108,6 +109,7 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const {
 		placement = 'bottom span-right',
 		disabled,
+		passthrough,
 		openOnHover,
 		openOnFocus,
 	} = host;
@@ -173,17 +175,19 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 
 	return html`
 		<slot name="button" @click=${handleClick}></slot>
-		<div
-			popover
-			style="position-area: ${placement}"
-			@toggle=${onToggle}
-			@select=${close}
-			@focusout=${scheduleClose}
-			@focusin=${cancelClose}
-			${ref((el) => el && (popoverRef.current = el as HTMLElement))}
-		>
-			<slot></slot>
-		</div>
+		${disabled && passthrough
+			? html`<slot></slot>`
+			: html`<div
+					popover
+					style="position-area: ${placement}"
+					@toggle=${onToggle}
+					@select=${close}
+					@focusout=${scheduleClose}
+					@focusin=${cancelClose}
+					${ref((el) => el && (popoverRef.current = el as HTMLElement))}
+				>
+					<slot></slot>
+				</div>`}
 	`;
 };
 
@@ -194,6 +198,7 @@ customElements.define(
 		observedAttributes: [
 			'placement',
 			'disabled',
+			'passthrough',
 			'open-on-hover',
 			'open-on-focus',
 		],

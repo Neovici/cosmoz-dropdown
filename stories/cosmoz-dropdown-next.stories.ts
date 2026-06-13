@@ -11,6 +11,7 @@ interface StoryArgs {
 	opened: boolean;
 	openOnHover: boolean;
 	openOnFocus: boolean;
+	passthrough: boolean;
 }
 
 const meta: Meta<StoryArgs> = {
@@ -37,12 +38,18 @@ const meta: Meta<StoryArgs> = {
 			control: 'boolean',
 			description: 'Open dropdown when the trigger receives focus.',
 		},
+		passthrough: {
+			control: 'boolean',
+			description:
+				'When disabled + passthrough, render default slot content in normal document flow instead of inside the popover.',
+		},
 	},
 	args: {
 		placement: 'bottom span-right',
 		opened: false,
 		openOnHover: false,
 		openOnFocus: false,
+		passthrough: false,
 	},
 };
 
@@ -364,6 +371,51 @@ export const DisabledFocusMode: Story = {
 			input.focus();
 			await new Promise((r) => setTimeout(r, 200));
 			expect(getPopover()?.matches(':popover-open')).toBe(false);
+		});
+	},
+};
+
+/**
+ * When `disabled` + `passthrough` are both set, the default slot content
+ * renders in normal document flow (outside the popover), making it visible
+ * even though the dropdown is disabled. This enables using the dropdown as
+ * a conditional wrapper — popover mode when enabled, inline mode when disabled.
+ */
+export const Passthrough: Story = {
+	args: {
+		passthrough: true,
+	},
+	render: (args) => html`
+		<cosmoz-dropdown-next
+			placement=${args.placement}
+			disabled
+			?passthrough=${args.passthrough}
+		>
+			<cosmoz-button slot="button">Toggle</cosmoz-button>
+			<div class="dropdown-content">
+				<div>Item 1</div>
+				<div>Item 2</div>
+				<div>Item 3</div>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement;
+
+		await step('No popover element in shadow DOM', async () => {
+			const popover = dropdown.shadowRoot!.querySelector('[popover]');
+			expect(popover).toBeNull();
+		});
+
+		await step('Default slot content is visible in normal flow', async () => {
+			const slot = dropdown.shadowRoot!.querySelector('slot:not([name])');
+			expect(slot).toBeTruthy();
+			const assigned = (slot as HTMLSlotElement).assignedElements({
+				flatten: true,
+			});
+			expect(assigned.length).toBeGreaterThan(0);
 		});
 	},
 };
