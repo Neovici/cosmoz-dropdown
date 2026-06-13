@@ -1,14 +1,16 @@
-import{b as a}from"./iframe-wAbPsJ_l.js";import"./cosmoz-dropdown-next-D29YSCDy.js";/* empty css                             */import"./preload-helper-PPVm8Dsz.js";const x=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:r,userEvent:b,waitFor:p}=__STORYBOOK_MODULE_TEST__,O={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:x,description:"CSS anchor position-area value. See MDN for all available options."},opened:{control:"boolean",description:"Get/set the dropdown open state. Reflected as an attribute."},openOnHover:{control:"boolean",description:"Open dropdown on hover."},openOnFocus:{control:"boolean",description:"Open dropdown when the trigger receives focus."},passthrough:{control:"boolean",description:"When disabled + passthrough, render default slot content in normal document flow instead of inside the popover."}},args:{placement:"bottom span-right",opened:!1,openOnHover:!1,openOnFocus:!1,passthrough:!1}},d=(o,n,e)=>a`
+import{b as a}from"./iframe-CkVbGRNY.js";import"./cosmoz-dropdown-next-BYrDJ0M-.js";/* empty css                             */import"./preload-helper-PPVm8Dsz.js";const x=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:r,userEvent:y,waitFor:d}=__STORYBOOK_MODULE_TEST__,O={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:x,description:"CSS anchor position-area value. See MDN for all available options."},opened:{control:"boolean",description:"Get/set the dropdown open state. Reflected as an attribute."},disabled:{control:"boolean",description:"Prevents the dropdown from opening."},openOnHover:{control:"boolean",description:"Open dropdown on hover."},openOnFocus:{control:"boolean",description:"Open dropdown when the trigger receives focus."},passthrough:{control:"boolean",description:"When disabled + passthrough, render default slot content in normal document flow instead of inside the popover."}},args:{placement:"bottom span-right",opened:!1,disabled:!1,openOnHover:!1,openOnFocus:!1,passthrough:!1}},p=(o,n,e)=>a`
     <cosmoz-dropdown-next
         placement=${o.placement}
         .opened=${o.opened}
+        ?disabled=${o.disabled}
         ?open-on-hover=${o.openOnHover}
         ?open-on-focus=${o.openOnFocus}
+        ?passthrough=${o.passthrough}
     >
         <cosmoz-button slot="button">${n}</cosmoz-button>
         ${e}
     </cosmoz-dropdown-next>
-`,l={render:o=>d(o,"Open Menu",a`<div class="dropdown-content">
+`,l={render:o=>p(o,"Open Menu",a`<div class="dropdown-content">
                 <input
                     type="text"
                     placeholder="Search..."
@@ -18,15 +20,15 @@ import{b as a}from"./iframe-wAbPsJ_l.js";import"./cosmoz-dropdown-next-D29YSCDy.
                 <div>Item 1</div>
                 <div>Item 2</div>
                 <div>Item 3</div>
-            </div>`),play:async({canvasElement:o})=>{const n=o.querySelector("cosmoz-dropdown-next"),e=n.querySelector('[slot="button"]'),s=()=>n.shadowRoot.querySelector("[popover]");await p(()=>{r(s()).toBeTruthy()}),await b.click(e),await p(()=>{const t=s();r(t?.matches(":popover-open")).toBe(!0)}),await b.click(e),await p(()=>{const t=s();r(t?.matches(":popover-open")).toBe(!1)})}},v={args:{openOnHover:!0},render:o=>d(o,"Hover me",a`<div class="dropdown-content">
+            </div>`),play:async({canvasElement:o})=>{const n=o.querySelector("cosmoz-dropdown-next"),e=n.querySelector('[slot="button"]'),s=()=>n.shadowRoot.querySelector("[popover]");await d(()=>{r(s()).toBeTruthy()}),await y.click(e),await d(()=>{const t=s();r(t?.matches(":popover-open")).toBe(!0)}),await y.click(e),await d(()=>{const t=s();r(t?.matches(":popover-open")).toBe(!1)})}},v={args:{openOnHover:!0},render:o=>p(o,"Hover me",a`<div class="dropdown-content">
                 <div>Item 1</div>
                 <div>Item 2</div>
                 <div>Item 3</div>
-            </div>`),play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await p(()=>{r(t()).toBeTruthy()}),await n("Dropdown has open-on-hover attribute",async()=>{r(e.hasAttribute("open-on-hover")).toBe(!0)}),await n("Click toggles the dropdown",async()=>{const c=t()?.matches(":popover-open");s.click(),await new Promise(I=>setTimeout(I,50));const f=t()?.matches(":popover-open");r(f).toBe(!c)}),await n("Click again toggles the dropdown back",async()=>{const c=t()?.matches(":popover-open");s.click(),await new Promise(I=>setTimeout(I,50));const f=t()?.matches(":popover-open");r(f).toBe(!c)})}},u={args:{openOnFocus:!0},render:o=>d(o,"Focus me",a`<div class="dropdown-content">
+            </div>`),play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await d(()=>{r(t()).toBeTruthy()}),await n("Dropdown has open-on-hover attribute",async()=>{r(e.hasAttribute("open-on-hover")).toBe(!0)}),await n("Click toggles the dropdown",async()=>{const c=t()?.matches(":popover-open");s.click(),await new Promise(I=>setTimeout(I,50));const f=t()?.matches(":popover-open");r(f).toBe(!c)}),await n("Click again toggles the dropdown back",async()=>{const c=t()?.matches(":popover-open");s.click(),await new Promise(I=>setTimeout(I,50));const f=t()?.matches(":popover-open");r(f).toBe(!c)})}},u={args:{openOnFocus:!0},render:o=>p(o,"Focus me",a`<div class="dropdown-content">
                 <div>Item 1</div>
                 <div>Item 2</div>
                 <div>Item 3</div>
-            </div>`),play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await p(()=>{r(t()).toBeTruthy()}),await n("Dropdown has open-on-focus attribute",async()=>{r(e.hasAttribute("open-on-focus")).toBe(!0)}),await n("Focus opens the dropdown",async()=>{t()?.matches(":popover-open")&&(s.click(),await new Promise(c=>setTimeout(c,50))),s.focus(),await p(()=>{r(t()?.matches(":popover-open")).toBe(!0)})})}},m={args:{openOnFocus:!0},render:o=>a`
+            </div>`),play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await d(()=>{r(t()).toBeTruthy()}),await n("Dropdown has open-on-focus attribute",async()=>{r(e.hasAttribute("open-on-focus")).toBe(!0)}),await n("Focus opens the dropdown",async()=>{t()?.matches(":popover-open")&&(s.click(),await new Promise(c=>setTimeout(c,50))),s.focus(),await d(()=>{r(t()?.matches(":popover-open")).toBe(!0)})})}},m={args:{openOnFocus:!0},render:o=>a`
         <cosmoz-dropdown-next
             placement=${o.placement}
             ?open-on-focus=${o.openOnFocus}
@@ -38,10 +40,10 @@ import{b as a}from"./iframe-wAbPsJ_l.js";import"./cosmoz-dropdown-next-D29YSCDy.
                 <div>Item 3</div>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('input[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await p(()=>{r(t()).toBeTruthy()}),await n("Clicking the input opens and keeps the dropdown open",async()=>{await b.click(s),await p(()=>{r(t()?.matches(":popover-open")).toBe(!0)})})}},w={render:o=>a`
+    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('input[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await d(()=>{r(t()).toBeTruthy()}),await n("Clicking the input opens and keeps the dropdown open",async()=>{await y.click(s),await d(()=>{r(t()?.matches(":popover-open")).toBe(!0)})})}},w={args:{disabled:!0},render:o=>a`
         <cosmoz-dropdown-next
             placement=${o.placement}
-            disabled
+            ?disabled=${o.disabled}
             ?open-on-focus=${o.openOnFocus}
         >
             <cosmoz-button slot="button">Disabled</cosmoz-button>
@@ -50,10 +52,10 @@ import{b as a}from"./iframe-wAbPsJ_l.js";import"./cosmoz-dropdown-next-D29YSCDy.
                 <div>Item 2</div>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await p(()=>{r(t()).toBeTruthy()}),await n("Dropdown has disabled attribute",async()=>{r(e.hasAttribute("disabled")).toBe(!0)}),await n("Click does NOT open the popover",async()=>{await b.click(s),await new Promise(i=>setTimeout(i,100)),r(t()?.matches(":popover-open")).toBe(!1)})}},h={args:{openOnFocus:!0},render:o=>a`
+    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await d(()=>{r(t()).toBeTruthy()}),await n("Dropdown has disabled attribute",async()=>{r(e.hasAttribute("disabled")).toBe(!0)}),await n("Click does NOT open the popover",async()=>{await y.click(s),await new Promise(i=>setTimeout(i,100)),r(t()?.matches(":popover-open")).toBe(!1)})}},h={args:{disabled:!0,openOnFocus:!0},render:o=>a`
         <cosmoz-dropdown-next
             placement=${o.placement}
-            disabled
+            ?disabled=${o.disabled}
             ?open-on-focus=${o.openOnFocus}
         >
             <input slot="button" type="text" placeholder="Disabled input..." />
@@ -62,10 +64,10 @@ import{b as a}from"./iframe-wAbPsJ_l.js";import"./cosmoz-dropdown-next-D29YSCDy.
                 <div>Item 2</div>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('input[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await p(()=>{r(t()).toBeTruthy()}),await n("Focus does NOT open the popover when disabled",async()=>{s.focus(),await new Promise(i=>setTimeout(i,200)),r(t()?.matches(":popover-open")).toBe(!1)})}},g={args:{passthrough:!0},render:o=>a`
+    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next"),s=e.querySelector('input[slot="button"]'),t=()=>e.shadowRoot.querySelector("[popover]");await d(()=>{r(t()).toBeTruthy()}),await n("Focus does NOT open the popover when disabled",async()=>{s.focus(),await new Promise(i=>setTimeout(i,200)),r(t()?.matches(":popover-open")).toBe(!1)})}},g={args:{disabled:!0,passthrough:!0},render:o=>a`
         <cosmoz-dropdown-next
             placement=${o.placement}
-            disabled
+            ?disabled=${o.disabled}
             ?passthrough=${o.passthrough}
         >
             <cosmoz-button slot="button">Toggle</cosmoz-button>
@@ -75,11 +77,11 @@ import{b as a}from"./iframe-wAbPsJ_l.js";import"./cosmoz-dropdown-next-D29YSCDy.
                 <div>Item 3</div>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next");await n("No popover element in shadow DOM",async()=>{const s=e.shadowRoot.querySelector("[popover]");r(s).toBeNull()}),await n("Default slot content is visible in normal flow",async()=>{const s=e.shadowRoot.querySelector("slot:not([name])");r(s).toBeTruthy();const t=s.assignedElements({flatten:!0});r(t.length).toBeGreaterThan(0)})}},y={render:o=>a`
+    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next");await n("No popover element in shadow DOM",async()=>{const s=e.shadowRoot.querySelector("[popover]");r(s).toBeNull()}),await n("Default slot content is visible in normal flow",async()=>{const s=e.shadowRoot.querySelector("slot:not([name])");r(s).toBeTruthy();const t=s.assignedElements({flatten:!0});r(t.length).toBeGreaterThan(0)})}},b={render:o=>a`
         <div class="position-grid">
             <!-- Top Left -->
             <div class="position-top-left">
-                ${d(o,"Top Left",a`<div class="dropdown-content">
+                ${p(o,"Top Left",a`<div class="dropdown-content">
                         <div>Item 1</div>
                         <div>Item 2</div>
                         <div>Item 3</div>
@@ -88,7 +90,7 @@ import{b as a}from"./iframe-wAbPsJ_l.js";import"./cosmoz-dropdown-next-D29YSCDy.
 
             <!-- Top Right -->
             <div class="position-top-right">
-                ${d(o,"Top Right",a`<div class="dropdown-content">
+                ${p(o,"Top Right",a`<div class="dropdown-content">
                         <div>Item 1</div>
                         <div>Item 2</div>
                         <div>Item 3</div>
@@ -97,7 +99,7 @@ import{b as a}from"./iframe-wAbPsJ_l.js";import"./cosmoz-dropdown-next-D29YSCDy.
 
             <!-- Bottom Left -->
             <div class="position-bottom-left">
-                ${d(o,"Bottom Left",a`<div class="dropdown-content">
+                ${p(o,"Bottom Left",a`<div class="dropdown-content">
                         <div>Item 1</div>
                         <div>Item 2</div>
                         <div>Item 3</div>
@@ -106,7 +108,7 @@ import{b as a}from"./iframe-wAbPsJ_l.js";import"./cosmoz-dropdown-next-D29YSCDy.
 
             <!-- Bottom Right -->
             <div class="position-bottom-right">
-                ${d(o,"Bottom Right",a`<div class="dropdown-content">
+                ${p(o,"Bottom Right",a`<div class="dropdown-content">
                         <div>Item 1</div>
                         <div>Item 2</div>
                         <div>Item 3</div>
@@ -280,10 +282,13 @@ Useful for navigation menus where keyboard accessibility is important.`,...u.par
 Regression test: clicking an input triggers focusin (on mousedown) before
 the click event. If the click handler used toggle() instead of open(),
 the popover would open on focusin then immediately close on click.`,...m.parameters?.docs?.description}}};w.parameters={...w.parameters,docs:{...w.parameters?.docs,source:{originalSource:`{
+  args: {
+    disabled: true
+  },
   render: args => html\`
         <cosmoz-dropdown-next
             placement=\${args.placement}
-            disabled
+            ?disabled=\${args.disabled}
             ?open-on-focus=\${args.openOnFocus}
         >
             <cosmoz-button slot="button">Disabled</cosmoz-button>
@@ -314,12 +319,13 @@ the popover would open on focusin then immediately close on click.`,...m.paramet
   }
 }`,...w.parameters?.docs?.source},description:{story:"Disabled state prevents the dropdown from opening via click, focus, or hover.",...w.parameters?.docs?.description}}};h.parameters={...h.parameters,docs:{...h.parameters?.docs,source:{originalSource:`{
   args: {
+    disabled: true,
     openOnFocus: true
   },
   render: args => html\`
         <cosmoz-dropdown-next
             placement=\${args.placement}
-            disabled
+            ?disabled=\${args.disabled}
             ?open-on-focus=\${args.openOnFocus}
         >
             <input slot="button" type="text" placeholder="Disabled input..." />
@@ -347,12 +353,13 @@ the popover would open on focusin then immediately close on click.`,...m.paramet
   }
 }`,...h.parameters?.docs?.source},description:{story:"Disabled state with open-on-focus prevents the dropdown from opening on focus.",...h.parameters?.docs?.description}}};g.parameters={...g.parameters,docs:{...g.parameters?.docs,source:{originalSource:`{
   args: {
+    disabled: true,
     passthrough: true
   },
   render: args => html\`
         <cosmoz-dropdown-next
             placement=\${args.placement}
-            disabled
+            ?disabled=\${args.disabled}
             ?passthrough=\${args.passthrough}
         >
             <cosmoz-button slot="button">Toggle</cosmoz-button>
@@ -381,7 +388,7 @@ the popover would open on focusin then immediately close on click.`,...m.paramet
       expect(assigned.length).toBeGreaterThan(0);
     });
   }
-}`,...g.parameters?.docs?.source},description:{story:"When `disabled` + `passthrough` are both set, the default slot content\nrenders in normal document flow (outside the popover), making it visible\neven though the dropdown is disabled. This enables using the dropdown as\na conditional wrapper — popover mode when enabled, inline mode when disabled.",...g.parameters?.docs?.description}}};y.parameters={...y.parameters,docs:{...y.parameters?.docs,source:{originalSource:`{
+}`,...g.parameters?.docs?.source},description:{story:"When `disabled` + `passthrough` are both set, the default slot content\nrenders in normal document flow (outside the popover), making it visible\neven though the dropdown is disabled. This enables using the dropdown as\na conditional wrapper — popover mode when enabled, inline mode when disabled.",...g.parameters?.docs?.description}}};b.parameters={...b.parameters,docs:{...b.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <div class="position-grid">
             <!-- Top Left -->
@@ -421,5 +428,5 @@ the popover would open on focusin then immediately close on click.`,...m.paramet
             </div>
         </div>
     \`
-}`,...y.parameters?.docs?.source},description:{story:`Demonstrates position fallbacks when near viewport edges.
-The dropdown will flip to stay visible when there's not enough space.`,...y.parameters?.docs?.description}}};const E=["Basic","HoverMode","FocusMode","FocusModeInput","Disabled","DisabledFocusMode","Passthrough","PositionFallbacks"];export{l as Basic,w as Disabled,h as DisabledFocusMode,u as FocusMode,m as FocusModeInput,v as HoverMode,g as Passthrough,y as PositionFallbacks,E as __namedExportsOrder,O as default};
+}`,...b.parameters?.docs?.source},description:{story:`Demonstrates position fallbacks when near viewport edges.
+The dropdown will flip to stay visible when there's not enough space.`,...b.parameters?.docs?.description}}};const E=["Basic","HoverMode","FocusMode","FocusModeInput","Disabled","DisabledFocusMode","Passthrough","PositionFallbacks"];export{l as Basic,w as Disabled,h as DisabledFocusMode,u as FocusMode,m as FocusModeInput,v as HoverMode,g as Passthrough,b as PositionFallbacks,E as __namedExportsOrder,O as default};
