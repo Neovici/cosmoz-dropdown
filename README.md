@@ -32,6 +32,8 @@ Modern dropdown using the Popover API and CSS Anchor Positioning.
 | Property        | Type      | Default               | Description                                                                                                              |
 | --------------- | --------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `placement`     | `string`  | `'bottom span-right'` | CSS anchor `position-area` value. See [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/position-area) for options. |
+| `disabled`      | `boolean` | `false`               | Prevents the dropdown from opening.                                                                                      |
+| `passthrough`   | `boolean` | `false`               | When `disabled` + `passthrough`, render default slot content inline instead of inside the popover.                       |
 | `open-on-hover` | `boolean` | `false`               | Open on pointer hover.                                                                                                   |
 | `open-on-focus` | `boolean` | `false`               | Open when the trigger receives focus.                                                                                    |
 
@@ -64,6 +66,24 @@ When auto-open is enabled:
 - The dropdown closes with a 100ms delay to allow moving between trigger and content
 - When `open-on-focus` is active, clicking the button only opens (does not toggle)
 - Otherwise, click works as a toggle
+
+#### Disabled + Passthrough
+
+When `disabled` and `passthrough` are both set, the default slot content renders in normal document flow (outside the popover). This enables using the dropdown as a conditional wrapper — popover mode when enabled, inline mode when disabled:
+
+```html
+<!-- Dropdown mode (enabled) -->
+<cosmoz-dropdown-next placement="bottom span-right">
+	<button slot="button">Menu</button>
+	<div>Popover content</div>
+</cosmoz-dropdown-next>
+
+<!-- Inline mode (disabled + passthrough) -->
+<cosmoz-dropdown-next disabled passthrough>
+	<button slot="button">Menu</button>
+	<div>Rendered inline, not inside a popover</div>
+</cosmoz-dropdown-next>
+```
 
 #### Slots
 
