@@ -147,7 +147,7 @@ export const NativeCloseSyncsProperty: Story = {
 				// Simulate browser-initiated close (light-dismiss / Escape).
 				// hidePopover() fires the native toggle event, same as
 				// light-dismiss and Escape key.
-				getPopover(dropdown)!.hidePopover();
+				getPopover(dropdown)!.hidePopover?.();
 				await waitFor(() => {
 					expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false);
 					expect(dropdown.opened).toBe(false);
