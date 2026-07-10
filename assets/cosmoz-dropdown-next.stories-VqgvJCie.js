@@ -1,4 +1,4 @@
-import{b as d}from"./iframe-CkVbGRNY.js";import"./cosmoz-dropdown-next-BYrDJ0M-.js";/* empty css                             */import"./preload-helper-PPVm8Dsz.js";const{expect:t,userEvent:x,waitFor:r}=__STORYBOOK_MODULE_TEST__,P={title:"Tests/Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["!autodocs"],args:{placement:"bottom span-right"}},s=o=>o.shadowRoot.querySelector("[popover]"),i={render:o=>d`
+import{b as d}from"./iframe-tSHkbcSB.js";import"./cosmoz-dropdown-next-D063MJhZ.js";/* empty css                             */import"./preload-helper-PPVm8Dsz.js";const{expect:t,userEvent:x,waitFor:r}=__STORYBOOK_MODULE_TEST__,P={title:"Tests/Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["!autodocs"],args:{placement:"bottom span-right"}},s=o=>o.shadowRoot.querySelector("[popover]"),i={render:o=>d`
         <cosmoz-dropdown-next placement=${o.placement}>
             <cosmoz-button slot="button">Toggle</cosmoz-button>
             <div class="dropdown-content">
@@ -21,7 +21,7 @@ import{b as d}from"./iframe-CkVbGRNY.js";import"./cosmoz-dropdown-next-BYrDJ0M-.
                 <div>Item 1</div>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next");await r(()=>{t(s(e)).toBeTruthy()}),await n("Open via property",async()=>{e.opened=!0,await r(()=>{t(s(e)?.matches(":popover-open")).toBe(!0)})}),await n("Native hidePopover() syncs property back to false",async()=>{s(e).hidePopover(),await r(()=>{t(s(e)?.matches(":popover-open")).toBe(!1),t(e.opened).toBe(!1),t(e.hasAttribute("opened")).toBe(!1)})})}},m={render:o=>d`
+    `,play:async({canvasElement:o,step:n})=>{const e=o.querySelector("cosmoz-dropdown-next");await r(()=>{t(s(e)).toBeTruthy()}),await n("Open via property",async()=>{e.opened=!0,await r(()=>{t(s(e)?.matches(":popover-open")).toBe(!0)})}),await n("Native hidePopover() syncs property back to false",async()=>{s(e).hidePopover?.(),await r(()=>{t(s(e)?.matches(":popover-open")).toBe(!1),t(e.opened).toBe(!1),t(e.hasAttribute("opened")).toBe(!1)})})}},m={render:o=>d`
         <cosmoz-dropdown-next placement=${o.placement}>
             <cosmoz-button slot="button">Toggle</cosmoz-button>
             <div class="dropdown-content">
@@ -181,7 +181,7 @@ import{b as d}from"./iframe-CkVbGRNY.js";import"./cosmoz-dropdown-next-BYrDJ0M-.
       // Simulate browser-initiated close (light-dismiss / Escape).
       // hidePopover() fires the native toggle event, same as
       // light-dismiss and Escape key.
-      getPopover(dropdown)!.hidePopover();
+      getPopover(dropdown)!.hidePopover?.();
       await waitFor(() => {
         expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false);
         expect(dropdown.opened).toBe(false);
