@@ -122,11 +122,11 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	const open = useCallback(() => {
 		if (disabled) return;
 		setOpened(true);
-		popoverRef.current?.showPopover();
+		popoverRef.current?.showPopover?.();
 	}, [disabled]);
 	const close = useCallback(() => {
 		setOpened(false);
-		popoverRef.current?.hidePopover();
+		popoverRef.current?.hidePopover?.();
 	}, []);
 	const toggle = useCallback(() => {
 		if (disabled) return;
@@ -139,8 +139,8 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	useEffect(() => {
 		const popover = popoverRef.current;
 		if (!popover) return;
-		if (opened) popover.showPopover();
-		else popover.hidePopover();
+		if (opened) popover.showPopover?.();
+		else popover.hidePopover?.();
 	}, [opened]);
 
 	useEffect(() => {
