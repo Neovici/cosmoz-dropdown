@@ -5,6 +5,7 @@
     "@neovici/cosmoz-dropdown": "7.7.1"
   },
   "changesets": [
-    "light-forks-sin"
+    "light-forks-sin",
+    "public-hotels-send"
   ]
 }
