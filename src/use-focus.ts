@@ -1,9 +1,13 @@
 import { useMeta } from '@neovici/cosmoz-utils/hooks/use-meta';
-import { useCallback, useEffect, useState } from '@pionjs/pion';
+import { useCallback, useEffect, useRef, useState } from '@pionjs/pion';
 
-const isFocused = (t: Element) => t.matches(':focus-within');
-const hasOpenDialogInPath = (e: Event) =>
-	e.composedPath().some((el) => el instanceof HTMLDialogElement && el.open);
+const isFocused = (t: Element) => {
+	if (t.matches(':focus-within')) {
+		return true;
+	}
+	const popover = t.shadowRoot?.querySelector('[popover]');
+	return popover?.matches(':focus-within') ?? false;
+};
 
 interface FocusState {
 	focused?: boolean;
@@ -37,9 +41,6 @@ export const useFocus = ({ disabled, onFocus }: UseFocusOpts) => {
 			if (e.defaultPrevented) {
 				return;
 			}
-			if (e.key === 'Escape' && hasOpenDialogInPath(e)) {
-				return;
-			}
 			const { closed } = meta;
 			if (e.key === 'Escape' && !closed) {
 				e.preventDefault();
@@ -69,18 +70,38 @@ export const useFocus = ({ disabled, onFocus }: UseFocusOpts) => {
 	};
 };
 
-const fevs = ['focusin', 'focusout'] as const;
 export const useHostFocus = (host: HTMLElement & UseFocusOpts) => {
 	const thru = useFocus(host),
 		{ onFocus } = thru;
 
+	const scheduleRef = useRef<ReturnType<typeof setTimeout>>();
+
 	useEffect(() => {
 		host.setAttribute('tabindex', '0');
-		fevs.forEach((ev) => host.addEventListener(ev, onFocus));
-		return () => {
-			fevs.forEach((ev) => host.removeEventListener(ev, onFocus));
+
+		const onFocusIn = (e: FocusEvent) => {
+			clearTimeout(scheduleRef.current);
+			onFocus(e);
 		};
-	}, []);
+
+		const onFocusOut = (e: FocusEvent) => {
+			clearTimeout(scheduleRef.current);
+			const currentTarget = e.currentTarget as HTMLElement;
+			// TODO: `onFocus` only uses `e.currentTarget`, consider refactoring to accept `HTMLElement` instead of `FocusEvent`
+			scheduleRef.current = setTimeout(
+				() => onFocus({ currentTarget } as unknown as FocusEvent),
+				30,
+			);
+		};
+
+		host.addEventListener('focusin', onFocusIn);
+		host.addEventListener('focusout', onFocusOut);
+		return () => {
+			clearTimeout(scheduleRef.current);
+			host.removeEventListener('focusin', onFocusIn);
+			host.removeEventListener('focusout', onFocusOut);
+		};
+	}, [onFocus]);
 
 	return thru;
 };

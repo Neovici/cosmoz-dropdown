@@ -9,8 +9,10 @@ import { placementOptions } from './story-helpers';
 interface StoryArgs {
 	placement: string;
 	opened: boolean;
+	disabled: boolean;
 	openOnHover: boolean;
 	openOnFocus: boolean;
+	passthrough: boolean;
 }
 
 const meta: Meta<StoryArgs> = {
@@ -29,6 +31,10 @@ const meta: Meta<StoryArgs> = {
 			description:
 				'Get/set the dropdown open state. Reflected as an attribute.',
 		},
+		disabled: {
+			control: 'boolean',
+			description: 'Prevents the dropdown from opening.',
+		},
 		openOnHover: {
 			control: 'boolean',
 			description: 'Open dropdown on hover.',
@@ -37,12 +43,19 @@ const meta: Meta<StoryArgs> = {
 			control: 'boolean',
 			description: 'Open dropdown when the trigger receives focus.',
 		},
+		passthrough: {
+			control: 'boolean',
+			description:
+				'When disabled + passthrough, render default slot content in normal document flow instead of inside the popover.',
+		},
 	},
 	args: {
 		placement: 'bottom span-right',
 		opened: false,
+		disabled: false,
 		openOnHover: false,
 		openOnFocus: false,
+		passthrough: false,
 	},
 };
 
@@ -58,8 +71,10 @@ const renderDropdown = (
 	<cosmoz-dropdown-next
 		placement=${args.placement}
 		.opened=${args.opened}
+		?disabled=${args.disabled}
 		?open-on-hover=${args.openOnHover}
 		?open-on-focus=${args.openOnFocus}
+		?passthrough=${args.passthrough}
 	>
 		<cosmoz-button slot="button">${buttonLabel}</cosmoz-button>
 		${content}
@@ -289,10 +304,13 @@ export const FocusModeInput: Story = {
  * Disabled state prevents the dropdown from opening via click, focus, or hover.
  */
 export const Disabled: Story = {
+	args: {
+		disabled: true,
+	},
 	render: (args) => html`
 		<cosmoz-dropdown-next
 			placement=${args.placement}
-			disabled
+			?disabled=${args.disabled}
 			?open-on-focus=${args.openOnFocus}
 		>
 			<cosmoz-button slot="button">Disabled</cosmoz-button>
@@ -331,12 +349,13 @@ export const Disabled: Story = {
  */
 export const DisabledFocusMode: Story = {
 	args: {
+		disabled: true,
 		openOnFocus: true,
 	},
 	render: (args) => html`
 		<cosmoz-dropdown-next
 			placement=${args.placement}
-			disabled
+			?disabled=${args.disabled}
 			?open-on-focus=${args.openOnFocus}
 		>
 			<input slot="button" type="text" placeholder="Disabled input..." />
@@ -364,6 +383,52 @@ export const DisabledFocusMode: Story = {
 			input.focus();
 			await new Promise((r) => setTimeout(r, 200));
 			expect(getPopover()?.matches(':popover-open')).toBe(false);
+		});
+	},
+};
+
+/**
+ * When `disabled` + `passthrough` are both set, the default slot content
+ * renders in normal document flow (outside the popover), making it visible
+ * even though the dropdown is disabled. This enables using the dropdown as
+ * a conditional wrapper — popover mode when enabled, inline mode when disabled.
+ */
+export const Passthrough: Story = {
+	args: {
+		disabled: true,
+		passthrough: true,
+	},
+	render: (args) => html`
+		<cosmoz-dropdown-next
+			placement=${args.placement}
+			?disabled=${args.disabled}
+			?passthrough=${args.passthrough}
+		>
+			<cosmoz-button slot="button">Toggle</cosmoz-button>
+			<div class="dropdown-content">
+				<div>Item 1</div>
+				<div>Item 2</div>
+				<div>Item 3</div>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement;
+
+		await step('No popover element in shadow DOM', async () => {
+			const popover = dropdown.shadowRoot!.querySelector('[popover]');
+			expect(popover).toBeNull();
+		});
+
+		await step('Default slot content is visible in normal flow', async () => {
+			const slot = dropdown.shadowRoot!.querySelector('slot:not([name])');
+			expect(slot).toBeTruthy();
+			const assigned = (slot as HTMLSlotElement).assignedElements({
+				flatten: true,
+			});
+			expect(assigned.length).toBeGreaterThan(0);
 		});
 	},
 };

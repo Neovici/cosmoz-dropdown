@@ -147,7 +147,7 @@ export const NativeCloseSyncsProperty: Story = {
 				// Simulate browser-initiated close (light-dismiss / Escape).
 				// hidePopover() fires the native toggle event, same as
 				// light-dismiss and Escape key.
-				getPopover(dropdown)!.hidePopover();
+				getPopover(dropdown)!.hidePopover?.();
 				await waitFor(() => {
 					expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false);
 					expect(dropdown.opened).toBe(false);
@@ -420,6 +420,90 @@ export const FocusBlurClose: Story = {
 			closeBtn.blur();
 			await new Promise((r) => setTimeout(r, 150));
 			expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false);
+		});
+	},
+};
+
+/**
+ * Verifies that when `disabled` + `passthrough` are both set, the default
+ * slot renders in normal document flow — no popover element exists in the
+ * shadow DOM, and the slotted content is visible.
+ */
+export const PassthroughRendersInline: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement} disabled passthrough>
+			<cosmoz-button slot="button">Toggle</cosmoz-button>
+			<div class="dropdown-content">
+				<div>Item 1</div>
+				<div>Item 2</div>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement;
+
+		await step('No popover element in shadow DOM', async () => {
+			const popover = dropdown.shadowRoot!.querySelector('[popover]');
+			expect(popover).toBeNull();
+		});
+
+		await step('Default slot is rendered inline', async () => {
+			const slot = dropdown.shadowRoot!.querySelector('slot:not([name])');
+			expect(slot).toBeTruthy();
+			expect(slot!.closest('[popover]')).toBeNull();
+		});
+
+		await step('Slotted content is visible', async () => {
+			const slot = dropdown.shadowRoot!.querySelector(
+				'slot:not([name])',
+			) as HTMLSlotElement;
+			const assigned = slot.assignedElements({ flatten: true });
+			expect(assigned.length).toBeGreaterThan(0);
+		});
+	},
+};
+
+/**
+ * Verifies that `passthrough` without `disabled` has no effect — the popover
+ * element is still rendered and the dropdown behaves normally.
+ */
+export const PassthroughWithoutDisabled: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement} passthrough>
+			<cosmoz-button slot="button">Toggle</cosmoz-button>
+			<div class="dropdown-content">
+				<div>Item 1</div>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement & { opened: boolean };
+		const button = dropdown.querySelector('[slot="button"]') as HTMLElement;
+
+		await step(
+			'Popover element exists (passthrough without disabled has no effect)',
+			async () => {
+				const popover = dropdown.shadowRoot!.querySelector('[popover]');
+				expect(popover).toBeTruthy();
+			},
+		);
+
+		await step('Click toggles popover normally', async () => {
+			await userEvent.click(button);
+			await waitFor(() => {
+				expect(getPopover(dropdown)?.matches(':popover-open')).toBe(true);
+			});
+		});
+
+		await step('Click closes popover normally', async () => {
+			await userEvent.click(button);
+			await waitFor(() => {
+				expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false);
+			});
 		});
 	},
 };
