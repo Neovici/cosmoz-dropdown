@@ -34,6 +34,7 @@ const style = css`
 		text-align: left;
 		margin: 0;
 		width: 100%;
+		white-space: nowrap;
 	}
 
 	::slotted(:not(slot):hover) {
