@@ -1,5 +1,11 @@
 ## [7.6.1-beta.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.6.0...v7.6.1-beta.1) (2026-04-08)
 
+## 7.7.2-beta.1
+
+### Patch Changes
+
+- b10a4a9: Remove padding and border from wrapper
+
 ## 7.7.2-beta.0
 
 ### Patch Changes
