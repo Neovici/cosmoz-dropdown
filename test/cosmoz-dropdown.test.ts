@@ -6,7 +6,7 @@ describe('cosmoz-dropdown', () => {
 		const el = await fixture(
 			html`<cosmoz-dropdown><a href="#">Test<a/></cosmoz-dropdown>`,
 		);
-		el.shadowRoot!.querySelector<HTMLElement>('cosmoz-button')!.focus();
+		el.shadowRoot!.querySelector<HTMLButtonElement>('button')!.focus();
 		await nextFrame();
 		expect(el.shadowRoot!.querySelector('cosmoz-dropdown-content')).to.be.ok;
 	});
@@ -15,7 +15,7 @@ describe('cosmoz-dropdown', () => {
 		const el = await fixture(
 			html`<cosmoz-dropdown><a href="#">Test<a/></cosmoz-dropdown>`,
 		);
-		const button = el.shadowRoot!.querySelector<HTMLElement>('cosmoz-button')!;
+		const button = el.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
 		button.focus();
 		await nextFrame();
 
@@ -42,7 +42,7 @@ describe('cosmoz-dropdown', () => {
 				<dialog open>Dialog</dialog>
 			</cosmoz-dropdown>
 		`);
-		const button = el.shadowRoot!.querySelector<HTMLElement>('cosmoz-button')!;
+		const button = el.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
 		const dialog = el.querySelector('dialog')!;
 
 		button.focus();
@@ -70,7 +70,7 @@ describe('cosmoz-dropdown', () => {
 		const el = await fixture(
 			html`<cosmoz-dropdown><a href="#">Test<a/></cosmoz-dropdown>`,
 		);
-		const button = el.shadowRoot!.querySelector<HTMLElement>('cosmoz-button')!;
+		const button = el.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
 
 		button.focus();
 		await nextFrame();
