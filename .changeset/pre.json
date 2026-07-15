@@ -1,8 +1,10 @@
 {
-	"mode": "pre",
-	"tag": "beta",
-	"initialVersions": {
-		"@neovici/cosmoz-dropdown": "7.7.1"
-	},
-	"changesets": []
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@neovici/cosmoz-dropdown": "7.7.1"
+  },
+  "changesets": [
+    "light-forks-sin"
+  ]
 }
