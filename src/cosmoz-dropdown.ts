@@ -58,14 +58,14 @@ const Dropdown = (host: HTMLElement & Props) => {
 
 	return html`
 		<div class="anchor" part="anchor" ${ref(setReference)}>
-			<cosmoz-button
+			<button
 				@mousedown=${preventDefault}
 				@click=${onToggle}
 				part="button"
 				id="dropdownButton"
 			>
 				<slot name="button">...</slot>
-			</cosmoz-button>
+			</button>
 		</div>
 		<cosmoz-dropdown-content
 			popover
