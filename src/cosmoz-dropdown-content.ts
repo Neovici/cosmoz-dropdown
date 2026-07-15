@@ -24,10 +24,7 @@ const style = css`
 			var(--cz-color-bg-primary)
 		);
 		box-shadow: var(--cosmoz-dropdown-box-shadow, var(--cz-shadow-sm));
-		padding: var(--cz-spacing) calc(var(--cz-spacing) * 1.5);
 		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
-		border: 1px solid
-			var(--cosmoz-dropdown-menu-border-color, var(--cz-color-border-primary));
 	}
 	::slotted(*) {
 		display: block;
