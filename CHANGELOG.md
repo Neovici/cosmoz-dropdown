@@ -1,5 +1,11 @@
 ## [7.6.1-beta.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.6.0...v7.6.1-beta.1) (2026-04-08)
 
+## 7.7.2-beta.3
+
+### Patch Changes
+
+- 9ee02e5: Add white-space nowrap to dropdown list button
+
 ## 7.7.2-beta.2
 
 ### Patch Changes
