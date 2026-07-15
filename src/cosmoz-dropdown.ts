@@ -19,6 +19,18 @@ const style = css`
 		padding: var(--cosmoz-dropdown-anchor-spacing);
 	}
 
+	button {
+		pointer-events: auto;
+		border: none;
+		cursor: pointer;
+		background: transparent;
+		padding: 0;
+	}
+
+	::slotted(svg) {
+		pointer-events: none;
+	}
+
 	@-moz-document url-prefix() {
 		#content {
 			left: auto;
