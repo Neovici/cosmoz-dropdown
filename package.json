@@ -74,7 +74,7 @@
 		"@commitlint/cli": "^20.0.0",
 		"@commitlint/config-conventional": "^20.0.0",
 		"@neovici/cfg": "^2.13.0",
-		"@neovici/cosmoz-button": "^1.0.0",
+		"@neovici/cosmoz-button": "^1.1.1",
 		"@neovici/cosmoz-tokens": "^3.2.1",
 		"@open-wc/testing": "^4.0.0",
 		"@playwright/test": "1.60.0",

@@ -1,3 +1,4 @@
+import '@neovici/cosmoz-button';
 import { component, css, useCallback, useEffect, useRef } from '@pionjs/pion';
 import { html, nothing } from 'lit-html';
 import { guard } from 'lit-html/directives/guard.js';
@@ -15,19 +16,9 @@ export interface Props extends UseFocusOpts, UseFloating {
 
 const style = css`
 	.anchor {
-		pointer-events: none;
 		padding: var(--cosmoz-dropdown-anchor-spacing);
 	}
-	button {
-		pointer-events: auto;
-		border: none;
-		cursor: pointer;
-		background: transparent;
-		padding: 0;
-	}
-	::slotted(svg) {
-		pointer-events: none;
-	}
+
 	@-moz-document url-prefix() {
 		#content {
 			left: auto;
@@ -67,14 +58,14 @@ const Dropdown = (host: HTMLElement & Props) => {
 
 	return html`
 		<div class="anchor" part="anchor" ${ref(setReference)}>
-			<button
+			<cosmoz-button
 				@mousedown=${preventDefault}
 				@click=${onToggle}
 				part="button"
 				id="dropdownButton"
 			>
 				<slot name="button">...</slot>
-			</button>
+			</cosmoz-button>
 		</div>
 		<cosmoz-dropdown-content
 			popover

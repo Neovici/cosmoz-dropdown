@@ -37,3 +37,21 @@ export const DropdownMenu: Story = {
 		</cosmoz-dropdown-menu>`;
 	},
 };
+
+export const DropdownMenuSlotted: Story = {
+	name: 'Dropdown Menu – Slotted Elements',
+	render: () => {
+		return html`<cosmoz-dropdown-menu>
+			<span slot="button">Menu</span>
+			<button>Button item</button>
+			<button disabled>Disabled button</button>
+			<a href="#">Anchor item</a>
+			<div>Div item</div>
+			<div
+				style="--cosmoz-dropdown-menu-bg-color: #f0f4ff; --cosmoz-dropdown-menu-color: #1a56db;"
+			>
+				Custom colors item
+			</div>
+		</cosmoz-dropdown-menu>`;
+	},
+};

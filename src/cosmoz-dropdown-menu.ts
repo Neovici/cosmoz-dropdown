@@ -1,28 +1,36 @@
-import { css, component } from '@pionjs/pion';
+import { component, css } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { Props as DropdownProps } from './cosmoz-dropdown';
 
 const style = css`
 	:host {
 		display: contents;
-		max-height: var(--cosmoz-dropdown-menu-max-height, calc(96vh - 64px));
+		max-height: var(--cosmoz-dropdown-menu-max-height, calc(96dvh - 64px));
+		background: var(
+			--cosmoz-dropdown-menu-bg-color,
+			var(--cz-color-bg-primary)
+		);
 		overflow-y: auto;
-		border-radius: var(--cosmoz-dropdown-border-radius, 15px);
+		padding: var(--cz-spacing) calc(var(--cz-spacing) * 1.5);
+		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
+		border: 1px solid
+			var(--cosmoz-dropdown-menu-border-color, var(--cz-color-border-primary));
 	}
 	::slotted(:not(slot)) {
 		display: block;
 		--paper-button_-_display: block;
 		box-sizing: border-box;
-		padding: 10px 24px;
+		padding: calc(var(--cz-spacing) * 2) calc(var(--cz-spacing) * 2.5);
+		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
 		background: var(--cosmoz-dropdown-menu-bg-color, transparent);
-		color: var(--cosmoz-dropdown-menu-color, #101010);
+		color: var(--cosmoz-dropdown-menu-color, var(--cz-color-text-primary));
 		transition:
 			background 0.25s,
 			color 0.25s;
 		border: none;
 		cursor: pointer;
-		font-size: 14px;
-		line-height: 20px;
+		font-size: var(--cz-text-sm);
+		line-height: var(--cz-text-sm-line-height);
 		text-align: left;
 		margin: 0;
 		width: 100%;
@@ -31,7 +39,7 @@ const style = css`
 	::slotted(:not(slot):hover) {
 		background: var(
 			--cosmoz-dropdown-menu-hover-color,
-			var(--cosmoz-selection-color, rgba(58, 145, 226, 0.1))
+			var(--cz-color-bg-secondary)
 		);
 	}
 
