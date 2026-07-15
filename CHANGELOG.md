@@ -1,5 +1,11 @@
 ## [7.6.1-beta.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.6.0...v7.6.1-beta.1) (2026-04-08)
 
+## 7.7.2-beta.0
+
+### Patch Changes
+
+- ca542fe: Migrate dropdown styles to cosmoz-tokens and replace <button> with <cusmoz-button>
+
 ### Bug Fixes
 
 - preserve dropdown content and dialog escape ([#57](https://github.com/Neovici/cosmoz-dropdown/issues/57)) ([11d816a](https://github.com/Neovici/cosmoz-dropdown/commit/11d816aa25f30040082236bf94dfe362ba3d4948))
