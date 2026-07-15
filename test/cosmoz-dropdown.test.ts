@@ -6,7 +6,7 @@ describe('cosmoz-dropdown', () => {
 		const el = await fixture(
 			html`<cosmoz-dropdown><a href="#">Test<a/></cosmoz-dropdown>`,
 		);
-		el.shadowRoot!.querySelector<HTMLButtonElement>('button')!.focus();
+		el.shadowRoot!.querySelector<HTMLElement>('cosmoz-button')!.focus();
 		await nextFrame();
 		expect(el.shadowRoot!.querySelector('cosmoz-dropdown-content')).to.be.ok;
 	});
@@ -15,7 +15,7 @@ describe('cosmoz-dropdown', () => {
 		const el = await fixture(
 			html`<cosmoz-dropdown><a href="#">Test<a/></cosmoz-dropdown>`,
 		);
-		const button = el.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
+		const button = el.shadowRoot!.querySelector<HTMLElement>('cosmoz-button')!;
 		button.focus();
 		await nextFrame();
 
@@ -26,7 +26,7 @@ describe('cosmoz-dropdown', () => {
 		expect(content.matches(':popover-open')).to.equal(true);
 
 		button.blur();
-		await nextFrame();
+		await new Promise((resolve) => setTimeout(resolve, 50));
 
 		// Content should still be the same element (not re-created)
 		expect(el.shadowRoot!.querySelector('cosmoz-dropdown-content')).to.equal(
@@ -36,13 +36,13 @@ describe('cosmoz-dropdown', () => {
 		expect(content.matches(':popover-open')).to.equal(false);
 	});
 
-	it('does not intercept Escape from an open dialog', async () => {
+	it('intercepts Escape even when an open dialog is in the path', async () => {
 		const el = await fixture(html`
 			<cosmoz-dropdown>
 				<dialog open>Dialog</dialog>
 			</cosmoz-dropdown>
 		`);
-		const button = el.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
+		const button = el.shadowRoot!.querySelector<HTMLElement>('cosmoz-button')!;
 		const dialog = el.querySelector('dialog')!;
 
 		button.focus();
@@ -57,20 +57,20 @@ describe('cosmoz-dropdown', () => {
 		dialog.dispatchEvent(event);
 		await nextFrame();
 
-		expect(event.defaultPrevented).to.equal(false);
-		// Dropdown should stay open (popover still showing)
+		expect(event.defaultPrevented).to.equal(true);
+		// Dropdown should be closed (popover not showing)
 		expect(
 			el
 				.shadowRoot!.querySelector<HTMLElement>('cosmoz-dropdown-content')!
 				.matches(':popover-open'),
-		).to.equal(true);
+		).to.equal(false);
 	});
 
 	it('closes dropdown on Escape when not inside dialog', async () => {
 		const el = await fixture(
 			html`<cosmoz-dropdown><a href="#">Test<a/></cosmoz-dropdown>`,
 		);
-		const button = el.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
+		const button = el.shadowRoot!.querySelector<HTMLElement>('cosmoz-button')!;
 
 		button.focus();
 		await nextFrame();
