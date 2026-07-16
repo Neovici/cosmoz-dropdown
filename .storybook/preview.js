@@ -1,4 +1,3 @@
-import '@neovici/cosmoz-button';
 import '@neovici/cosmoz-tokens';
 import { html } from '@pionjs/pion';
 import { within as withinShadow } from 'shadow-dom-testing-library';

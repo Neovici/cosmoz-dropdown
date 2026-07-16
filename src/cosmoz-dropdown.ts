@@ -1,4 +1,3 @@
-import '@neovici/cosmoz-button';
 import { component, css, useCallback, useEffect, useRef } from '@pionjs/pion';
 import { html, nothing } from 'lit-html';
 import { guard } from 'lit-html/directives/guard.js';
