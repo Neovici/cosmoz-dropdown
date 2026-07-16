@@ -1,6 +1,6 @@
 {
 	"name": "@neovici/cosmoz-dropdown",
-	"version": "7.7.2-beta.3",
+	"version": "7.7.2-beta.4",
 	"description": "A simple dropdown web component",
 	"keywords": [
 		"lit-html",

@@ -1,5 +1,11 @@
 ## [7.6.1-beta.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.6.0...v7.6.1-beta.1) (2026-04-08)
 
+## 7.7.2-beta.4
+
+### Patch Changes
+
+- e2ce9a3: Add reset style for button
+
 ## 7.7.2-beta.3
 
 ### Patch Changes
