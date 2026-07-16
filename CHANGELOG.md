@@ -1,5 +1,11 @@
 ## [7.6.1-beta.1](https://github.com/Neovici/cosmoz-dropdown/compare/v7.6.0...v7.6.1-beta.1) (2026-04-08)
 
+## 7.7.2-beta.5
+
+### Patch Changes
+
+- 36029fc: Remove unused import of cosmoz-button
+
 ## 7.7.2-beta.4
 
 ### Patch Changes
