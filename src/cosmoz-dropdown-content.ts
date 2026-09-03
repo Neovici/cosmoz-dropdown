@@ -19,12 +19,12 @@ const style = css`
 		overflow: visible;
 	}
 	.wrap {
-		background: var(--cosmoz-dropdown-bg-color, #fff);
-		box-shadow: var(
-			--cosmoz-dropdown-box-shadow,
-			0px 3px 4px 2px rgba(0, 0, 0, 0.1)
+		background: var(
+			--cosmoz-dropdown-menu-bg-color,
+			var(--cz-color-bg-primary)
 		);
-		border-radius: var(--cosmoz-dropdown-border-radius, 15px);
+		box-shadow: var(--cosmoz-dropdown-box-shadow, var(--cz-shadow-sm));
+		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
 	}
 	::slotted(*) {
 		display: block;

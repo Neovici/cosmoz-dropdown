@@ -1,4 +1,3 @@
-import '@neovici/cosmoz-button';
 import '@neovici/cosmoz-tokens';
 import { html } from '@pionjs/pion';
 import { within as withinShadow } from 'shadow-dom-testing-library';
@@ -28,7 +27,7 @@ export default {
 						color: var(--cz-color-text-primary);
 						background: var(--cz-color-bg-primary);
 						padding: calc(var(--cz-spacing) * 4);
-						min-height: 100%;
+						min-height: 100dvh;
 						transition:
 							background-color 0.2s,
 							color 0.2s;
