@@ -1,3 +1,17 @@
+## 8.0.0
+
+### Major Changes
+
+- Migrate dropdown styles to cosmoz-tokens custom properties: use `--cz-*` tokens as fallbacks for `--cosmoz-dropdown-*` variables, adopt `dvh` units for menu max-height, and apply token-based menu spacing, border and radii
+
+### Minor Changes
+
+- 48b823e: Keep dropdown content mounted when closed (#57): the popover content is no longer unmounted on close, so slotted element state (focus, input values, expanded state) is preserved across open/close cycles; popover show/hide lifecycle moved to an effect driven by the active state
+
+### Patch Changes
+
+- Add white-space nowrap to dropdown list button
+
 ## 7.7.1
 
 ### Patch Changes
