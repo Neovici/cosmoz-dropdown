@@ -1,5 +1,5 @@
 ---
-'@neovici/cosmoz-dropdown': patch
+'@neovici/cosmoz-dropdown': major
 ---
 
-Migrate dropdown styles to cosmoz-tokens and replace <button> with <cusmoz-button>
+Migrate dropdown styles to cosmoz-tokens and replace <button> with <cosmoz-button>

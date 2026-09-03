@@ -1,15 +1,15 @@
 {
-  "mode": "pre",
-  "tag": "beta",
-  "initialVersions": {
-    "@neovici/cosmoz-dropdown": "7.7.1"
-  },
-  "changesets": [
-    "easy-moose-fall",
-    "light-forks-sin",
-    "public-hotels-send",
-    "quick-clubs-joke",
-    "sour-lights-worry",
-    "two-things-slide"
-  ]
+	"mode": "exit",
+	"tag": "beta",
+	"initialVersions": {
+		"@neovici/cosmoz-dropdown": "7.7.1"
+	},
+	"changesets": [
+		"easy-moose-fall",
+		"light-forks-sin",
+		"public-hotels-send",
+		"quick-clubs-joke",
+		"sour-lights-worry",
+		"two-things-slide"
+	]
 }
