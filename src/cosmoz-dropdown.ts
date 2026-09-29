@@ -38,7 +38,7 @@ const style = css`
 `;
 
 const Dropdown = (host: HTMLElement & Props) => {
-	const { placement, strategy, middleware, render } = host;
+	const { placement, strategy = 'fixed', middleware, render } = host;
 	const { active, onToggle } = useHostFocus(host);
 	const contentRef = useRef<HTMLElement>();
 	const { styles, setReference, setFloating } = useFloating({
