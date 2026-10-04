@@ -417,9 +417,20 @@ export const FocusBlurClose: Story = {
 
 		await step('focus() then blur() closes the dropdown', async () => {
 			closeBtn.focus();
+			// blur alone does not move focus inside an unfocused runner
+			// window - the element keeps activeElement and the dropdown
+			// stays focused-within. Move focus outside for real (what a
+			// user's Tab/click-out does), which is the dismissal intent.
+			const outside = document.createElement('button');
+			document.body.appendChild(outside);
 			closeBtn.blur();
-			await new Promise((r) => setTimeout(r, 150));
-			expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false);
+			outside.focus();
+			await waitFor(
+				() =>
+					expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false),
+				{ timeout: 3000 },
+			);
+			outside.remove();
 		});
 	},
 };
@@ -599,8 +610,9 @@ export const DismissalRestoresInvokerFocus: Story = {
 			pick().focus();
 			// platform close path, as Escape and light dismiss report themselves
 			popover.hidePopover();
-			// the popover's display flip settles focus a few ticks after the
-			// toggle event; the dropdown restores the invoker once it does
+			// the popover's display flip can settle focus a few ticks after
+			// the toggle event; the restore follows whatever focus settles
+			// to: on the pick it stays, into the void it goes to the invoker
 			await waitFor(() =>
 				expect(
 					document.activeElement === button ||
@@ -609,7 +621,7 @@ export const DismissalRestoresInvokerFocus: Story = {
 			);
 		});
 
-		await step('select-close keeps focus on the pick', async () => {
+		await step('select-close: the pick that took focus keeps it', async () => {
 			button.focus();
 			(
 				userEvent as never as { click: (t: HTMLElement) => Promise<void> }
@@ -618,10 +630,30 @@ export const DismissalRestoresInvokerFocus: Story = {
 			pick().focus();
 			pick().dispatchEvent(new Event('select', { bubbles: true }));
 			await waitFor(() => expect(popover.matches(':popover-open')).toBe(false));
+			// on the pick is real focus; only lost focus gets restored
 			expect(
 				(popover.getRootNode() as Document).activeElement === pick() ||
 					document.activeElement === pick(),
 			).toBe(true);
+		});
+
+		await step('a select from a non-focused row hands focus back', async () => {
+			button.focus();
+			(
+				userEvent as never as { click: (t: HTMLElement) => Promise<void> }
+			).click(button);
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(true));
+			// the row was never focused; when the close settles, focus is
+			// lost and the invoker adopts it
+			dropdown
+				.querySelector('.pick')!
+				.dispatchEvent(new Event('select', { bubbles: true }));
+			await waitFor(() =>
+				expect(
+					document.activeElement === button ||
+						(popover.getRootNode() as Document).activeElement === button,
+				).toBe(true),
+			);
 		});
 
 		await step('dismissal with focus elsewhere does not steal it', async () => {
@@ -726,7 +758,7 @@ export const DismissalRestoresInvokerFocusNestedShadow: Story = {
 			});
 		});
 
-		await step('select-close keeps focus off the invoker', async () => {
+		await step('select-close: the focused pick keeps focus', async () => {
 			(
 				userEvent as never as { click: (t: HTMLElement) => Promise<void> }
 			).click(invoker);
@@ -734,10 +766,8 @@ export const DismissalRestoresInvokerFocusNestedShadow: Story = {
 			pick().focus();
 			pick().dispatchEvent(new Event('select', { bubbles: true }));
 			await waitFor(() => expect(popover.matches(':popover-open')).toBe(false));
-			// the pick acted on itself; in a nested shadow root the
-			// platform's own fixup drops the (now hidden) pick's focus,
-			// and the dropdown restores nothing for a select-close
-			expect(activeInNested()).not.toBe(invoker);
+			// focus on the pick is real focus, not lost focus
+			expect(activeInNested()).toBe(pick());
 		});
 	},
 };

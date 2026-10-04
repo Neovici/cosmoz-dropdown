@@ -50,32 +50,18 @@ const activeElement = (root: DocumentOrShadowRoot = document) => {
 };
 
 /**
- * Select-and-close skips the focus restore: the picked content acted on
- * itself (e.g. a row that took focus), so handing focus back to the
- * invoker would undo the pick. A scheduled close (focusout / hover-out)
- * skips it too: something outside took focus on purpose, and focusing
- * the invoker back would fight the dismissal.
- */
-const selecting = new WeakSet<EventTarget>();
-/** flags a popover whose close was scheduled by its own focus/hover out */
-const scheduled = new WeakSet<EventTarget>();
-
-/**
  * The slotted invoker (the button-slot content) is the dropdown's face:
  * its `aria-expanded` is reconciled to the popover's own `toggle` event,
  * whatever closed it - the API, light dismiss, Escape, back, or a
  * `select` from inside the content. No invoker, nothing to reconcile.
  *
- * A manual popover moves no focus when it hides. On dismissal, focus
- * back to the invoker - unless it already landed somewhere sensible,
- * which the `select` skip handles: a choose-and-close should act like
- * a pick, a dismissal should hand focus back.
+ * A manual popover moves no focus when it hides. Where focus lands
+ * decides the restore: if it went to something real - the thing
+ * focused, the picked row, whatever took it on purpose - it stays;
+ * only lost focus (nobody has it: body, or nothing) is handed back to
+ * the invoker.
  */
-const reconcileInvoker = (
-	host: HTMLElement,
-	open: boolean,
-	skipRestore: boolean,
-) => {
+const reconcileInvoker = (host: HTMLElement, open: boolean) => {
 	const slot =
 		host.shadowRoot?.querySelector<HTMLSlotElement>('slot[name=button]');
 	const invoker = slot?.assignedElements({ flatten: true })[0];
@@ -83,24 +69,26 @@ const reconcileInvoker = (
 		return;
 	}
 	invoker.setAttribute('aria-expanded', String(open));
-	if (open || skipRestore) {
+	if (open) {
 		return;
 	}
 	// focus may sit on the host itself (a forwarded click() focuses the
 	// invoker's target), in the popover's slotted content - light DOM,
 	// which `shadowRoot.contains` does not see (`host.contains` does) -
-	// in the dropdown's shadow, or have fallen to body after the display
-	// flip
-	const focused = activeElement();
-	if (
-		focused == null ||
-		focused === document.body ||
-		focused === host ||
-		host.contains(focused) ||
-		host.shadowRoot?.contains(focused)
-	) {
-		invoker.focus();
-	}
+	// or nowhere. At toggle-time the display flip may not have finished
+	// with focus: the platform's own fixup is a queued task too, and a
+	// read taken before it sees focus that is about to be lost. Wait the
+	// flip out, then hand lost focus to the invoker. Timers, not
+	// animation frames: rAF never fires in an idle headless runner. The
+	// second pass re-checks in case focus settled between the two.
+	const restore = () => {
+		const focused = activeElement();
+		if (focused == null || focused === document.body) {
+			invoker.focus();
+		}
+	};
+	setTimeout(restore, 50);
+	setTimeout(restore, 250);
 };
 
 const style = css`
@@ -209,7 +197,7 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		host.toggleAttribute('opened', !!opened);
 	}, [opened]);
 
-	const { scheduleClose: scheduleAutoClose, cancelClose } = useAutoOpen({
+	const { scheduleClose, cancelClose } = useAutoOpen({
 		host,
 		popoverRef,
 		disabled,
@@ -218,16 +206,6 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		open,
 		close,
 	});
-	// a close through the focus/hover-out path is a dismissal by
-	// something outside taking focus on purpose; the focus restore must
-	// not fight it
-	const scheduleClose = useCallback(() => {
-		const popover = popoverRef.current;
-		if (popover != null) {
-			scheduled.add(popover);
-		}
-		scheduleAutoClose();
-	}, [scheduleAutoClose]);
 
 	// With open-on-focus, only open (not toggle) on click to avoid racing
 	// with the focusin handler
@@ -236,22 +214,14 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	// the invoker's face is ours from the start: state it before the
 	// first toggle can
 	useEffect(() => {
-		reconcileInvoker(host, false, false);
+		reconcileInvoker(host, false);
 	}, []);
 
 	const onToggle = useCallback((e: ToggleEvent) => {
 		autofocus(e);
 		const open = e.newState === 'open';
 		setOpened(open);
-		const popover = e.target;
-		const skip =
-			(popover != null && selecting.has(popover)) ||
-			(popover != null && scheduled.has(popover));
-		if (popover != null) {
-			selecting.delete(popover);
-			scheduled.delete(popover);
-		}
-		reconcileInvoker(host, open, skip);
+		reconcileInvoker(host, open);
 		host.dispatchEvent(
 			new ToggleEvent('dropdown-toggle', {
 				newState: e.newState,
@@ -269,12 +239,7 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 					popover
 					style="position-area: ${placement}"
 					@toggle=${onToggle}
-					@select=${(e: Event) => {
-						if (e.currentTarget != null) {
-							selecting.add(e.currentTarget);
-						}
-						close();
-					}}
+					@select=${close}
 					@focusout=${scheduleClose}
 					@focusin=${cancelClose}
 					${ref((el) => el && (popoverRef.current = el as HTMLElement))}
