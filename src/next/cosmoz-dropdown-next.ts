@@ -52,9 +52,13 @@ const activeElement = (root: DocumentOrShadowRoot = document) => {
 /**
  * Select-and-close skips the focus restore: the picked content acted on
  * itself (e.g. a row that took focus), so handing focus back to the
- * invoker would undo the pick.
+ * invoker would undo the pick. A scheduled close (focusout / hover-out)
+ * skips it too: something outside took focus on purpose, and focusing
+ * the invoker back would fight the dismissal.
  */
 const selecting = new WeakSet<EventTarget>();
+/** flags a popover whose close was scheduled by its own focus/hover out */
+const scheduled = new WeakSet<EventTarget>();
 
 /**
  * The slotted invoker (the button-slot content) is the dropdown's face:
@@ -205,7 +209,7 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		host.toggleAttribute('opened', !!opened);
 	}, [opened]);
 
-	const { scheduleClose, cancelClose } = useAutoOpen({
+	const { scheduleClose: scheduleAutoClose, cancelClose } = useAutoOpen({
 		host,
 		popoverRef,
 		disabled,
@@ -214,6 +218,16 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		open,
 		close,
 	});
+	// a close through the focus/hover-out path is a dismissal by
+	// something outside taking focus on purpose; the focus restore must
+	// not fight it
+	const scheduleClose = useCallback(() => {
+		const popover = popoverRef.current;
+		if (popover != null) {
+			scheduled.add(popover);
+		}
+		scheduleAutoClose();
+	}, [scheduleAutoClose]);
 
 	// With open-on-focus, only open (not toggle) on click to avoid racing
 	// with the focusin handler
@@ -229,11 +243,15 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		autofocus(e);
 		const open = e.newState === 'open';
 		setOpened(open);
-		reconcileInvoker(host, open, e.target != null && selecting.has(e.target));
-		if (e.target == null) {
-			return;
+		const popover = e.target;
+		const skip =
+			(popover != null && selecting.has(popover)) ||
+			(popover != null && scheduled.has(popover));
+		if (popover != null) {
+			selecting.delete(popover);
+			scheduled.delete(popover);
 		}
-		selecting.delete(e.target);
+		reconcileInvoker(host, open, skip);
 		host.dispatchEvent(
 			new ToggleEvent('dropdown-toggle', {
 				newState: e.newState,

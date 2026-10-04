@@ -1,5 +1,5 @@
 import '@neovici/cosmoz-button';
-import { html } from '@pionjs/pion';
+import { component, html } from '@pionjs/pion';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { expect, userEvent, waitFor } from 'storybook/test';
 import '../../src/next/cosmoz-dropdown-next';
@@ -659,6 +659,85 @@ export const NoInvokerIsANoop: Story = {
 		dropdown.opened = false;
 		await waitFor(() => {
 			expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false);
+		});
+	},
+};
+
+/*
+ * Nested shadow roots: the dropdown renders inside another component's
+ * shadow, its invoker projected into the button slot. The platform's
+ * own popover focus fixup misfires in this geometry (focus previously
+ * inside a shadow-hosted popover can drop to body on hide rather than
+ * the previously focused element - Chromium's shadow focus-scope
+ * handling, whatwg/html#9169 area); the dropdown's own restore is what
+ * makes Escape/light-dismiss dismissal return to the invoker here.
+ */
+if (!customElements.get('nested-dropdown-host')) {
+	customElements.define(
+		'nested-dropdown-host',
+		component(
+			() => html`
+				<cosmoz-dropdown-next>
+					<button class="nested-invoker" slot="button">Nested toggle</button>
+					<div class="dropdown-content">
+						<button class="nested-pick" autofocus>Item 1</button>
+					</div>
+				</cosmoz-dropdown-next>
+			`,
+		),
+	);
+}
+
+export const DismissalRestoresInvokerFocusNestedShadow: Story = {
+	render: () => html`<nested-dropdown-host></nested-dropdown-host>`,
+	play: async ({ canvasElement, step }) => {
+		const nestedHost = canvasElement.querySelector(
+			'nested-dropdown-host',
+		) as HTMLElement;
+		const shadow = nestedHost.shadowRoot!;
+		const dropdown = shadow.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement & { opened: boolean };
+		const invoker = shadow.querySelector('.nested-invoker') as HTMLElement;
+		const popover = getPopover(dropdown)!;
+		const pick = () => dropdown.querySelector('.nested-pick') as HTMLElement;
+		const activeInNested = () => {
+			// deepest focus across the nested shadow roots
+			let el = document.activeElement as HTMLElement | null;
+			while (el?.shadowRoot) {
+				el = el.shadowRoot.activeElement as HTMLElement | null;
+			}
+			return el;
+		};
+
+		await step('dismissal restores the nested invoker', async () => {
+			await waitFor(() => expect(invoker.isConnected).toBe(true));
+			(
+				userEvent as never as { click: (t: HTMLElement) => Promise<void> }
+			).click(invoker);
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(true));
+			pick().focus();
+			expect(activeInNested()).toBe(pick());
+			// platform close (Escape / light dismiss report the same state)
+			popover.hidePopover();
+			await waitFor(() => {
+				expect(popover.matches(':popover-open')).toBe(false);
+				expect(activeInNested()).toBe(invoker);
+			});
+		});
+
+		await step('select-close keeps focus off the invoker', async () => {
+			(
+				userEvent as never as { click: (t: HTMLElement) => Promise<void> }
+			).click(invoker);
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(true));
+			pick().focus();
+			pick().dispatchEvent(new Event('select', { bubbles: true }));
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(false));
+			// the pick acted on itself; in a nested shadow root the
+			// platform's own fixup drops the (now hidden) pick's focus,
+			// and the dropdown restores nothing for a select-close
+			expect(activeInNested()).not.toBe(invoker);
 		});
 	},
 };
