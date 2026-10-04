@@ -75,12 +75,10 @@ const reconcileInvoker = (host: HTMLElement, open: boolean) => {
 	// focus may sit on the host itself (a forwarded click() focuses the
 	// invoker's target), in the popover's slotted content - light DOM,
 	// which `shadowRoot.contains` does not see (`host.contains` does) -
-	// or nowhere. At toggle-time the display flip may not have finished
-	// with focus: the platform's own fixup is a queued task too, and a
-	// read taken before it sees focus that is about to be lost. Wait the
-	// flip out, then hand lost focus to the invoker. Timers, not
-	// animation frames: rAF never fires in an idle headless runner. The
-	// second pass re-checks in case focus settled between the two.
+	// or nowhere. The display flip is a queued task like `toggle`, and a
+	// read taken before it sees focus that is about to be lost: the
+	// check waits it out, and runs twice in case focus settles between.
+	// Timers: an idle headless runner never fires animation frames.
 	const restore = () => {
 		const focused = activeElement();
 		if (focused == null || focused === document.body) {
