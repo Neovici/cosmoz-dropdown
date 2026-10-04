@@ -41,6 +41,64 @@ const autofocus = (e: ToggleEvent) => {
 	}
 };
 
+const activeElement = (root: DocumentOrShadowRoot = document) => {
+	let el = root.activeElement as HTMLElement | null;
+	while (el?.shadowRoot) {
+		el = el.shadowRoot.activeElement as HTMLElement | null;
+	}
+	return el;
+};
+
+/**
+ * Select-and-close skips the focus restore: the picked content acted on
+ * itself (e.g. a row that took focus), so handing focus back to the
+ * invoker would undo the pick.
+ */
+const selecting = new WeakSet<EventTarget>();
+
+/**
+ * The slotted invoker (the button-slot content) is the dropdown's face:
+ * its `aria-expanded` is reconciled to the popover's own `toggle` event,
+ * whatever closed it - the API, light dismiss, Escape, back, or a
+ * `select` from inside the content. No invoker, nothing to reconcile.
+ *
+ * A manual popover moves no focus when it hides. On dismissal, focus
+ * back to the invoker - unless it already landed somewhere sensible,
+ * which the `select` skip handles: a choose-and-close should act like
+ * a pick, a dismissal should hand focus back.
+ */
+const reconcileInvoker = (
+	host: HTMLElement,
+	open: boolean,
+	skipRestore: boolean,
+) => {
+	const slot =
+		host.shadowRoot?.querySelector<HTMLSlotElement>('slot[name=button]');
+	const invoker = slot?.assignedElements({ flatten: true })[0];
+	if (!invoker || !(invoker instanceof HTMLElement)) {
+		return;
+	}
+	invoker.setAttribute('aria-expanded', String(open));
+	if (open || skipRestore) {
+		return;
+	}
+	// focus may sit on the host itself (a forwarded click() focuses the
+	// invoker's target), in the popover's slotted content - light DOM,
+	// which `shadowRoot.contains` does not see (`host.contains` does) -
+	// in the dropdown's shadow, or have fallen to body after the display
+	// flip
+	const focused = activeElement();
+	if (
+		focused == null ||
+		focused === document.body ||
+		focused === host ||
+		host.contains(focused) ||
+		host.shadowRoot?.contains(focused)
+	) {
+		invoker.focus();
+	}
+};
+
 const style = css`
 	:host {
 		display: inline-block;
@@ -161,9 +219,21 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	// with the focusin handler
 	const handleClick = openOnFocus ? open : toggle;
 
+	// the invoker's face is ours from the start: state it before the
+	// first toggle can
+	useEffect(() => {
+		reconcileInvoker(host, false, false);
+	}, []);
+
 	const onToggle = useCallback((e: ToggleEvent) => {
 		autofocus(e);
-		setOpened(e.newState === 'open');
+		const open = e.newState === 'open';
+		setOpened(open);
+		reconcileInvoker(host, open, e.target != null && selecting.has(e.target));
+		if (e.target == null) {
+			return;
+		}
+		selecting.delete(e.target);
 		host.dispatchEvent(
 			new ToggleEvent('dropdown-toggle', {
 				newState: e.newState,
@@ -181,7 +251,12 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 					popover
 					style="position-area: ${placement}"
 					@toggle=${onToggle}
-					@select=${close}
+					@select=${(e: Event) => {
+						if (e.currentTarget != null) {
+							selecting.add(e.currentTarget);
+						}
+						close();
+					}}
 					@focusout=${scheduleClose}
 					@focusin=${cancelClose}
 					${ref((el) => el && (popoverRef.current = el as HTMLElement))}
