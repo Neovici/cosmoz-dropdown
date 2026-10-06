@@ -1,4 +1,4 @@
-import"./cosmoz-dropdown-next-BCWZymd2.js";import{b as p}from"./iframe-AiAdt08d.js";import"./cosmoz-dropdown-next-CM9UpsBW.js";import"./preload-helper-PPVm8Dsz.js";const{expect:o,userEvent:E,waitFor:a}=__STORYBOOK_MODULE_TEST__,F={title:"Tests/Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["!autodocs"],args:{placement:"bottom span-right"}},s=t=>t.shadowRoot.querySelector("[popover]"),i={render:t=>p`
+import"./cosmoz-dropdown-next-C3UR_qv2.js";import{b as p}from"./iframe-CfPNavJM.js";import"./cosmoz-dropdown-next-DmzttnJL.js";import"./preload-helper-PPVm8Dsz.js";const{expect:o,userEvent:E,waitFor:a}=__STORYBOOK_MODULE_TEST__,F={title:"Tests/Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["!autodocs"],args:{placement:"bottom span-right"}},s=t=>t.shadowRoot.querySelector("[popover]"),i={render:t=>p`
         <cosmoz-dropdown-next placement=${t.placement}>
             <cosmoz-button slot="button">Toggle</cosmoz-button>
             <div class="dropdown-content">
@@ -42,7 +42,7 @@ import"./cosmoz-dropdown-next-BCWZymd2.js";import{b as p}from"./iframe-AiAdt08d.
                 <button id="inside">Inside</button>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:t,step:n})=>{const e=t.querySelector("cosmoz-dropdown-next"),r=e.querySelector('[slot="button"]');await a(()=>{o(s(e)).toBeTruthy()}),await n("Open via click",async()=>{r.click(),await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!0),o(e.opened).toBe(!0)})}),await n("Programmatic close via .opened = false",async()=>{e.opened=!1,await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!1),o(e.opened).toBe(!1),o(e.hasAttribute("opened")).toBe(!1)})})}},h={render:t=>p`
+    `,play:async({canvasElement:t,step:n})=>{const e=t.querySelector("cosmoz-dropdown-next"),r=e.querySelector('[slot="button"]');await a(()=>{o(s(e)).toBeTruthy()}),await n("Open via click",async()=>{r.click(),await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!0),o(e.opened).toBe(!0)})}),await n("Programmatic close via .opened = false",async()=>{e.opened=!1,await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!1),o(e.opened).toBe(!1),o(e.hasAttribute("opened")).toBe(!1)})})}},b={render:t=>p`
         <div>
             <cosmoz-dropdown-next placement=${t.placement}>
                 <cosmoz-button slot="button">Toggle</cosmoz-button>
@@ -52,7 +52,7 @@ import"./cosmoz-dropdown-next-BCWZymd2.js";import{b as p}from"./iframe-AiAdt08d.
             </cosmoz-dropdown-next>
             <button id="outside" style="margin-top: 1rem;">Outside</button>
         </div>
-    `,play:async({canvasElement:t,step:n})=>{const e=t.querySelector("cosmoz-dropdown-next"),r=e.querySelector('[slot="button"]'),d=e.querySelector("#inside"),c=t.querySelector("#outside");await a(()=>{o(s(e)).toBeTruthy()}),await n("Open the dropdown",async()=>{await E.click(r),await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!0)})}),await n("Focus inside then outside closes the dropdown",async()=>{d.focus(),c.focus(),await new Promise(k=>setTimeout(k,150)),o(s(e)?.matches(":popover-open")).toBe(!1)})}},b={render:t=>p`
+    `,play:async({canvasElement:t,step:n})=>{const e=t.querySelector("cosmoz-dropdown-next"),r=e.querySelector('[slot="button"]'),d=e.querySelector("#inside"),c=t.querySelector("#outside");await a(()=>{o(s(e)).toBeTruthy()}),await n("Open the dropdown",async()=>{await E.click(r),await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!0)})}),await n("Focus inside then outside closes the dropdown",async()=>{d.focus(),c.focus(),await new Promise(k=>setTimeout(k,150)),o(s(e)?.matches(":popover-open")).toBe(!1)})}},h={render:t=>p`
         <cosmoz-dropdown-next placement=${t.placement}>
             <cosmoz-button slot="button">Toggle</cosmoz-button>
             <div class="dropdown-content">
@@ -82,14 +82,14 @@ import"./cosmoz-dropdown-next-BCWZymd2.js";import{b as p}from"./iframe-AiAdt08d.
                 <div>Item 1</div>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:t,step:n})=>{const e=t.querySelector("cosmoz-dropdown-next"),r=e.querySelector('[slot="button"]');await n("Popover element exists (passthrough without disabled has no effect)",async()=>{const d=e.shadowRoot.querySelector("[popover]");o(d).toBeTruthy()}),await n("Click toggles popover normally",async()=>{await E.click(r),await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!0)})}),await n("Click closes popover normally",async()=>{await E.click(r),await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!1)})})}},f={render:t=>p`
+    `,play:async({canvasElement:t,step:n})=>{const e=t.querySelector("cosmoz-dropdown-next"),r=e.querySelector('[slot="button"]');await n("Popover element exists (passthrough without disabled has no effect)",async()=>{const d=e.shadowRoot.querySelector("[popover]");o(d).toBeTruthy()}),await n("Click toggles popover normally",async()=>{await E.click(r),await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!0)})}),await n("Click closes popover normally",async()=>{await E.click(r),await a(()=>{o(s(e)?.matches(":popover-open")).toBe(!1)})})}},z={render:t=>p`
         <cosmoz-dropdown-next placement=${t.placement}>
             <button slot="button" class="invoker">Toggle</button>
             <div class="dropdown-content">
                 <button class="pick">Item 1</button>
             </div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:t,step:n})=>{const e=t.querySelector("cosmoz-dropdown-next"),r=e.querySelector(".invoker"),d=s(e);await n("states false before the first toggle",async()=>{o(r.getAttribute("aria-expanded")).toBe("false")}),await n("opening reconciles",async()=>{e.opened=!0,await a(()=>o(r.getAttribute("aria-expanded")).toBe("true"))}),await n("platform close also reconciles",async()=>{d.hidePopover(),await a(()=>o(r.getAttribute("aria-expanded")).toBe("false"))}),await n("and a select-close",async()=>{e.opened=!0,await a(()=>o(r.getAttribute("aria-expanded")).toBe("true")),e.querySelector(".pick").dispatchEvent(new Event("select",{bubbles:!0})),await a(()=>o(r.getAttribute("aria-expanded")).toBe("false"))})}},z={render:t=>p`
+    `,play:async({canvasElement:t,step:n})=>{const e=t.querySelector("cosmoz-dropdown-next"),r=e.querySelector(".invoker"),d=s(e);await n("states false before the first toggle",async()=>{o(r.getAttribute("aria-expanded")).toBe("false")}),await n("opening reconciles",async()=>{e.opened=!0,await a(()=>o(r.getAttribute("aria-expanded")).toBe("true"))}),await n("platform close also reconciles",async()=>{d.hidePopover(),await a(()=>o(r.getAttribute("aria-expanded")).toBe("false"))}),await n("and a select-close",async()=>{e.opened=!0,await a(()=>o(r.getAttribute("aria-expanded")).toBe("true")),e.querySelector(".pick").dispatchEvent(new Event("select",{bubbles:!0})),await a(()=>o(r.getAttribute("aria-expanded")).toBe("false"))})}},f={render:t=>p`
         <cosmoz-dropdown-next placement=${t.placement}>
             <span class="wrapper" slot="button"
                 ><button class="wrapped">Toggle</button></span
@@ -101,7 +101,7 @@ import"./cosmoz-dropdown-next-BCWZymd2.js";import{b as p}from"./iframe-AiAdt08d.
             <cosmoz-button class="cz" slot="button">Toggle</cosmoz-button>
             <div class="dropdown-content"><button class="pick">Item 1</button></div>
         </cosmoz-dropdown-next>
-    `,play:async({canvasElement:t})=>{const n=t.querySelector("cosmoz-dropdown-next"),e=n.querySelector(".cz"),r=s(n);o(e.getAttribute("aria-expanded")).toBe("false"),n.opened=!0,await a(()=>o(e.getAttribute("aria-expanded")).toBe("true"));const d=e.shadowRoot.querySelector("button");if(d?.hasAttribute("aria-expanded")){o(d.getAttribute("aria-expanded")).toBe("true"),r.hidePopover(),await a(()=>{o(e.getAttribute("aria-expanded")).toBe("false"),o(d.getAttribute("aria-expanded")).toBe("false")});return}r.hidePopover(),await a(()=>o(e.getAttribute("aria-expanded")).toBe("false"))}},S={render:t=>p`
+    `,play:async({canvasElement:t})=>{const n=t.querySelector("cosmoz-dropdown-next"),e=n.querySelector(".cz"),r=s(n);o(e.getAttribute("aria-expanded")).toBe("false"),n.opened=!0,await a(()=>{o(e.getAttribute("aria-expanded")).toBe("true"),o(e.shadowRoot.querySelector("button").getAttribute("aria-expanded")).toBe("true")}),r.hidePopover(),await a(()=>{o(e.getAttribute("aria-expanded")).toBe("false"),o(e.shadowRoot.querySelector("button").getAttribute("aria-expanded")).toBe("false")})}},S={render:t=>p`
         <cosmoz-dropdown-next placement=${t.placement} class="late">
             <div class="dropdown-content"><button class="pick">Item 1</button></div>
         </cosmoz-dropdown-next>
@@ -327,7 +327,7 @@ import"./cosmoz-dropdown-next-BCWZymd2.js";import{b as p}from"./iframe-AiAdt08d.
       });
     });
   }
-}`,...v.parameters?.docs?.source},description:{story:"Verifies that a parent component can programmatically close the dropdown\nby setting `.opened = false` on the element.",...v.parameters?.docs?.description}}};h.parameters={...h.parameters,docs:{...h.parameters?.docs,source:{originalSource:`{
+}`,...v.parameters?.docs?.source},description:{story:"Verifies that a parent component can programmatically close the dropdown\nby setting `.opened = false` on the element.",...v.parameters?.docs?.description}}};b.parameters={...b.parameters,docs:{...b.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <div>
             <cosmoz-dropdown-next placement=\${args.placement}>
@@ -363,9 +363,9 @@ import"./cosmoz-dropdown-next-BCWZymd2.js";import{b as p}from"./iframe-AiAdt08d.
       expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false);
     });
   }
-}`,...h.parameters?.docs?.source},description:{story:`Verifies the popover closes when focus leaves the dropdown.
+}`,...b.parameters?.docs?.source},description:{story:`Verifies the popover closes when focus leaves the dropdown.
 The native Popover API only handles click-outside and Escape;
-this tests the focusout handler that fills the Tab-out gap.`,...h.parameters?.docs?.description}}};b.parameters={...b.parameters,docs:{...b.parameters?.docs,source:{originalSource:`{
+this tests the focusout handler that fills the Tab-out gap.`,...b.parameters?.docs?.description}}};h.parameters={...h.parameters,docs:{...h.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <cosmoz-dropdown-next placement=\${args.placement}>
             <cosmoz-button slot="button">Toggle</cosmoz-button>
@@ -399,9 +399,9 @@ this tests the focusout handler that fills the Tab-out gap.`,...h.parameters?.do
       expect(getPopover(dropdown)?.matches(':popover-open')).toBe(true);
     });
   }
-}`,...b.parameters?.docs?.source},description:{story:`Verifies focus movement between elements inside the popover
+}`,...h.parameters?.docs?.source},description:{story:`Verifies focus movement between elements inside the popover
 does not close it. The debounced scheduleClose re-checks
-:focus-within before closing.`,...b.parameters?.docs?.description}}};y.parameters={...y.parameters,docs:{...y.parameters?.docs,source:{originalSource:`{
+:focus-within before closing.`,...h.parameters?.docs?.description}}};y.parameters={...y.parameters,docs:{...y.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <cosmoz-dropdown-next placement=\${args.placement}>
             <cosmoz-button slot="button">Toggle</cosmoz-button>
@@ -501,7 +501,7 @@ programmatically without relying on open-on-focus.`,...y.parameters?.docs?.descr
       });
     });
   }
-}`,...x.parameters?.docs?.source},description:{story:"Verifies that `passthrough` without `disabled` has no effect — the popover\nelement is still rendered and the dropdown behaves normally.",...x.parameters?.docs?.description}}};f.parameters={...f.parameters,docs:{...f.parameters?.docs,source:{originalSource:`{
+}`,...x.parameters?.docs?.source},description:{story:"Verifies that `passthrough` without `disabled` has no effect — the popover\nelement is still rendered and the dropdown behaves normally.",...x.parameters?.docs?.description}}};z.parameters={...z.parameters,docs:{...z.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <cosmoz-dropdown-next placement=\${args.placement}>
             <button slot="button" class="invoker">Toggle</button>
@@ -539,7 +539,7 @@ programmatically without relying on open-on-focus.`,...y.parameters?.docs?.descr
       await waitFor(() => expect(button.getAttribute('aria-expanded')).toBe('false'));
     });
   }
-}`,...f.parameters?.docs?.source},description:{story:"The dropdown reconciles the slotted invoker's `aria-expanded` to the\npopover's own toggle state, over every close path - the opened API,\nhidePopover (as Escape / light dismiss report themselves), and a\n`select` dispatched from inside the content.",...f.parameters?.docs?.description}}};z.parameters={...z.parameters,docs:{...z.parameters?.docs,source:{originalSource:`{
+}`,...z.parameters?.docs?.source},description:{story:"The dropdown reconciles the slotted invoker's `aria-expanded` to the\npopover's own toggle state, over every close path - the opened API,\nhidePopover (as Escape / light dismiss report themselves), and a\n`select` dispatched from inside the content.",...z.parameters?.docs?.description}}};f.parameters={...f.parameters,docs:{...f.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <cosmoz-dropdown-next placement=\${args.placement}>
             <span class="wrapper" slot="button"
@@ -564,8 +564,8 @@ programmatically without relying on open-on-focus.`,...y.parameters?.docs?.descr
     popover.hidePopover();
     await waitFor(() => expect(wrapped.getAttribute('aria-expanded')).toBe('false'));
   }
-}`,...z.parameters?.docs?.source},description:{story:`The attribute lands on the button inside a slotted wrapper (the
-consumer's own light DOM), not on the wrapper.`,...z.parameters?.docs?.description}}};B.parameters={...B.parameters,docs:{...B.parameters?.docs,source:{originalSource:`{
+}`,...f.parameters?.docs?.source},description:{story:`The attribute lands on the button inside a slotted wrapper (the
+consumer's own light DOM), not on the wrapper.`,...f.parameters?.docs?.description}}};B.parameters={...B.parameters,docs:{...B.parameters?.docs,source:{originalSource:`{
   render: args => html\`
         <cosmoz-dropdown-next placement=\${args.placement}>
             <cosmoz-button class="cz" slot="button">Toggle</cosmoz-button>
@@ -584,22 +584,15 @@ consumer's own light DOM), not on the wrapper.`,...z.parameters?.docs?.descripti
     // the dropdown states the invoker on mount
     expect(cz.getAttribute('aria-expanded')).toBe('false');
     dropdown.opened = true;
-    await waitFor(() => expect(cz.getAttribute('aria-expanded')).toBe('true'));
-
-    // with a cosmoz-button that forwards (2.2.2+, #39), the host state
-    // reaches the native control; assert the chain when it can complete
-    const inner = cz.shadowRoot!.querySelector('button');
-    if (inner?.hasAttribute('aria-expanded')) {
-      expect(inner.getAttribute('aria-expanded')).toBe('true');
-      popover.hidePopover();
-      await waitFor(() => {
-        expect(cz.getAttribute('aria-expanded')).toBe('false');
-        expect(inner.getAttribute('aria-expanded')).toBe('false');
-      });
-      return;
-    }
+    await waitFor(() => {
+      expect(cz.getAttribute('aria-expanded')).toBe('true');
+      expect(cz.shadowRoot!.querySelector('button')!.getAttribute('aria-expanded')).toBe('true');
+    });
     popover.hidePopover();
-    await waitFor(() => expect(cz.getAttribute('aria-expanded')).toBe('false'));
+    await waitFor(() => {
+      expect(cz.getAttribute('aria-expanded')).toBe('false');
+      expect(cz.shadowRoot!.querySelector('button')!.getAttribute('aria-expanded')).toBe('false');
+    });
   }
 }`,...B.parameters?.docs?.source},description:{story:`A custom-element invoker (e.g. cosmoz-button) has no light-DOM control
 of its own: the dropdown states the host attribute, and the invoker
@@ -648,4 +641,4 @@ state via slotchange.`,...S.parameters?.docs?.description}}};T.parameters={...T.
     await waitFor(() => expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false));
     expect(dropdown.getAttribute('aria-expanded')).toBeNull();
   }
-}`,...T.parameters?.docs?.source},description:{story:"no slotted invoker, nothing to reconcile: opens and closes as before",...T.parameters?.docs?.description}}};const L=["OpenedPropertyOpens","OpenedPropertyCloses","NativeCloseSyncsProperty","OpenedChangedEvent","AttributeReflection","ProgrammaticCloseFromParent","CloseOnFocusout","FocusWithinStaysOpen","FocusBlurClose","PassthroughRendersInline","PassthroughWithoutDisabled","InvokerAriaReconciles","InvokerAriaReachesWrappedButton","InvokerAriaOnCustomElementInvoker","LateInvokerReconciles","InvokerAriaWithoutInvokerIsANoop"];export{w as AttributeReflection,h as CloseOnFocusout,y as FocusBlurClose,b as FocusWithinStaysOpen,B as InvokerAriaOnCustomElementInvoker,z as InvokerAriaReachesWrappedButton,f as InvokerAriaReconciles,T as InvokerAriaWithoutInvokerIsANoop,S as LateInvokerReconciles,u as NativeCloseSyncsProperty,m as OpenedChangedEvent,l as OpenedPropertyCloses,i as OpenedPropertyOpens,g as PassthroughRendersInline,x as PassthroughWithoutDisabled,v as ProgrammaticCloseFromParent,L as __namedExportsOrder,F as default};
+}`,...T.parameters?.docs?.source},description:{story:"no slotted invoker, nothing to reconcile: opens and closes as before",...T.parameters?.docs?.description}}};const L=["OpenedPropertyOpens","OpenedPropertyCloses","NativeCloseSyncsProperty","OpenedChangedEvent","AttributeReflection","ProgrammaticCloseFromParent","CloseOnFocusout","FocusWithinStaysOpen","FocusBlurClose","PassthroughRendersInline","PassthroughWithoutDisabled","InvokerAriaReconciles","InvokerAriaReachesWrappedButton","InvokerAriaOnCustomElementInvoker","LateInvokerReconciles","InvokerAriaWithoutInvokerIsANoop"];export{w as AttributeReflection,b as CloseOnFocusout,y as FocusBlurClose,h as FocusWithinStaysOpen,B as InvokerAriaOnCustomElementInvoker,f as InvokerAriaReachesWrappedButton,z as InvokerAriaReconciles,T as InvokerAriaWithoutInvokerIsANoop,S as LateInvokerReconciles,u as NativeCloseSyncsProperty,m as OpenedChangedEvent,l as OpenedPropertyCloses,i as OpenedPropertyOpens,g as PassthroughRendersInline,x as PassthroughWithoutDisabled,v as ProgrammaticCloseFromParent,L as __namedExportsOrder,F as default};
