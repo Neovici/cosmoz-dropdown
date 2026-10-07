@@ -126,11 +126,34 @@ export const useCosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		}, 100);
 	}, []);
 
+	/**
+	 * After a close, focus that went nowhere (nothing active, body,
+	 * hidden content — the platform leaves focus stuck there) goes back
+	 * to the trigger. The focusin listener is lifted around the focus
+	 * call: this restore is not an open signal.
+	 */
+	const restoreFocus = useCallback(() => {
+		let el = document.activeElement as HTMLElement | null;
+		while (el?.shadowRoot) {
+			el = el.shadowRoot.activeElement as HTMLElement | null;
+		}
+		const lost = el == null || el === document.body || el.offsetParent == null;
+		if (!lost) return;
+
+		const t = findTrigger();
+		if (!t) return;
+		host.removeEventListener('focusin', handleFocusEnter);
+		t.focus();
+		host.addEventListener('focusin', handleFocusEnter);
+	}, []);
+
 	const onToggle = useCallback((e: ToggleEvent) => {
 		const opening = e.newState === 'open';
 		setOpened(opening);
 		if (opening) {
 			autofocusIn(content);
+		} else {
+			restoreFocus();
 		}
 		host.dispatchEvent(
 			new ToggleEvent('dropdown-toggle', {
