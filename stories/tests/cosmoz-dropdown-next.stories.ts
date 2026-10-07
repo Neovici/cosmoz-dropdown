@@ -1,9 +1,21 @@
 import '@neovici/cosmoz-button';
-import { html } from '@pionjs/pion';
+import { component, html } from '@pionjs/pion';
 import type { Meta, StoryObj } from '@storybook/web-components';
-import { expect, userEvent, waitFor } from 'storybook/test';
+import {
+	expect,
+	userEvent as storybookUserEvent,
+	waitFor,
+} from 'storybook/test';
+import { userEvent as trustedUserEvent } from 'vitest/browser';
 import '../../src/next/cosmoz-dropdown-next';
 import '../cosmoz-dropdown-next.css';
+
+// storybook/test's userEvent dispatches synthetic events (verified: keyboard
+// isTrusted=false; synthetic clicks leave focus untouched). Trusted (CDP)
+// interaction goes through vitest's browser userEvent.
+const userEvent = trustedUserEvent as unknown as typeof storybookUserEvent & {
+	click(t: HTMLElement): Promise<void>;
+};
 
 interface StoryArgs {
 	placement: string;
@@ -478,6 +490,9 @@ export const PassthroughWithoutDisabled: Story = {
 			</div>
 		</cosmoz-dropdown-next>
 	`,
+	// storybookUserEvent's synthetic clicks are intentional here: the story pins the
+	// toggle *mechanics*; trusted-click dismissal is light-dismiss+toggle, which
+	// double-applies today (tracked as reopen-flicker; not this PR's scope).
 	play: async ({ canvasElement, step }) => {
 		const dropdown = canvasElement.querySelector(
 			'cosmoz-dropdown-next',
@@ -493,14 +508,14 @@ export const PassthroughWithoutDisabled: Story = {
 		);
 
 		await step('Click toggles popover normally', async () => {
-			await userEvent.click(button);
+			await storybookUserEvent.click(button);
 			await waitFor(() => {
 				expect(getPopover(dropdown)?.matches(':popover-open')).toBe(true);
 			});
 		});
 
 		await step('Click closes popover normally', async () => {
-			await userEvent.click(button);
+			await storybookUserEvent.click(button);
 			await waitFor(() => {
 				expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false);
 			});
@@ -660,3 +675,196 @@ export const InvokerAriaWithoutInvokerIsANoop: Story = {
 		expect(dropdown.getAttribute('aria-expanded')).toBeNull();
 	},
 };
+
+const deepestFocus = (): HTMLElement | null => {
+	let el = document.activeElement as HTMLElement | null;
+	while (el?.shadowRoot) {
+		el = el.shadowRoot.activeElement as HTMLElement | null;
+	}
+	return el;
+};
+
+/** dismissal restore: Escape closes with focus inside, focus lands back on the invoker */
+export const DismissalRestoresInvoker: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
+			<button slot="button" class="invoker">Toggle</button>
+			<div class="dropdown-content">
+				<button class="pick" autofocus>Item 1</button>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement & { opened: boolean };
+		const invoker = dropdown.querySelector('.invoker') as HTMLElement;
+		const popover = getPopover(dropdown)!;
+
+		await step(
+			'open with focus inside (autofocus lands on the pick)',
+			async () => {
+				await userEvent.click(invoker);
+				await waitFor(() =>
+					expect(popover.matches(':popover-open')).toBe(true),
+				);
+			},
+		);
+
+		await step('dismissal returns focus to the invoker', async () => {
+			// hidePopover: the platform-close stand-in (Escape/light-dismiss
+			// report the same close-request state; trusted keys are not
+			// reachable from this harness - userEvent.keyboard is synthetic)
+			popover.hidePopover();
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(false));
+			expect(deepestFocus()).toBe(invoker);
+		});
+	},
+};
+
+/** select-close restores to the invoker in steady state (the picked row's DOM dies) */
+export const SelectCloseRestoresInvoker: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
+			<button slot="button" class="invoker">Toggle</button>
+			<div class="dropdown-content">
+				<button class="pick" autofocus>Item 1</button>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement & { opened: boolean };
+		const invoker = dropdown.querySelector('.invoker') as HTMLElement;
+		const popover = getPopover(dropdown)!;
+
+		await step('open, focus the pick, select it', async () => {
+			invoker.focus();
+			await userEvent.click(invoker);
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(true));
+			(dropdown.querySelector('.pick') as HTMLElement).focus();
+			dropdown
+				.querySelector('.pick')!
+				.dispatchEvent(new Event('select', { bubbles: true }));
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(false));
+		});
+
+		await step('steady state: focus is on the invoker', async () => {
+			await new Promise((r) => setTimeout(r, 300));
+			expect(deepestFocus()).toBe(invoker);
+		});
+	},
+};
+
+/** focus moved away on purpose (tab-out / click-out) is not restored over */
+export const FocusMovedStays: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
+			<button slot="button" class="invoker">Toggle</button>
+			<div class="dropdown-content">
+				<button class="pick" autofocus>Item 1</button>
+			</div>
+		</cosmoz-dropdown-next>
+		<button id="outside">Outside</button>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement & { opened: boolean };
+		const invoker = dropdown.querySelector('.invoker') as HTMLElement;
+		const popover = getPopover(dropdown)!;
+		const outside = canvasElement.querySelector('#outside') as HTMLElement;
+
+		await step('open, then move focus outside on purpose', async () => {
+			invoker.focus();
+			await userEvent.click(invoker);
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(true));
+			(dropdown.querySelector('.pick') as HTMLElement).focus(); // real focus inside first
+			outside.focus();
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(false));
+		});
+
+		await step('the deliberate focus move sticks', async () => {
+			await new Promise((r) => setTimeout(r, 300));
+			expect(deepestFocus()).toBe(outside);
+		});
+	},
+};
+
+/** dismissal with open-on-focus stays closed (no reopen loop) and restores */
+export const OpenOnFocusDismissalStaysClosed: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement} open-on-focus>
+			<button slot="button" class="invoker">Toggle</button>
+			<div class="dropdown-content">
+				<button class="pick" autofocus>Item 1</button>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement & { opened: boolean };
+		const invoker = dropdown.querySelector('.invoker') as HTMLElement;
+		const popover = getPopover(dropdown)!;
+
+		await step('open-on-focus opens', async () => {
+			invoker.focus();
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(true));
+		});
+
+		await step('dismissal closes and stays closed', async () => {
+			popover.hidePopover();
+			await new Promise((r) => setTimeout(r, 400));
+			// beyond the #76 reopen loop's settle window: still closed
+			expect(popover.matches(':popover-open')).toBe(false);
+			expect(deepestFocus()).toBe(invoker);
+		});
+	},
+};
+
+/** the nested shadow geometry: dismissal restores the projected invoker */
+export const DismissalRestoresInvokerNestedShadow: Story = {
+	render: () => html`<nested-dropdown-host></nested-dropdown-host>`,
+	play: async ({ canvasElement, step }) => {
+		const nestedHost = canvasElement.querySelector(
+			'nested-dropdown-host',
+		) as HTMLElement;
+		const shadow = nestedHost.shadowRoot!;
+		const dropdown = shadow.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement & { opened: boolean };
+		const invoker = shadow.querySelector('.nested-invoker') as HTMLElement;
+		const popover = getPopover(dropdown)!;
+
+		await step('open with focus inside', async () => {
+			await waitFor(() => expect(invoker.isConnected).toBe(true));
+			await userEvent.click(invoker);
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(true));
+			(shadow.querySelector('.nested-pick') as HTMLElement).focus();
+			expect(deepestFocus()).toBe(shadow.querySelector('.nested-pick'));
+		});
+
+		await step('dismissal restores the nested invoker', async () => {
+			popover.hidePopover(); // platform-close stand-in (see DismissalRestoresInvoker)
+			await waitFor(() => expect(popover.matches(':popover-open')).toBe(false));
+			expect(deepestFocus()).toBe(invoker);
+		});
+	},
+};
+
+if (!customElements.get('nested-dropdown-host')) {
+	customElements.define(
+		'nested-dropdown-host',
+		component(
+			() =>
+				html`<cosmoz-dropdown-next>
+					<button class="nested-invoker" slot="button">Nested toggle</button>
+					<div class="dropdown-content">
+						<button class="nested-pick" autofocus>Item 1</button>
+					</div>
+				</cosmoz-dropdown-next>`,
+		),
+	);
+}
