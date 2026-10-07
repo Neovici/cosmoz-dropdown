@@ -65,7 +65,7 @@
 	},
 	"dependencies": {
 		"@floating-ui/dom": "^1.6.12",
-		"@neovici/cosmoz-utils": "^6.24.0",
+		"@neovici/cosmoz-utils": "^6.25.0",
 		"@pionjs/pion": "^2.16.3",
 		"lit-html": "^3.1.2"
 	},
@@ -85,6 +85,7 @@
 		"@types/node": "^24.0.0",
 		"@vitest/browser": "^4.0.18",
 		"@vitest/browser-playwright": "^4.0.18",
+		"@web/test-runner-commands": "^1.0.1",
 		"esbuild": "^0.25.0",
 		"http-server": "^14.1.1",
 		"husky": "^9.0.11",

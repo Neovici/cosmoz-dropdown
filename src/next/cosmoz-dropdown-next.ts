@@ -1,46 +1,12 @@
+import { assignedRef } from '@neovici/cosmoz-utils/directives/assigned-ref';
 import { forwardAttributes } from '@neovici/cosmoz-utils/directives/forward-attributes';
-import {
-	component,
-	css,
-	useCallback,
-	useEffect,
-	useProperty,
-	useRef,
-} from '@pionjs/pion';
+import { component, css } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
-import { useAutoOpen } from './use-auto-open.js';
-
-/**
- * Autofocus polyfill for slotted content.
- *
- * The HTML spec's autofocus delegate algorithm uses DOM tree traversal,
- * not flat tree, so it doesn't find [autofocus] elements slotted into
- * a popover/dialog. This is a known spec limitation being discussed at:
- * https://github.com/whatwg/html/issues/9245
- *
- * This handler searches slotted content for [autofocus] and focuses it
- * when the popover opens. Can be removed once browsers implement the
- * spec fix (flat tree traversal for dialog/popover focus delegate).
- */
-const autofocus = (e: ToggleEvent) => {
-	if (e.newState !== 'open') return;
-
-	const popover = e.target as HTMLElement;
-	const slot = popover.querySelector(
-		'slot:not([name])',
-	) as HTMLSlotElement | null;
-	const elements = slot?.assignedElements({ flatten: true }) ?? [];
-	for (const el of elements) {
-		const autofocusEl = el.matches('[autofocus]')
-			? el
-			: el.querySelector('[autofocus]');
-		if (autofocusEl instanceof HTMLElement) {
-			autofocusEl.focus();
-			break;
-		}
-	}
-};
+import {
+	DropdownProps,
+	useCosmozDropdownNext,
+} from './use-cosmoz-dropdown-next.js';
 
 const style = css`
 	:host {
@@ -64,11 +30,11 @@ const style = css`
 		overflow: visible;
 		min-width: anchor-size(width);
 
-		/* Animation - open state */
 		opacity: 1;
 		transform: translateY(0) scale(1);
 
-		/* Transitions for smooth open/close animation */
+		/* overlay/display transitions need allow-discrete to animate
+		 * between display:none and display:block */
 		transition:
 			opacity 150ms ease-out,
 			transform 150ms ease-out,
@@ -76,7 +42,6 @@ const style = css`
 			display 150ms ease-out allow-discrete;
 	}
 
-	/* Starting state when popover opens */
 	@starting-style {
 		[popover]:popover-open {
 			opacity: 0;
@@ -84,7 +49,6 @@ const style = css`
 		}
 	}
 
-	/* Closing state */
 	[popover]:not(:popover-open) {
 		opacity: 0;
 		transform: translateY(-4px) scale(0.96);
@@ -97,87 +61,45 @@ const style = css`
 	}
 `;
 
-interface DropdownProps {
-	placement?: string;
-	opened?: boolean;
+interface DropdownNextState {
+	placement: string;
 	disabled?: boolean;
 	passthrough?: boolean;
-	openOnHover?: boolean;
-	openOnFocus?: boolean;
+	opened: boolean;
+	triggers: { current?: Element[] };
+	content: { current?: Element[] };
+	popoverRef: { current?: HTMLElement };
+	handleClick: () => void;
+	onToggle: (e: ToggleEvent) => void;
+	close: () => void;
+	scheduleClose: () => void;
+	cancelClose: () => void;
 }
 
-const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
-	const {
-		placement = 'bottom span-right',
-		disabled,
-		passthrough,
-		openOnHover,
-		openOnFocus,
-	} = host;
-	const popoverRef = useRef<HTMLElement>();
-	const [opened, setOpened] = useProperty<boolean>('opened', false);
-
-	// Call showPopover/hidePopover synchronously so the browser associates
-	// the popover with the current user-gesture. Deferring to a microtask
-	// (useEffect) causes light-dismiss to immediately close the popover.
-	const open = useCallback(() => {
-		if (disabled) return;
-		setOpened(true);
-		popoverRef.current?.showPopover?.();
-	}, [disabled]);
-	const close = useCallback(() => {
-		setOpened(false);
-		popoverRef.current?.hidePopover?.();
-	}, []);
-	const toggle = useCallback(() => {
-		if (disabled) return;
-		const popover = popoverRef.current;
-		if (popover?.matches(':popover-open')) close();
-		else open();
-	}, [disabled]);
-
-	// Sync native popover when `opened` is set externally via property binding
-	useEffect(() => {
-		const popover = popoverRef.current;
-		if (!popover) return;
-		if (opened) popover.showPopover?.();
-		else popover.hidePopover?.();
-	}, [opened]);
-
-	useEffect(() => {
-		host.toggleAttribute('opened', !!opened);
-	}, [opened]);
-
-	const { scheduleClose, cancelClose } = useAutoOpen({
-		host,
-		popoverRef,
-		disabled,
-		openOnHover,
-		openOnFocus,
-		open,
-		close,
-	});
-
-	// With open-on-focus, only open (not toggle) on click to avoid racing
-	// with the focusin handler
-	const handleClick = openOnFocus ? open : toggle;
-
-	const onToggle = useCallback((e: ToggleEvent) => {
-		autofocus(e);
-		setOpened(e.newState === 'open');
-		host.dispatchEvent(
-			new ToggleEvent('dropdown-toggle', {
-				newState: e.newState,
-				oldState: e.oldState,
-				composed: true,
-			}),
-		);
-	}, []);
-
+const renderCosmozDropdownNext = ({
+	placement,
+	disabled,
+	passthrough,
+	opened,
+	triggers,
+	content,
+	popoverRef,
+	handleClick,
+	onToggle,
+	close,
+	scheduleClose,
+	cancelClose,
+}: DropdownNextState) => {
 	return html`
 		<slot
 			name="button"
-			${forwardAttributes({ 'aria-expanded': String(opened) })}
+			${assignedRef(triggers)}
+			${forwardAttributes({
+				// passthrough (inline content) leaves the trigger neutral: no
+				// popover, no state to state
+				'aria-expanded': passthrough ? null : String(opened),
+				disabled: disabled && !passthrough ? '' : null,
+			})}
 			@click=${handleClick}
 		></slot>
 		${disabled && passthrough
@@ -191,9 +113,13 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 					@focusin=${cancelClose}
 					${ref((el) => el && (popoverRef.current = el as HTMLElement))}
 				>
-					<slot></slot>
+					<slot ${assignedRef(content)}></slot>
 				</div>`}
 	`;
+};
+
+const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
+	return renderCosmozDropdownNext(useCosmozDropdownNext(host));
 };
 
 customElements.define(

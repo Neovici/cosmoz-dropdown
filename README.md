@@ -69,6 +69,9 @@ When auto-open is enabled:
 
 #### Disabled + Passthrough
 
+> **Deprecated.** Inline-content mode has no known consumer; it will be
+> dropped in a future major unless one shows up.
+
 When `disabled` and `passthrough` are both set, the default slot content renders in normal document flow (outside the popover). This enables using the dropdown as a conditional wrapper — popover mode when enabled, inline mode when disabled:
 
 ```html

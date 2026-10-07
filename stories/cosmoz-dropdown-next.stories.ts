@@ -286,11 +286,8 @@ export const FocusModeInput: Story = {
 		await step(
 			'Clicking the input opens and keeps the dropdown open',
 			async () => {
-				// userEvent.click fires mousedown → focusin → mouseup → click
-				// focusin triggers useAutoOpen's handleEnter → showPopover()
-				// click reaches <slot name="button" @click=${handleClick}>
-				// With the bug (toggle): togglePopover() closes the just-opened popover
-				// With the fix (open): showPopover() is a no-op on an already-open popover
+				// click races the focusin open: handleClick must open, not
+				// toggle, or the focusin open is toggled back off
 				await userEvent.click(input);
 				await waitFor(() => {
 					expect(getPopover()?.matches(':popover-open')).toBe(true);
