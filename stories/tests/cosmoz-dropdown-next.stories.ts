@@ -507,3 +507,156 @@ export const PassthroughWithoutDisabled: Story = {
 		});
 	},
 };
+
+/**
+ * The dropdown reconciles the slotted invoker's `aria-expanded` to the
+ * popover's own toggle state, over every close path - the opened API,
+ * hidePopover (as Escape / light dismiss report themselves), and a
+ * `select` dispatched from inside the content.
+ */
+export const InvokerAriaReconciles: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
+			<button slot="button" class="invoker">Toggle</button>
+			<div class="dropdown-content">
+				<button class="pick">Item 1</button>
+			</div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement, step }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement & { opened: boolean };
+		const button = dropdown.querySelector('.invoker') as HTMLElement;
+		const popover = getPopover(dropdown)!;
+
+		await step('states false before the first toggle', async () => {
+			expect(button.getAttribute('aria-expanded')).toBe('false');
+		});
+
+		await step('opening reconciles', async () => {
+			dropdown.opened = true;
+			await waitFor(() =>
+				expect(button.getAttribute('aria-expanded')).toBe('true'),
+			);
+		});
+
+		await step('platform close also reconciles', async () => {
+			popover.hidePopover();
+			await waitFor(() =>
+				expect(button.getAttribute('aria-expanded')).toBe('false'),
+			);
+		});
+
+		await step('and a select-close', async () => {
+			dropdown.opened = true;
+			await waitFor(() =>
+				expect(button.getAttribute('aria-expanded')).toBe('true'),
+			);
+			dropdown
+				.querySelector('.pick')!
+				.dispatchEvent(new Event('select', { bubbles: true }));
+			await waitFor(() =>
+				expect(button.getAttribute('aria-expanded')).toBe('false'),
+			);
+		});
+	},
+};
+
+/**
+ * A custom-element invoker (e.g. cosmoz-button) has no light-DOM control
+ * of its own: the dropdown states the host attribute, and the invoker
+ * forwards to its native control from there.
+ */
+export const InvokerAriaOnCustomElementInvoker: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement}>
+			<cosmoz-button class="cz" slot="button">Toggle</cosmoz-button>
+			<div class="dropdown-content"><button class="pick">Item 1</button></div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next',
+		) as HTMLElement & { opened: boolean };
+		const cz = dropdown.querySelector('.cz') as HTMLElement;
+		const popover = getPopover(dropdown)!;
+
+		// the dropdown states the invoker on mount
+		expect(cz.getAttribute('aria-expanded')).toBe('false');
+
+		dropdown.opened = true;
+		await waitFor(() => {
+			expect(cz.getAttribute('aria-expanded')).toBe('true');
+			expect(
+				cz.shadowRoot!.querySelector('button')!.getAttribute('aria-expanded'),
+			).toBe('true');
+		});
+
+		popover.hidePopover();
+		await waitFor(() => {
+			expect(cz.getAttribute('aria-expanded')).toBe('false');
+			expect(
+				cz.shadowRoot!.querySelector('button')!.getAttribute('aria-expanded'),
+			).toBe('false');
+		});
+	},
+};
+
+/**
+ * An invoker slotted after mount reconciles with the popover's current
+ * state via slotchange.
+ */
+export const LateInvokerReconciles: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement} class="late">
+			<div class="dropdown-content"><button class="pick">Item 1</button></div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next.late',
+		) as HTMLElement & { opened: boolean };
+		const popover = getPopover(dropdown)!;
+		const invoker = document.createElement('button');
+		invoker.setAttribute('slot', 'button');
+		invoker.className = 'late-invoker';
+		invoker.textContent = 'Late toggle';
+
+		dropdown.opened = true;
+		await waitFor(() => expect(popover.matches(':popover-open')).toBe(true));
+		dropdown.appendChild(invoker);
+		await waitFor(() =>
+			expect(invoker.getAttribute('aria-expanded')).toBe('true'),
+		);
+		popover.hidePopover();
+		await waitFor(() =>
+			expect(invoker.getAttribute('aria-expanded')).toBe('false'),
+		);
+	},
+};
+
+/** no slotted invoker, nothing to reconcile: opens and closes as before */
+export const InvokerAriaWithoutInvokerIsANoop: Story = {
+	render: (args) => html`
+		<cosmoz-dropdown-next placement=${args.placement} class="noinvoker">
+			<div class="dropdown-content"><div>Item 1</div></div>
+		</cosmoz-dropdown-next>
+	`,
+	play: async ({ canvasElement }) => {
+		const dropdown = canvasElement.querySelector(
+			'cosmoz-dropdown-next.noinvoker',
+		) as HTMLElement & { opened: boolean };
+		expect(dropdown.getAttribute('aria-expanded')).toBeNull();
+		dropdown.opened = true;
+		await waitFor(() =>
+			expect(getPopover(dropdown)?.matches(':popover-open')).toBe(true),
+		);
+		expect(dropdown.getAttribute('aria-expanded')).toBeNull();
+		dropdown.opened = false;
+		await waitFor(() =>
+			expect(getPopover(dropdown)?.matches(':popover-open')).toBe(false),
+		);
+		expect(dropdown.getAttribute('aria-expanded')).toBeNull();
+	},
+};

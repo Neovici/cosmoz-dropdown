@@ -87,10 +87,12 @@ When `disabled` and `passthrough` are both set, the default slot content renders
 
 #### Slots
 
-| Slot      | Description                                 |
-| --------- | ------------------------------------------- |
-| `button`  | The trigger element that opens the dropdown |
-| (default) | The dropdown content                        |
+| Slot      | Description                                                                                                                                                          |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `button`  | The trigger element that opens the dropdown. Slot a proper trigger: a native button/controlled element, or a forwarding custom element (e.g. `cosmoz-button` 2.2.3+) |
+| (default) | The dropdown content                                                                                                                                                 |
+
+The trigger's aria-expanded state is projected by the dropdown to match the menu state, on every open/close path. Slot the trigger element itself: a non-forwarding wrapper receives the attribute without exposing state.
 
 #### Events
 

@@ -1,3 +1,4 @@
+import { forwardAttributes } from '@neovici/cosmoz-utils/directives/forward-attributes';
 import {
 	component,
 	css,
@@ -174,7 +175,11 @@ const CosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	}, []);
 
 	return html`
-		<slot name="button" @click=${handleClick}></slot>
+		<slot
+			name="button"
+			${forwardAttributes({ 'aria-expanded': String(opened) })}
+			@click=${handleClick}
+		></slot>
 		${disabled && passthrough
 			? html`<slot></slot>`
 			: html`<div
