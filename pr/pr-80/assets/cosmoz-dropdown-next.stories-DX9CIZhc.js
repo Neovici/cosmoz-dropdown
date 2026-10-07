@@ -1,4 +1,4 @@
-import"./cosmoz-dropdown-next-DDoUz2nd.js";import{b as a}from"./iframe-DqGJsmdG.js";import"./cosmoz-dropdown-next-D9cQW8ZE.js";import"./preload-helper-PPVm8Dsz.js";const x=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:r,userEvent:y,waitFor:d}=__STORYBOOK_MODULE_TEST__,O={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:x,description:"CSS anchor position-area value. See MDN for all available options."},opened:{control:"boolean",description:"Get/set the dropdown open state. Reflected as an attribute."},disabled:{control:"boolean",description:"Prevents the dropdown from opening."},openOnHover:{control:"boolean",description:"Open dropdown on hover."},openOnFocus:{control:"boolean",description:"Open dropdown when the trigger receives focus."},passthrough:{control:"boolean",description:"When disabled + passthrough, render default slot content in normal document flow instead of inside the popover."}},args:{placement:"bottom span-right",opened:!1,disabled:!1,openOnHover:!1,openOnFocus:!1,passthrough:!1}},p=(o,n,e)=>a`
+import"./cosmoz-dropdown-next-CviOvfMZ.js";import{b as a}from"./iframe-5yVqiL3B.js";import"./cosmoz-dropdown-next-cdyM2AwF.js";import"./preload-helper-PPVm8Dsz.js";const T=["bottom span-right","bottom span-left","bottom","top span-right","top span-left","top","right span-bottom","right span-top","right","left span-bottom","left span-top","left","bottom center","top center","center"],{expect:r,userEvent:y,waitFor:d}=__STORYBOOK_MODULE_TEST__,O={title:"Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["autodocs"],argTypes:{placement:{control:"select",options:T,description:"CSS anchor position-area value. See MDN for all available options."},opened:{control:"boolean",description:"Get/set the dropdown open state. Reflected as an attribute."},disabled:{control:"boolean",description:"Prevents the dropdown from opening."},openOnHover:{control:"boolean",description:"Open dropdown on hover."},openOnFocus:{control:"boolean",description:"Open dropdown when the trigger receives focus."},passthrough:{control:"boolean",description:"When disabled + passthrough, render default slot content in normal document flow instead of inside the popover."}},args:{placement:"bottom span-right",opened:!1,disabled:!1,openOnHover:!1,openOnFocus:!1,passthrough:!1}},p=(o,n,e)=>a`
     <cosmoz-dropdown-next
         placement=${o.placement}
         .opened=${o.opened}
@@ -267,11 +267,8 @@ Useful for navigation menus where keyboard accessibility is important.`,...u.par
       expect(getPopover()).toBeTruthy();
     });
     await step('Clicking the input opens and keeps the dropdown open', async () => {
-      // userEvent.click fires mousedown → focusin → mouseup → click
-      // focusin triggers the hook's handleFocusEnter → showPopover()
-      // click reaches <slot name="button" @click=\${handleClick}>
-      // With the bug (toggle): togglePopover() closes the just-opened popover
-      // With the fix (open): showPopover() is a no-op on an already-open popover
+      // click races the focusin open: handleClick must open, not
+      // toggle, or the focusin open is toggled back off
       await userEvent.click(input);
       await waitFor(() => {
         expect(getPopover()?.matches(':popover-open')).toBe(true);
