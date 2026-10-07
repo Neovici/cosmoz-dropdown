@@ -14,16 +14,19 @@ const focused = (): HTMLElement | null => {
 	return el;
 };
 
-const settle = async () => {
-	// settle beyond the close transition before asserting
-	await new Promise((r) => setTimeout(r, 400));
-};
+const settled = (el: HTMLElement, state: 'open' | 'closed') =>
+	new Promise<void>((resolve) =>
+		pop(el).addEventListener(
+			'toggle',
+			(e) => (e as ToggleEvent).newState === state && resolve(),
+			{ once: true },
+		),
+	);
 
 const openFocusedInside = async (el: HTMLElement) => {
+	const opened = settled(el, 'open');
 	(el as HTMLElement & { opened: boolean }).opened = true;
-	await nextFrame();
-	// autofocus lands on the pick inside the opened popover
-	await new Promise((r) => setTimeout(r, 50));
+	await opened;
 };
 
 describe('cosmoz-dropdown-next focus restore', () => {
@@ -49,23 +52,26 @@ describe('cosmoz-dropdown-next focus restore', () => {
 			await openFocusedInside(el);
 			expect(pop(el).matches(':popover-open')).to.equal(true);
 			// focus is on the pick (autofocus); now close for real
+			const closed = settled(el, 'closed');
 			pop(el).hidePopover();
-			await settle();
+			await closed;
 			expect(focused()).to.equal(trigger);
 		});
 
 		it('after a real Escape (trusted keys), focus is back on the trigger', async () => {
 			await openFocusedInside(el);
+			const closed = settled(el, 'closed');
 			await sendKeys({ press: 'Escape' });
-			await settle();
+			await closed;
 			expect(pop(el).matches(':popover-open')).to.equal(false);
 			expect(focused()).to.equal(trigger);
 		});
 
 		it('after select-close, steady state lands on the trigger', async () => {
 			await openFocusedInside(el);
+			const closed = settled(el, 'closed');
 			pick.dispatchEvent(new Event('select', { bubbles: true }));
-			await settle();
+			await closed;
 			expect(pop(el).matches(':popover-open')).to.equal(false);
 			expect(focused()).to.equal(trigger);
 		});
@@ -77,7 +83,9 @@ describe('cosmoz-dropdown-next focus restore', () => {
 			const outside = await fixture(html`<button class="outside">Out</button>`);
 			outside.focus();
 			await nextFrame();
-			await settle(); // the focusout close runs 100ms after the move
+			// the focusout close runs 100ms after the move; the toggle
+			// event is the deterministic signal
+			await settled(el, 'closed');
 			expect(pop(el).matches(':popover-open')).to.equal(false);
 			expect(focused()).to.equal(outside);
 		});
@@ -106,8 +114,9 @@ describe('cosmoz-dropdown-next focus restore', () => {
 			await nextFrame();
 			expect(opop.matches(':popover-open')).to.equal(true); // open-on-focus opened
 
+			const closed = settled(oel, 'closed');
 			opop.hidePopover();
-			await settle();
+			await closed;
 			expect(opop.matches(':popover-open')).to.equal(false);
 			expect(focused()).to.equal(otrigger);
 		});
