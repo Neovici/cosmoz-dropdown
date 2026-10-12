@@ -1,4 +1,4 @@
-import { component, css } from '@pionjs/pion';
+import { component, css, useEffect } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { Props as DropdownProps } from './cosmoz-dropdown';
 
@@ -50,7 +50,40 @@ const style = css`
 	}
 `;
 
-export const List = () => html` <slot></slot> `;
+const steps: Record<string, (i: number, n: number) => number> = {
+	ArrowDown: (i, n) => (i + 1) % n,
+	ArrowUp: (i, n) => (i > 0 ? i : n) - 1,
+	Home: () => 0,
+	End: (_, n) => n - 1,
+};
+
+/**
+ * Arrow keys, Home and End move focus between the enabled items, wrapping
+ * around at the ends.
+ */
+const onKeyDown = (e: KeyboardEvent) => {
+	const step = steps[e.key],
+		slot = (e.currentTarget as HTMLElement).shadowRoot?.querySelector('slot');
+	if (!step || !slot || e.defaultPrevented) return;
+	const items = slot
+		.assignedElements({ flatten: true })
+		.filter(
+			(el): el is HTMLElement =>
+				el instanceof HTMLElement && !el.matches('[disabled], [hidden]'),
+		);
+	if (items.length === 0) return;
+	e.preventDefault();
+	const current = items.findIndex((el) => el.matches(':focus-within'));
+	items[step(current, items.length)].focus();
+};
+
+export const List = (host: HTMLElement) => {
+	useEffect(() => {
+		host.addEventListener('keydown', onKeyDown);
+		return () => host.removeEventListener('keydown', onKeyDown);
+	}, []);
+	return html` <slot></slot> `;
+};
 customElements.define(
 	'cosmoz-dropdown-list',
 	component(List, { styleSheets: [style] }),
