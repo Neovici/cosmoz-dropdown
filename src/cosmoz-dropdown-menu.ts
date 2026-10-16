@@ -4,24 +4,31 @@ import { Props as DropdownProps } from './cosmoz-dropdown';
 
 const style = css`
 	:host {
-		display: contents;
+		display: block;
 		max-height: var(--cosmoz-dropdown-menu-max-height, calc(96dvh - 64px));
 		background: var(
 			--cosmoz-dropdown-menu-bg-color,
-			var(--cz-color-bg-primary)
+			var(--cz-color-bg-glass-panel, var(--cz-color-bg-secondary))
 		);
 		overflow-y: auto;
 		padding: var(--cz-spacing) calc(var(--cz-spacing) * 1.5);
-		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
+		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-xl));
 		border: 1px solid
-			var(--cosmoz-dropdown-menu-border-color, var(--cz-color-border-primary));
+			var(
+				--cosmoz-dropdown-menu-border-color,
+				var(--cz-color-border-glass, var(--cz-color-border-primary))
+			);
+	}
+	:host {
+		box-shadow: var(--cz-shadow-glass-panel, var(--cz-shadow-lg));
+		backdrop-filter: var(--cz-backdrop-filter-glass, none);
 	}
 	::slotted(:not(slot)) {
 		display: block;
 		--paper-button_-_display: block;
 		box-sizing: border-box;
 		padding: calc(var(--cz-spacing) * 2) calc(var(--cz-spacing) * 2.5);
-		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
+		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-xl));
 		background: var(--cosmoz-dropdown-menu-bg-color, transparent);
 		color: var(--cosmoz-dropdown-menu-color, var(--cz-color-text-primary));
 		transition:
@@ -40,7 +47,7 @@ const style = css`
 	::slotted(:not(slot):hover) {
 		background: var(
 			--cosmoz-dropdown-menu-hover-color,
-			var(--cz-color-bg-secondary)
+			var(--cz-color-bg-glass-hover, var(--cz-color-bg-secondary-hover))
 		);
 	}
 
