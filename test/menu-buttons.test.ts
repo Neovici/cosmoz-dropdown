@@ -14,6 +14,9 @@ describe('menu button layout', () => {
 				</cosmoz-button>
 			</cosmoz-dropdown-list>
 		`);
+		const frame = list.getBoundingClientRect();
+		expect(frame.width).to.be.greaterThan(0);
+		expect(frame.height).to.be.greaterThan(0);
 		const buttons = [...list.querySelectorAll('cosmoz-button')];
 		const bounds = buttons.map((host) => {
 			const control = host.shadowRoot!.querySelector<HTMLElement>('.button')!;
@@ -23,7 +26,10 @@ describe('menu button layout', () => {
 				host.getBoundingClientRect().width,
 				0.5,
 			);
-			return control.getBoundingClientRect();
+			const rect = control.getBoundingClientRect();
+			expect(rect.left).to.be.at.least(frame.left);
+			expect(rect.right).to.be.at.most(frame.right);
+			return rect;
 		});
 		expect(bounds[0].left).to.equal(bounds[1].left);
 		expect(bounds[0].width).to.equal(bounds[1].width);

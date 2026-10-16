@@ -1,5 +1,5 @@
 ---
-"@neovici/cosmoz-dropdown": minor
+'@neovici/cosmoz-dropdown': patch
 ---
 
-Use shared Cosmoz glass material for controls in light and dark themes. Preserve readable primary actions, keyboard focus, reduced transparency, and forced colors.
+Let slotted button components own their padding, alignment, hover and disabled appearance in action menus. Keep dropdown surfaces unchanged.

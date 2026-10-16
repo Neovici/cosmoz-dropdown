@@ -19,19 +19,12 @@ const style = css`
 		overflow: visible;
 	}
 	.wrap {
-		border: 1px solid
-			var(--cz-color-border-glass, var(--cz-color-border-primary));
-		padding: var(--cz-spacing);
-		backdrop-filter: var(--cz-backdrop-filter-glass, none);
 		background: var(
 			--cosmoz-dropdown-menu-bg-color,
-			var(--cz-color-bg-glass-panel, var(--cz-color-bg-secondary))
+			var(--cz-color-bg-primary)
 		);
-		box-shadow: var(
-			--cosmoz-dropdown-box-shadow,
-			var(--cz-shadow-glass-panel, var(--cz-shadow-lg))
-		);
-		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-3xl));
+		box-shadow: var(--cosmoz-dropdown-box-shadow, var(--cz-shadow-sm));
+		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
 	}
 	::slotted(*) {
 		display: block;

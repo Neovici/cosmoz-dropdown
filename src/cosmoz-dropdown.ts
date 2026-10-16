@@ -14,13 +14,6 @@ export interface Props extends UseFocusOpts, UseFloating {
 }
 
 const style = css`
-	::slotted(cosmoz-dropdown-list) {
-		background: transparent;
-		border: 0;
-		box-shadow: none;
-		backdrop-filter: none;
-	}
-
 	.anchor {
 		padding: var(--cosmoz-dropdown-anchor-spacing);
 	}
