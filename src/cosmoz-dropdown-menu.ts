@@ -55,6 +55,18 @@ const style = css`
 		opacity: 0.5;
 		pointer-events: none;
 	}
+
+	/* Button components own their padding, hover and disabled appearance. */
+	::slotted([variant]),
+	::slotted([variant]:hover) {
+		padding: 0;
+		background: none;
+		--cosmoz-button-justify-content: flex-start;
+	}
+
+	::slotted([variant][disabled]) {
+		opacity: 1;
+	}
 `;
 
 export const List = () => html` <slot></slot> `;
