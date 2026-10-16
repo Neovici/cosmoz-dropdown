@@ -1,4 +1,4 @@
-import{E as mt,b as B,u as J,a as rt,c as Gt,A as Jt}from"./iframe-DZY70kFA.js";import{e as Pt,i as It,t as Qt,c as gt,a as st,u as Bt,b as te,d as Q,n as Et}from"./cosmoz-dropdown-next-Sxarcb0p.js";import"./preload-helper-PPVm8Dsz.js";const ee={},oe=Pt(class extends It{constructor(){super(...arguments),this.ot=ee}render(t,e){return e()}update(t,[e,n]){if(Array.isArray(e)){if(Array.isArray(this.ot)&&this.ot.length===e.length&&e.every((o,r)=>o===this.ot[r]))return mt}else if(this.ot===e)return mt;return this.ot=Array.isArray(e)?Array.from(e):e,this.render(e,n)}});const $t="important",ne=" !"+$t,re=Pt(class extends It{constructor(t){if(super(t),t.type!==Qt.ATTRIBUTE||t.name!=="style"||t.strings?.length>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce((e,n)=>{const o=t[n];return o==null?e:e+`${n=n.includes("-")?n:n.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${o};`},"")}update(t,[e]){const{style:n}=t.element;if(this.ft===void 0)return this.ft=new Set(Object.keys(e)),this.render(e);for(const o of this.ft)e[o]==null&&(this.ft.delete(o),o.includes("-")?n.removeProperty(o):n[o]=null);for(const o in e){const r=e[o];if(r!=null){this.ft.add(o);const s=typeof r=="string"&&r.endsWith(ne);o.includes("-")||s?n.setProperty(o,s?r.slice(0,-11):r,s?$t:""):n[o]=r}}return mt}}),se=(t=HTMLElement)=>class extends t{connectedCallback(){super.connectedCallback?.(),this.dispatchEvent(new CustomEvent("connected"))}disconnectedCallback(){super.disconnectedCallback?.(),this.dispatchEvent(new CustomEvent("disconnected"))}},ie=gt`
+import{E as mt,b as B,u as J,a as rt,c as Gt,A as Jt}from"./iframe-BiA2GU5R.js";import{e as Pt,i as It,t as Qt,c as gt,a as st,u as Bt,b as te,d as Q,n as Et}from"./cosmoz-dropdown-next-Dbd0ovTI.js";import"./preload-helper-PPVm8Dsz.js";const ee={},oe=Pt(class extends It{constructor(){super(...arguments),this.ot=ee}render(t,e){return e()}update(t,[e,n]){if(Array.isArray(e)){if(Array.isArray(this.ot)&&this.ot.length===e.length&&e.every((o,r)=>o===this.ot[r]))return mt}else if(this.ot===e)return mt;return this.ot=Array.isArray(e)?Array.from(e):e,this.render(e,n)}});const $t="important",ne=" !"+$t,re=Pt(class extends It{constructor(t){if(super(t),t.type!==Qt.ATTRIBUTE||t.name!=="style"||t.strings?.length>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce((e,n)=>{const o=t[n];return o==null?e:e+`${n=n.includes("-")?n:n.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${o};`},"")}update(t,[e]){const{style:n}=t.element;if(this.ft===void 0)return this.ft=new Set(Object.keys(e)),this.render(e);for(const o of this.ft)e[o]==null&&(this.ft.delete(o),o.includes("-")?n.removeProperty(o):n[o]=null);for(const o in e){const r=e[o];if(r!=null){this.ft.add(o);const s=typeof r=="string"&&r.endsWith(ne);o.includes("-")||s?n.setProperty(o,s?r.slice(0,-11):r,s?$t:""):n[o]=r}}return mt}}),se=(t=HTMLElement)=>class extends t{connectedCallback(){super.connectedCallback?.(),this.dispatchEvent(new CustomEvent("connected"))}disconnectedCallback(){super.disconnectedCallback?.(),this.dispatchEvent(new CustomEvent("disconnected"))}},ie=gt`
 	:host {
 		position: fixed;
 		left: -9999999999px;
@@ -30,12 +30,14 @@ import{E as mt,b as B,u as J,a as rt,c as Gt,A as Jt}from"./iframe-DZY70kFA.js";
 		padding: var(--cosmoz-dropdown-anchor-spacing);
 	}
 
-	button {
+	cosmoz-button::part(button) {
 		pointer-events: auto;
 		border: none;
 		cursor: pointer;
 		background: transparent;
 		padding: 0;
+
+		height: auto;
 	}
 
 	::slotted(svg) {
@@ -49,14 +51,15 @@ import{E as mt,b as B,u as J,a as rt,c as Gt,A as Jt}from"./iframe-DZY70kFA.js";
 	}
 `,ro=t=>{const{placement:e,strategy:n,middleware:o,render:r}=t,{active:s,onToggle:i}=eo(t),c=Bt(),{styles:l,setReference:a,setFloating:u}=Qe({placement:e,strategy:n,middleware:o}),d=Q(f=>{c.current=f,u(f)},[u]);return rt(()=>{const f=c.current;f&&(s&&!f.matches(":popover-open")&&f.showPopover?.(),!s&&f.matches(":popover-open")&&f.hidePopover?.())},[s]),B`
 		<div class="anchor" part="anchor" ${Et(a)}>
-			<button
+			<cosmoz-button
+				variant="tertiary"
 				@mousedown=${oo}
 				@click=${i}
-				part="button"
+				exportparts="button"
 				id="dropdownButton"
 			>
 				<slot name="button">...</slot>
-			</button>
+			</cosmoz-button>
 		</div>
 		<cosmoz-dropdown-content
 			popover
