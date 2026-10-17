@@ -2,4 +2,4 @@
 '@neovici/cosmoz-dropdown': minor
 ---
 
-Render action and utility controls with cosmoz-button while preserving their layout, callbacks, disabled states and keyboard focus.
+Render the dropdown trigger with a flat tertiary `cosmoz-button` and preserve the exported `button` part. Let slotted button components own their padding, hover and disabled appearance, with labels aligned to the start of menu rows.
