@@ -19,7 +19,13 @@ const style = css`
 		padding: var(--cosmoz-dropdown-anchor-spacing);
 	}
 
+	cosmoz-button {
+		width: 100%;
+		pointer-events: none;
+	}
+
 	cosmoz-button::part(button) {
+		width: auto;
 		pointer-events: auto;
 		border: none;
 		cursor: pointer;
