@@ -4,7 +4,7 @@ import { Props as DropdownProps } from './cosmoz-dropdown';
 
 const style = css`
 	:host {
-		display: contents;
+		display: block;
 		max-height: var(--cosmoz-dropdown-menu-max-height, calc(96dvh - 64px));
 		background: var(
 			--cosmoz-dropdown-menu-bg-color,
@@ -47,6 +47,18 @@ const style = css`
 	::slotted(:not(slot)[disabled]) {
 		opacity: 0.5;
 		pointer-events: none;
+	}
+
+	/* Button components own their padding, hover and disabled appearance. */
+	::slotted([variant]),
+	::slotted([variant]:hover) {
+		padding: 0;
+		background: none;
+		--cosmoz-button-justify-content: flex-start;
+	}
+
+	::slotted([variant][disabled]) {
+		opacity: 1;
 	}
 `;
 

@@ -1,3 +1,4 @@
+import '@neovici/cosmoz-button';
 import { component, css, useCallback, useEffect, useRef } from '@pionjs/pion';
 import { html, nothing } from 'lit-html';
 import { guard } from 'lit-html/directives/guard.js';
@@ -18,12 +19,20 @@ const style = css`
 		padding: var(--cosmoz-dropdown-anchor-spacing);
 	}
 
-	button {
+	cosmoz-button {
+		width: 100%;
+		pointer-events: none;
+	}
+
+	cosmoz-button::part(button) {
+		width: auto;
 		pointer-events: auto;
 		border: none;
 		cursor: pointer;
 		background: transparent;
 		padding: 0;
+
+		height: auto;
 	}
 
 	::slotted(svg) {
@@ -69,14 +78,15 @@ const Dropdown = (host: HTMLElement & Props) => {
 
 	return html`
 		<div class="anchor" part="anchor" ${ref(setReference)}>
-			<button
+			<cosmoz-button
+				variant="tertiary"
 				@mousedown=${preventDefault}
 				@click=${onToggle}
-				part="button"
+				exportparts="button"
 				id="dropdownButton"
 			>
 				<slot name="button">...</slot>
-			</button>
+			</cosmoz-button>
 		</div>
 		<cosmoz-dropdown-content
 			popover
