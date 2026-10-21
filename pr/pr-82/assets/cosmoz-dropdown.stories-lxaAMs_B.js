@@ -1,4 +1,4 @@
-import{E as mt,b as B,u as Q,a as U,c as Jt,A as Qt}from"./iframe-BrmROySs.js";import{e as It,i as Bt,t as te,c as gt,a as st,u as $t,b as ee,d as tt,n as Rt}from"./cosmoz-dropdown-next-tdnh_FLY.js";import"./preload-helper-PPVm8Dsz.js";const oe={},ne=It(class extends Bt{constructor(){super(...arguments),this.ot=oe}render(t,e){return e()}update(t,[e,n]){if(Array.isArray(e)){if(Array.isArray(this.ot)&&this.ot.length===e.length&&e.every((o,r)=>o===this.ot[r]))return mt}else if(this.ot===e)return mt;return this.ot=Array.isArray(e)?Array.from(e):e,this.render(e,n)}});const Wt="important",re=" !"+Wt,se=It(class extends Bt{constructor(t){if(super(t),t.type!==te.ATTRIBUTE||t.name!=="style"||t.strings?.length>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce((e,n)=>{const o=t[n];return o==null?e:e+`${n=n.includes("-")?n:n.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${o};`},"")}update(t,[e]){const{style:n}=t.element;if(this.ft===void 0)return this.ft=new Set(Object.keys(e)),this.render(e);for(const o of this.ft)e[o]==null&&(this.ft.delete(o),o.includes("-")?n.removeProperty(o):n[o]=null);for(const o in e){const r=e[o];if(r!=null){this.ft.add(o);const s=typeof r=="string"&&r.endsWith(re);o.includes("-")||s?n.setProperty(o,s?r.slice(0,-11):r,s?Wt:""):n[o]=r}}return mt}}),ie=(t=HTMLElement)=>class extends t{connectedCallback(){super.connectedCallback?.(),this.dispatchEvent(new CustomEvent("connected"))}disconnectedCallback(){super.disconnectedCallback?.(),this.dispatchEvent(new CustomEvent("disconnected"))}},ce=gt`
+import{E as mt,b as B,u as Q,a as U,c as Jt,A as Qt}from"./iframe--w8rjZhC.js";import{e as It,i as Bt,t as te,c as gt,a as st,u as $t,b as ee,d as tt,n as Rt}from"./cosmoz-dropdown-next-Dba2IhgH.js";import"./preload-helper-PPVm8Dsz.js";const oe={},ne=It(class extends Bt{constructor(){super(...arguments),this.ot=oe}render(t,e){return e()}update(t,[e,n]){if(Array.isArray(e)){if(Array.isArray(this.ot)&&this.ot.length===e.length&&e.every((o,r)=>o===this.ot[r]))return mt}else if(this.ot===e)return mt;return this.ot=Array.isArray(e)?Array.from(e):e,this.render(e,n)}});const Wt="important",re=" !"+Wt,se=It(class extends Bt{constructor(t){if(super(t),t.type!==te.ATTRIBUTE||t.name!=="style"||t.strings?.length>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce((e,n)=>{const o=t[n];return o==null?e:e+`${n=n.includes("-")?n:n.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${o};`},"")}update(t,[e]){const{style:n}=t.element;if(this.ft===void 0)return this.ft=new Set(Object.keys(e)),this.render(e);for(const o of this.ft)e[o]==null&&(this.ft.delete(o),o.includes("-")?n.removeProperty(o):n[o]=null);for(const o in e){const r=e[o];if(r!=null){this.ft.add(o);const s=typeof r=="string"&&r.endsWith(re);o.includes("-")||s?n.setProperty(o,s?r.slice(0,-11):r,s?Wt:""):n[o]=r}}return mt}}),ie=(t=HTMLElement)=>class extends t{connectedCallback(){super.connectedCallback?.(),this.dispatchEvent(new CustomEvent("connected"))}disconnectedCallback(){super.disconnectedCallback?.(),this.dispatchEvent(new CustomEvent("disconnected"))}},ce=gt`
 	:host {
 		position: fixed;
 		left: -9999999999px;
@@ -30,12 +30,20 @@ import{E as mt,b as B,u as Q,a as U,c as Jt,A as Qt}from"./iframe-BrmROySs.js";i
 		padding: var(--cosmoz-dropdown-anchor-spacing);
 	}
 
-	button {
+	cosmoz-button {
+		width: 100%;
+		pointer-events: none;
+	}
+
+	cosmoz-button::part(button) {
+		width: auto;
 		pointer-events: auto;
 		border: none;
 		cursor: pointer;
 		background: transparent;
 		padding: 0;
+
+		height: auto;
 	}
 
 	::slotted(svg) {
@@ -49,14 +57,15 @@ import{E as mt,b as B,u as Q,a as U,c as Jt,A as Qt}from"./iframe-BrmROySs.js";i
 	}
 `,so=t=>{const{placement:e,strategy:n,middleware:o,render:r}=t,{active:s,onToggle:i}=oo(t),c=$t(),{styles:l,setReference:a,setFloating:u}=to({placement:e,strategy:n,middleware:o}),d=tt(f=>{c.current=f,u(f)},[u]);return U(()=>{const f=c.current;f&&(s&&!f.matches(":popover-open")&&f.showPopover?.(),!s&&f.matches(":popover-open")&&f.hidePopover?.())},[s]),B`
 		<div class="anchor" part="anchor" ${Rt(a)}>
-			<button
+			<cosmoz-button
+				variant="tertiary"
 				@mousedown=${no}
 				@click=${i}
-				part="button"
+				exportparts="button"
 				id="dropdownButton"
 			>
 				<slot name="button">...</slot>
-			</button>
+			</cosmoz-button>
 		</div>
 		<cosmoz-dropdown-content
 			popover
@@ -69,7 +78,7 @@ import{E as mt,b as B,u as Q,a as U,c as Jt,A as Qt}from"./iframe-BrmROySs.js";i
 		>
 	`};customElements.define("cosmoz-dropdown",st(so,{styleSheets:[ro]}));const io=gt`
 	:host {
-		display: contents;
+		display: block;
 		max-height: var(--cosmoz-dropdown-menu-max-height, calc(96dvh - 64px));
 		background: var(
 			--cosmoz-dropdown-menu-bg-color,
@@ -113,7 +122,19 @@ import{E as mt,b as B,u as Q,a as U,c as Jt,A as Qt}from"./iframe-BrmROySs.js";i
 		opacity: 0.5;
 		pointer-events: none;
 	}
-`,co={ArrowDown:(t,e)=>(t+1)%e,ArrowUp:(t,e)=>(t>0?t:e)-1,Home:()=>0,End:(t,e)=>e-1},Pt=t=>{const e=co[t.key],n=t.currentTarget.shadowRoot?.querySelector("slot");if(!e||!n||t.defaultPrevented)return;const o=n.assignedElements({flatten:!0}).filter(s=>s instanceof HTMLElement&&!s.matches("[disabled], [hidden]"));if(o.length===0)return;t.preventDefault();const r=o.findIndex(s=>s.matches(":focus-within"));o[e(r,o.length)].focus()},lo=t=>(U(()=>(t.addEventListener("keydown",Pt),()=>t.removeEventListener("keydown",Pt)),[]),B` <slot></slot> `);customElements.define("cosmoz-dropdown-list",st(lo,{styleSheets:[io]}));const ao=({placement:t})=>B` <cosmoz-dropdown
+
+	/* Button components own their padding, hover and disabled appearance. */
+	::slotted([variant]),
+	::slotted([variant]:hover) {
+		padding: 0;
+		background: none;
+		--cosmoz-button-justify-content: flex-start;
+	}
+
+	::slotted([variant][disabled]) {
+		opacity: 1;
+	}
+`,co={ArrowDown:t=>[t+1,1],ArrowUp:(t,e)=>[(t<0?e:t)-1,-1],Home:()=>[0,1],End:(t,e)=>[e-1,-1]},Pt=t=>{const e=co[t.key],n=t.currentTarget.shadowRoot?.querySelector("slot");if(!e||!n||t.defaultPrevented)return;const o=n.assignedElements({flatten:!0}).filter(c=>c instanceof HTMLElement&&!c.matches("[disabled], [hidden]")),r=o.length;if(r===0)return;t.preventDefault();const[s,i]=e(o.findIndex(c=>c.matches(":focus-within")),r);for(let c=0;c<r;c++){const l=o[((s+c*i)%r+r)%r];if(l.focus(),l.matches(":focus-within"))return}},lo=t=>(U(()=>(t.addEventListener("keydown",Pt),()=>t.removeEventListener("keydown",Pt)),[]),B` <slot></slot> `);customElements.define("cosmoz-dropdown-list",st(lo,{styleSheets:[io]}));const ao=({placement:t})=>B` <cosmoz-dropdown
 		.placement=${t}
 		part="dropdown"
 		exportparts="anchor, button, content, wrap, dropdown"
