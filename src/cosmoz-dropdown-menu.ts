@@ -50,16 +50,17 @@ const style = css`
 	}
 `;
 
-const steps: Record<string, (i: number, n: number) => number> = {
-	ArrowDown: (i, n) => (i + 1) % n,
-	ArrowUp: (i, n) => (i > 0 ? i : n) - 1,
-	Home: () => 0,
-	End: (_, n) => n - 1,
+// [first index to try, direction to keep trying in]
+const steps: Record<string, (i: number, n: number) => [number, 1 | -1]> = {
+	ArrowDown: (i) => [i + 1, 1],
+	ArrowUp: (i, n) => [(i < 0 ? n : i) - 1, -1],
+	Home: () => [0, 1],
+	End: (_, n) => [n - 1, -1],
 };
 
 /**
  * Arrow keys, Home and End move focus between the enabled items, wrapping
- * around at the ends.
+ * around at the ends. Items that don't take focus, e.g. separators, are skipped.
  */
 const onKeyDown = (e: KeyboardEvent) => {
 	const step = steps[e.key],
@@ -71,10 +72,18 @@ const onKeyDown = (e: KeyboardEvent) => {
 			(el): el is HTMLElement =>
 				el instanceof HTMLElement && !el.matches('[disabled], [hidden]'),
 		);
-	if (items.length === 0) return;
+	const n = items.length;
+	if (n === 0) return;
 	e.preventDefault();
-	const current = items.findIndex((el) => el.matches(':focus-within'));
-	items[step(current, items.length)].focus();
+	const [start, dir] = step(
+		items.findIndex((el) => el.matches(':focus-within')),
+		n,
+	);
+	for (let k = 0; k < n; k++) {
+		const item = items[(((start + k * dir) % n) + n) % n];
+		item.focus();
+		if (item.matches(':focus-within')) return;
+	}
 };
 
 export const List = (host: HTMLElement) => {

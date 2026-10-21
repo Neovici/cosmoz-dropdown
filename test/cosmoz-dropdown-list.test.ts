@@ -43,3 +43,44 @@ describe('cosmoz-dropdown-list keyboard', () => {
 		expect(document.activeElement).to.equal(items[0]);
 	});
 });
+
+// Like cosmoz-button: focus is delegated and `disabled` is a property that isn't reflected
+customElements.define(
+	'test-button',
+	class extends HTMLElement {
+		constructor() {
+			super();
+			this.attachShadow({ mode: 'open', delegatesFocus: true }).innerHTML =
+				'<button><slot></slot></button>';
+		}
+
+		get disabled() {
+			return this.shadowRoot!.querySelector('button')!.disabled;
+		}
+
+		set disabled(value: boolean) {
+			this.shadowRoot!.querySelector('button')!.disabled = value;
+		}
+	},
+);
+
+describe('cosmoz-dropdown-list keyboard with unfocusable items', () => {
+	it('skips separators and buttons disabled by property', async () => {
+		const el = await fixture(html`
+			<cosmoz-dropdown-list role="menu">
+				<test-button role="menuitem">One</test-button>
+				<hr />
+				<test-button role="menuitem" .disabled=${true}>Two</test-button>
+				<test-button role="menuitem">Three</test-button>
+			</cosmoz-dropdown-list>
+		`);
+		const [one, , three] = el.querySelectorAll('test-button');
+		one.focus();
+		await sendKeys({ press: 'ArrowDown' });
+		expect(document.activeElement).to.equal(three);
+		await sendKeys({ press: 'ArrowUp' });
+		expect(document.activeElement).to.equal(one);
+		await sendKeys({ press: 'ArrowUp' });
+		expect(document.activeElement).to.equal(three);
+	});
+});
