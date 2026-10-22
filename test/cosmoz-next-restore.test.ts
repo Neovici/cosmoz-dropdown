@@ -3,6 +3,37 @@ import { sendKeys } from '@web/test-runner-commands';
 
 import '../src/next/cosmoz-dropdown-next.js';
 
+class NestedTrigger extends HTMLElement {
+	constructor() {
+		super();
+		this.attachShadow({ mode: 'open', delegatesFocus: true }).innerHTML =
+			'<div id="btn" role="button" tabindex="0">Go</div>';
+	}
+}
+customElements.define('nested-trigger', NestedTrigger);
+
+class NestedListbox extends HTMLElement {
+	constructor() {
+		super();
+		this.attachShadow({
+			mode: 'open',
+		}).innerHTML =
+			'<slot name="search"></slot><div class="items" tabindex="-1"><slot name="items"></slot></div>';
+	}
+}
+customElements.define('nested-listbox', NestedListbox);
+
+class NestedSearch extends HTMLElement {
+	constructor() {
+		super();
+		// the positioned wrapper keeps the inner input's offsetParent
+		// non-null through the whole hide transition, like cosmoz-input
+		this.attachShadow({ mode: 'open' }).innerHTML =
+			'<div style="position: relative"><input id="input" aria-label="Search" /></div>';
+	}
+}
+customElements.define('nested-search', NestedSearch);
+
 const pop = (el: Element): HTMLElement =>
 	el.shadowRoot!.querySelector('[popover]') as HTMLElement;
 
@@ -12,6 +43,15 @@ const focused = (): HTMLElement | null => {
 		el = el.shadowRoot.activeElement as HTMLElement | null;
 	}
 	return el;
+};
+
+// the post-hide restore lands asynchronously (see restoreFocus); give
+// it a beat before asserting
+const settledFocus = async (target: HTMLElement) => {
+	for (let i = 0; i < 15; i++) {
+		if (focused()?.outerHTML === target.outerHTML) return;
+		await new Promise((r) => setTimeout(r, 20));
+	}
 };
 
 const settled = (el: HTMLElement, state: 'open' | 'closed') =>
@@ -88,6 +128,75 @@ describe('cosmoz-dropdown-next focus restore', () => {
 			await settled(el, 'closed');
 			expect(pop(el).matches(':popover-open')).to.equal(false);
 			expect(focused()).to.equal(outside);
+		});
+	});
+
+	describe('dismissal restores through nested shadow content', () => {
+		// mirrors cosmoz-autocomplete #285: a slotted trigger hosting the
+		// field in its own shadow, a search input nested two shadow levels
+		// into the dismissal content
+		let nel: HTMLElement & { opened: boolean };
+		let focusTarget: HTMLElement;
+		let search: HTMLElement;
+		let npick: HTMLElement;
+
+		beforeEach(async () => {
+			nel = await fixture(html`
+				<cosmoz-dropdown-next>
+					<nested-trigger slot="button" class="trigger"></nested-trigger>
+					<div class="dropdown-content">
+						<nested-listbox>
+							<nested-search slot="search"></nested-search>
+							<button class="npick" autofocus slot="items">Item 1</button>
+						</nested-listbox>
+					</div>
+				</cosmoz-dropdown-next>
+			`);
+			focusTarget = nel
+				.querySelector('.trigger')!
+				.shadowRoot!.querySelector('#btn')!;
+			search = nel
+				.querySelector('nested-listbox')!
+				.querySelector('nested-search')!
+				.shadowRoot!.querySelector('#input')!;
+			npick = nel.querySelector('.npick')!;
+		});
+
+		it('after platform close, focus is back on the trigger', async () => {
+			await openFocusedInside(nel);
+			await nextFrame();
+			search.focus();
+			await nextFrame();
+			const closed = settled(nel, 'closed');
+			pop(nel).hidePopover();
+			await closed;
+			await settledFocus(focusTarget);
+			expect(focused()?.outerHTML).to.equal(focusTarget.outerHTML);
+		});
+
+		it('after a real Escape (trusted keys), focus is back on the trigger', async () => {
+			await openFocusedInside(nel);
+			await nextFrame();
+			search.focus();
+			await nextFrame();
+			const closed = settled(nel, 'closed');
+			await sendKeys({ press: 'Escape' });
+			await closed;
+			await settledFocus(focusTarget);
+			expect(focused()?.outerHTML).to.equal(focusTarget.outerHTML);
+		});
+
+		it('after select-close, focus is back on the trigger', async () => {
+			await openFocusedInside(nel);
+			await nextFrame();
+			const closed = settled(nel, 'closed');
+			npick.dispatchEvent(
+				new Event('select', { bubbles: true, composed: true }),
+			);
+			await closed;
+			await nextFrame();
+			await settledFocus(focusTarget);
+			expect(focused()?.outerHTML).to.equal(focusTarget.outerHTML);
 		});
 	});
 
