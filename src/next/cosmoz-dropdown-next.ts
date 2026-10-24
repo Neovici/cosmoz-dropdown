@@ -5,6 +5,7 @@ import { html } from 'lit-html';
 import { ref } from 'lit-html/directives/ref.js';
 import {
 	DropdownProps,
+	HIDE_TRANSITION_MS,
 	useCosmozDropdownNext,
 } from './use-cosmoz-dropdown-next.js';
 
@@ -36,10 +37,10 @@ const style = css`
 		/* overlay/display transitions need allow-discrete to animate
 		 * between display:none and display:block */
 		transition:
-			opacity 150ms ease-out,
-			transform 150ms ease-out,
-			overlay 150ms ease-out allow-discrete,
-			display 150ms ease-out allow-discrete;
+			opacity ${HIDE_TRANSITION_MS}ms ease-out,
+			transform ${HIDE_TRANSITION_MS}ms ease-out,
+			overlay ${HIDE_TRANSITION_MS}ms ease-out allow-discrete,
+			display ${HIDE_TRANSITION_MS}ms ease-out allow-discrete;
 	}
 
 	@starting-style {

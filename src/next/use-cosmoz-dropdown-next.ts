@@ -20,6 +20,14 @@ export interface DropdownProps {
  * elements (tracked by the assignedRef directive on the popover's
  * default slot).
  */
+// the hide's overlay/display transition, interpolated into the
+// [popover] styles in cosmoz-dropdown-next.ts
+export const HIDE_TRANSITION_MS = 150;
+
+// the restore's re-check budget: hide transition plus slack, in case
+// the commit lands a frame or two late
+const HIDE_COMMIT_BUDGET = HIDE_TRANSITION_MS + 100;
+
 const autofocusIn = (content: { current?: Element[] }) => {
 	for (const el of content.current ?? []) {
 		const autofocusEl = el.matches('[autofocus]')
@@ -132,19 +140,41 @@ export const useCosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 	 * to the trigger. The focusin listener is lifted around the focus
 	 * call: this restore is not an open signal.
 	 */
-	const restoreFocus = useCallback(() => {
-		let el = document.activeElement as HTMLElement | null;
-		while (el?.shadowRoot) {
-			el = el.shadowRoot.activeElement as HTMLElement | null;
-		}
-		const lost = el == null || el === document.body || el.offsetParent == null;
-		if (!lost) return;
-
+	const focusTrigger = () => {
 		const t = findTrigger();
 		if (!t) return;
 		host.removeEventListener('focusin', handleFocusEnter);
 		t.focus();
 		host.addEventListener('focusin', handleFocusEnter);
+	};
+
+	const lost = (el: HTMLElement | null) =>
+		el == null || el === document.body || el.offsetParent == null;
+
+	const active = () => {
+		let el = document.activeElement as HTMLElement | null;
+		while (el?.shadowRoot) {
+			el = el.shadowRoot.activeElement as HTMLElement | null;
+		}
+		return el;
+	};
+
+	// the hide keeps the popover laid out while its transition runs: a
+	// positioned wrapper in the dismissal content can still read a
+	// non-null offsetParent, and nothing announces the commit. Poll
+	// briefly for the drop; a deliberate move is visible and never lost.
+	const restoreFocus = useCallback(() => {
+		if (lost(active())) {
+			focusTrigger();
+			return;
+		}
+		const start = performance.now();
+		const next = () => {
+			if (performance.now() - start > HIDE_COMMIT_BUDGET) return;
+			if (lost(active())) return focusTrigger();
+			requestAnimationFrame(next);
+		};
+		requestAnimationFrame(next);
 	}, []);
 
 	const onToggle = useCallback((e: ToggleEvent) => {
