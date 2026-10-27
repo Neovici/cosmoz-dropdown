@@ -22,10 +22,10 @@ JS-driven arrangement was measured and gets no such service:
 | `popoverTargetElement = x`, JS show, real button     | no                        |
 | bare `showPopover()`                                 | no                        |
 
-(Evidence: a 12-experiment vanilla probe in Chromium 141 and Firefox —
-file `/tmp/popover-lab/`, results in PR #85 discussion. The attribute
-invocation restores in both engines; none of the JS forms restore in
-either.)
+(Evidence: a 12-experiment vanilla probe in current Chromium and Firefox,
+reproducible with `node docs/adr/lab/run.mjs chromium|firefox`. The
+attribute invocation restores in both engines; none of the JS forms
+restore in either.)
 
 Consequences of the platform gap:
 
