@@ -18,5 +18,5 @@ export default [
 			'mocha/no-top-level-hooks': 'off',
 		},
 	},
-	{ ignores: ['coverage/**', 'dist/**', 'storybook-static/**'] },
+	{ ignores: ['coverage/**', 'dist/**', 'storybook-static/**', 'docs/**'] },
 ];
