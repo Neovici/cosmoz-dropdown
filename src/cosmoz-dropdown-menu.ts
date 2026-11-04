@@ -1,4 +1,4 @@
-import { component, css, useEffect } from '@pionjs/pion';
+import { component, css, useEffect, useRef } from '@pionjs/pion';
 import { html } from 'lit-html';
 import { Props as DropdownProps } from './cosmoz-dropdown';
 
@@ -50,48 +50,54 @@ const style = css`
 	}
 `;
 
-// [first index to try, direction to keep trying in]
-const steps: Record<string, (i: number, n: number) => [number, 1 | -1]> = {
-	ArrowDown: (i) => [i + 1, 1],
-	ArrowUp: (i, n) => [(i < 0 ? n : i) - 1, -1],
-	Home: () => [0, 1],
-	End: (_, n) => [n - 1, -1],
+const steps: Record<string, (i: number, n: number) => number> = {
+	ArrowDown: (i, n) => (i + 1) % n,
+	ArrowUp: (i, n) => (i > 0 ? i : n) - 1,
+	Home: () => 0,
+	End: (_, n) => n - 1,
 };
+
+const isItem = (el: Element): el is HTMLElement =>
+	el instanceof HTMLElement && !el.matches('hr, [role="separator"]');
+
+// `disabled` is read as a property too: cosmoz-button doesn't reflect it
+const isEnabled = (el: HTMLElement) =>
+	!el.hidden &&
+	!el.hasAttribute('disabled') &&
+	!(el as HTMLButtonElement).disabled;
 
 /**
  * Arrow keys, Home and End move focus between the enabled items, wrapping
- * around at the ends. Items that don't take focus, e.g. separators, are skipped.
+ * around at the ends. Separators are skipped.
  */
-const onKeyDown = (e: KeyboardEvent) => {
-	const step = steps[e.key],
-		slot = (e.currentTarget as HTMLElement).shadowRoot?.querySelector('slot');
-	if (!step || !slot || e.defaultPrevented) return;
-	const items = slot
-		.assignedElements({ flatten: true })
-		.filter(
-			(el): el is HTMLElement =>
-				el instanceof HTMLElement && !el.matches('[disabled], [hidden]'),
-		);
-	const n = items.length;
-	if (n === 0) return;
-	e.preventDefault();
-	const [start, dir] = step(
-		items.findIndex((el) => el.matches(':focus-within')),
-		n,
-	);
-	for (let k = 0; k < n; k++) {
-		const item = items[(((start + k * dir) % n) + n) % n];
-		item.focus();
-		if (item.matches(':focus-within')) return;
-	}
-};
-
 export const List = (host: HTMLElement) => {
+	const items = useRef<HTMLElement[]>([]);
+
 	useEffect(() => {
+		const onKeyDown = (e: KeyboardEvent) => {
+			const step = steps[e.key];
+			if (!step || e.defaultPrevented) return;
+			const enabled = (items.current ?? []).filter(isEnabled);
+			if (enabled.length === 0) return;
+			e.preventDefault();
+			const path = e.composedPath();
+			enabled[
+				step(
+					enabled.findIndex((el) => path.includes(el)),
+					enabled.length,
+				)
+			].focus();
+		};
 		host.addEventListener('keydown', onKeyDown);
 		return () => host.removeEventListener('keydown', onKeyDown);
 	}, []);
-	return html` <slot></slot> `;
+
+	return html`<slot
+		@slotchange=${(e: Event) =>
+			(items.current = (e.target as HTMLSlotElement)
+				.assignedElements({ flatten: true })
+				.filter(isItem))}
+	></slot>`;
 };
 customElements.define(
 	'cosmoz-dropdown-list',
