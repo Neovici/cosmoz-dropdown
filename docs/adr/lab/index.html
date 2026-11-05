@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<style>
+	body { margin: 20px; font: 13px system-ui }
+	[popover] { position: fixed; top: 8px; left: 8px; border: 1px solid #888; padding: 8px;
+		transition: opacity 150ms ease-out, transform 150ms ease-out,
+			overlay 150ms ease-out allow-discrete, display 150ms ease-out allow-discrete; }
+	[popover]:not(:popover-open) { opacity: 0; transform: translateY(-4px) }
+	@starting-style { [popover]:popover-open { opacity: 0; transform: translateY(-4px) } }
+</style>
+</head>
+<body>
+	<button id="invoker" popovertarget="pp3">open</button>
+	<button id="plain-btn">visible target</button>
+	<input id="outside-input">
+	<div id="pp1" popover><div style="position:relative"><input id="in1" aria-label="s"></div></div>
+	<div id="pp2" popover><div style="position:relative"><input id="in2" aria-label="s"></div></div>
+	<div id="pp3" popover><div style="position:relative"><input id="in3" aria-label="s"></div></div>
+	<div id="pp4" popover>
+		<host-deleg id="hd"></host-deleg>
+		<host-plain id="hp"></host-plain>
+		<div id="fixbox" style="position:fixed"><span id="infix">f</span></div>
+		<span id="plainspan">p</span>
+		<span id="hidden-span" style="display:none">x</span>
+	</div>
+<script>
+"use strict";
+const L = window.__L = [];
+const log = (...r) => L.push(r);
+const deep = () => { let e = document.activeElement; while (e && e.shadowRoot) e = e.shadowRoot.activeElement; return e; };
+const op = (el) => el && el.offsetParent ? el.offsetParent.tagName : "null";
+const raf = () => new Promise(r => requestAnimationFrame(r));
+const $ = (id) => document.getElementById(id);
+let T0 = performance.now();
+const rel = () => Math.round(performance.now() - T0);
+
+// one armed listener pair for the whole page; id-tagged rows
+document.addEventListener("focusout", e => log(["ev", "focusout", e.target.id || e.target.tagName, "rel", rel()]), true);
+document.addEventListener("blur",    e => log(["ev", "blur",    e.target.id || e.target.tagName, "rel", rel()]), true);
+document.addEventListener("focusin", e => log(["ev", "FOCUSIN", e.target.id || e.target.tagName, "rel", rel()]), true);
+document.addEventListener("transitionend",     e => log(["ev", "TRANSITIONEND", e.target.id || e.target.tagName, e.propertyName, "rel", rel()]), true);
+document.addEventListener("transitioncancel",  e => log(["ev", "TRANSITIONCANCEL", e.target.id || e.target.tagName, e.propertyName, "rel", rel()]), true);
+
+const state = () => ["active=" + (deep()?.id ?? "null"), "body=" + (document.activeElement === document.body)];
+
+const frameLoop = async (pp, input, n) => {
+	const s = performance.now();
+	T0 = performance.now();
+	for (let i = 0; i < n; i++) {
+		await raf();
+		log(["frame", Math.round(performance.now() - s), "open=" + pp.matches(":popover-open"), "inp.op=" + op(input), ...state()]);
+	}
+};
+
+window.EX = {
+async e1_hideEvents(pp, input) { // programmatic hide with focus stuck inside
+	await pp.showPopover(); await raf(); await raf();
+	input.focus(); await raf();
+	log(["pre", ...state(), "inp.op=" + op(input)]);
+	pp.hidePopover();
+	await frameLoop(pp, input, 12);
+},
+async e2_escProgrammatic(pp, input) { // trusted esc; showPopover() from JS, no invocation
+	await pp.showPopover(); await raf(); await raf();
+	input.focus(); await raf();
+	log(["pre", ...state(), "inp.op=" + op(input)]);
+	log(["WAIT-ESC"]);
+},
+async e3_toggleTiming(pp, input) { // frame chart; toggle listeners local
+	pp.addEventListener("toggle", e => log(["POP-toggle", e.newState, "rel", rel()]));
+	await pp.showPopover(); await raf(); await raf();
+	input.focus(); await raf();
+	T0 = performance.now();
+	pp.hidePopover();
+	for (let i = 0; i < 12; i++) {
+		await raf();
+		log(["frame", rel(), "open=" + pp.matches(":popover-open"), "inp.op=" + op(input), ...state()]);
+	}
+},
+async e4_offsetMatrix() { // offsetParent semantics; outside + inside an OPEN popover
+	const mk = (html, parent) => {
+		const host = document.createElement("div"); host.innerHTML = html;
+		for (const el of [...host.children]) parent.append(el);
+		return parent;
+	};
+	const run = (parent, tag) => {
+		mk(`<span id="p1">p</span><div id="fx" style="position:fixed"><span id="p2">i</span></div>
+			<shadow-bare id="sb2"></shadow-bare><shadow-wrap id="sw2"></shadow-wrap>
+			<shadow-infix id="sf2"></shadow-infix><span id="hn" style="display:none">x</span>`, parent);
+		log([tag, "plain=" + ($("p1").offsetParent?.tagName ?? "null"),
+			"in-fixed=" + ($("p2").offsetParent?.tagName ?? "null") + "/" + ($("p2").offsetParent?.id ?? ""),
+			"sh-bare=" + ($("sb2").shadowRoot ? ($("sb2").shadowRoot.querySelector("#sbx").offsetParent?.tagName ?? "null") : "na"),
+			"sh-wrap=" + ($("sw2").shadowRoot ? ($("sw2").shadowRoot.querySelector("#swx").offsetParent?.tagName ?? "null") : "na"),
+			"sh-wrap-fixed=" + ($("sf2").shadowRoot ? ($("sf2").shadowRoot.querySelector("#sfx").offsetParent?.tagName ?? "null") : "na"),
+			"dn=" + ($("hn").offsetParent?.tagName ?? "null")]);
+	};
+	customElements.define("shadow-bare", class B extends HTMLElement { connectedCallback(){ this.attachShadow({mode:"open"}).innerHTML = `<span id="sbx">b</span>`; } });
+	customElements.define("shadow-wrap", class W extends HTMLElement { connectedCallback(){ this.attachShadow({mode:"open"}).innerHTML = `<div style="position:relative"><span id="swx">w</span></div>`; } });
+	customElements.define("shadow-infix", class F extends HTMLElement { connectedCallback(){ this.attachShadow({mode:"open"}).innerHTML = `<div style="position:relative"><span id="sfx">f</span></div>`; } });
+	run(document.body, "in-body");
+	const box = document.createElement("div"); box.setAttribute("popover", ""); box.id = "ppprobe"; document.body.append(box);
+	await box.showPopover(); await raf();
+	run(box, "in-open-popover");
+	box.hidePopover();
+},
+async e5_invoker(pp, input) { // trusted esc; UA shows via popovertarget invocation
+	await raf(); await raf();
+	invoker.focus();
+	await raf();
+	const pre = { active: deep()?.id, open: pp.matches(":popover-open") };
+	if (!pre.open) { invoker.click(); await raf(); await raf(); }
+	input.focus(); await raf();
+	log(["pre", ...state(), "inp.op=" + op(input), "invoker=" + invoker.tagName]);
+	log(["WAIT-ESC"]);
+},
+async e6a_focusinArm_stuck(pp, input) { // fix-prototype: armed focusin; drop-to-body case
+	await pp.showPopover(); await raf(); await raf();
+	input.focus(); await raf();
+	const armed = (e) => log(["ARM-FOCUSIN", e.target?.id || e.target?.tagName, "rel", rel()]);
+	document.addEventListener("focusin", armed, true);
+	pp.hidePopover();
+	await frameLoop(pp, input, 10);
+	log(["end", ...state()]);
+},
+async e6b_focusinArm_deliberate(pp, input) { // armed focusin; deliberate move during hide window
+	await pp.showPopover(); await raf(); await raf();
+	input.focus(); await raf();
+	document.addEventListener("focusin", (e) => log(["ARM-FOCUSIN", e.target?.id || e.target?.tagName, "rel", rel()]), true);
+	pp.hidePopover();
+	setTimeout(() => document.getElementById('outside-input').focus(), 60);
+	await frameLoop(pp, input, 10);
+	log(["end", ...state()]);
+},
+async e7_delegateFocus() { // where does host.focus() land
+	await pp4.showPopover(); await raf(); await raf();
+	log(["deleg-host", ...(() => { hd.focus(); const d = deep(); return ["deep=" + d?.id, "root=" + (d?.shadowRoot ? "shadow" : "light")]; })()]);
+	log(["plain-host", ...(() => { hp.focus(); const d = deep(); return ["deep=" + d?.id, "root=" + (d?.shadowRoot ? "shadow" : "light")]; })()]);
+	const db = hd.shadowRoot.querySelector("#dbtn"); db.tabIndex = -1;
+	await raf(); document.body.focus(); await raf();
+	log(["deleg-host,child=-1", ...(() => { hd.focus(); const d = deep(); return ["deep=" + d?.id]; })()]);
+},
+async e8a_sourceEsc() { // showPopover({source}) + trusted esc: does the UA restore the source?
+	const pp = document.getElementById('pp1'), input = document.getElementById('in1'), src = window.DEEP ? document.getElementById('hd') : null;
+	await pp.showPopover({ source: src }); await raf(); await raf();
+	input.focus(); await raf();
+	log(["pre", "open=" + pp.matches(":popover-open"), ...state(), "source=" + src.tagName]);
+	log(["WAIT-ESC"]);
+},
+async e9_targetProp() { // popoverTargetElement property + JS show: does the UA restore?
+	const pp = $('pp1'), input = $('in1'), target = $('hd');
+	target.popoverTargetElement = pp;
+	await pp.showPopover(); await raf(); await raf();
+	log(["wired", "target=" + target.tagName, "set=" + (target.popoverTargetElement === pp)]);
+	input.focus(); await raf();
+	log(["pre", ...state(), "inp.op=" + op(input)]);
+	log(["WAIT-ESC"]);
+},
+async e9c_buttonPropEsc() { // real BUTTON target via property, JS show, trusted esc
+	const pp = $('pp1'), input = $('in1'), target = $('plain-btn');
+	target.popoverTargetElement = pp;
+	await pp.showPopover(); await raf(); await raf();
+	log(["wired", "is-button", target.tagName, "set=" + (target.popoverTargetElement === pp)]);
+	input.focus(); await raf();
+	log(["pre", ...state()]);
+	log(["WAIT-ESC"]);
+},
+async e8b_targetPropHide() { // property form + hidePopover with stuck nested focus
+	const pp = $('pp1'), input = $('in1'), target = $('hd');
+	target.popoverTargetElement = pp;
+	await pp.showPopover(); await raf(); await raf();
+	input.focus(); await raf();
+	pp.hidePopover();
+	await frameLoop(pp, input, 10);
+	log(["end", ...state()]);
+},
+async e8b_sourceStuckHide() {
+	const pp = document.getElementById('pp1'), input = document.getElementById('in1'), src = window.DEEP ? document.getElementById('hd') : null;
+	await pp.showPopover({ source: src }); await raf(); await raf();
+	input.focus(); await raf();
+	log(["pre", ...state(), "inp.op=" + op(input)]);
+	pp.hidePopover();
+	await frameLoop(pp, input, 10);
+	log(["end", ...state()]);
+},
+};
+
+customElements.define("host-deleg", class H extends HTMLElement {
+	constructor(){ super(); this.attachShadow({mode:"open", delegatesFocus:true}).innerHTML = `<div id="dbtn" role="button" tabindex="0">D</div>`; }
+});
+customElements.define("host-plain", class H extends HTMLElement {
+	constructor(){ super(); this.attachShadow({mode:"open"}).innerHTML = `<div id="pbtn" role="button" tabindex="0">P</div>`; }
+});
+
+window.DEEP = deep; window.OP = op; window.PUSH = (r) => L.push(r);
+</script>
+</body>
+</html>
