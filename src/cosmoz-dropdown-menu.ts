@@ -80,7 +80,8 @@ const isEnabled = (el: HTMLElement) =>
 
 /**
  * Arrow keys, Home and End move focus between the enabled items, wrapping
- * around at the ends. Separators are skipped.
+ * around at the ends. Separators are skipped. `focus()` focuses the first
+ * enabled item.
  */
 export const List = (host: HTMLElement) => {
 	const items = useRef<HTMLElement[]>([]);
@@ -101,7 +102,15 @@ export const List = (host: HTMLElement) => {
 			].focus();
 		};
 		host.addEventListener('keydown', onKeyDown);
-		return () => host.removeEventListener('keydown', onKeyDown);
+		// Items can be slotted from further out, where an opening dropdown's
+		// [autofocus] search can't reach: `<cosmoz-dropdown-list autofocus>`
+		// focuses the first enabled item instead.
+		host.focus = (opts?: FocusOptions) =>
+			(items.current ?? []).find(isEnabled)?.focus(opts);
+		return () => {
+			host.removeEventListener('keydown', onKeyDown);
+			delete (host as Partial<HTMLElement>).focus;
+		};
 	}, []);
 
 	return html`<slot
