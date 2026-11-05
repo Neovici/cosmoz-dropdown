@@ -1,5 +1,5 @@
 import { expect, fixture, html, nextFrame } from '@open-wc/testing';
-import { sendMouse } from '@web/test-runner-commands';
+import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import '../src/next/cosmoz-dropdown-next.js';
 
 const pop = (el: Element): HTMLElement =>
@@ -61,6 +61,46 @@ describe('cosmoz-dropdown-next hover mode', () => {
 		const [ix, iy] = centered(item);
 		await sendMouse({ type: 'move', position: [ix, iy] });
 		await new Promise((r) => setTimeout(r, 300));
+		expect(pop(el).matches(':popover-open')).to.equal(true);
+	});
+
+	it('closes on pointer leave after a click left focus on the trigger', async () => {
+		const el = await fixture(html`
+			<cosmoz-dropdown-next open-on-hover open-on-focus>
+				<button slot="button" class="clickTrigger">Click me</button>
+				<div class="dropdown-content"><div>Item 1</div></div>
+			</cosmoz-dropdown-next>
+		`);
+		const trigger = el.querySelector('.clickTrigger')!;
+		const [x, y] = centered(trigger);
+
+		await sendMouse({ type: 'click', position: [x, y] });
+		await new Promise((r) => setTimeout(r, 150));
+		expect(document.activeElement).to.equal(trigger);
+		expect(pop(el).matches(':popover-open')).to.equal(true);
+
+		await sendMouse({ type: 'move', position: [x, y + 200] });
+		await new Promise((r) => setTimeout(r, 250));
+		expect(pop(el).matches(':popover-open')).to.equal(false);
+	});
+
+	it('keeps open on pointer leave while the trigger has keyboard focus', async () => {
+		const el = await fixture(html`
+			<cosmoz-dropdown-next open-on-hover open-on-focus>
+				<button slot="button" class="keyTrigger">Tab to me</button>
+				<div class="dropdown-content"><div>Item 1</div></div>
+			</cosmoz-dropdown-next>
+		`);
+		const trigger = el.querySelector('.keyTrigger')!;
+		const [x, y] = centered(trigger);
+
+		await sendMouse({ type: 'move', position: [x, y] });
+		await sendKeys({ press: 'Tab' });
+		await new Promise((r) => setTimeout(r, 150));
+		expect(trigger.matches(':focus-visible')).to.equal(true);
+
+		await sendMouse({ type: 'move', position: [x, y + 200] });
+		await new Promise((r) => setTimeout(r, 250));
 		expect(pop(el).matches(':popover-open')).to.equal(true);
 	});
 });
