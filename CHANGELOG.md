@@ -1,3 +1,19 @@
+## 8.2.0
+
+### Minor Changes
+
+- fa10b4f: `cosmoz-dropdown-list` moves focus between its enabled items with the arrow keys, Home and End, wrapping around at the ends. Put `autofocus` on the first item to focus it when a `cosmoz-dropdown-next` menu opens.
+
+### Patch Changes
+
+- 9439226: `cosmoz-dropdown-next` still restores focus to the trigger when the dismissal
+  content holds focus through its own shadow roots with a positioned wrapper
+  (a nested search input, like cosmoz-autocomplete's): the inner input's
+  `offsetParent` stays non-null for the whole hide transition, so the immediate
+  loss check read it as a deliberate move and the platform's focus drop landed
+  on `<body>`. The restore now re-checks briefly while the hide commits;
+  deliberate focus moves are visible afterwards and stay untouched.
+
 ## 8.1.1
 
 ### Patch Changes
