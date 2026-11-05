@@ -1,4 +1,4 @@
-import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E as H,f as et}from"./iframe-BkBgAMK0.js";const G=(...t)=>{const e=new CSSStyleSheet;return e.replaceSync(t.join("")),e},ot=t=>t?.map(e=>typeof e=="string"?G(e):e),rt=(t,...e)=>t.flatMap((o,r)=>[o,e[r]||""]).join(""),A=rt,nt=(t="")=>t.replace(/-+([a-z])?/g,(e,o)=>o?o.toUpperCase():"");function st(t){class e extends J{frag;renderResult;constructor(n,a,d){super(n,d||a),this.frag=a}commit(n){this.renderResult=t(n,this.frag)}}function o(r,n,a){const d=(a||n||{}).baseElement||HTMLElement,{observedAttributes:u=[],useShadowDOM:h=!0,shadowRootInit:m={},styleSheets:y}=a||n||{},i=ot(r.styleSheets||y);class f extends d{_scheduler;static get observedAttributes(){return r.observedAttributes||u||[]}constructor(){if(super(),h===!1)this._scheduler=new e(r,this);else{const l=this.attachShadow({mode:"open",...m});i&&(l.adoptedStyleSheets=i),this._scheduler=new e(r,l,this)}}connectedCallback(){super.connectedCallback?.(),this._scheduler.resume(),this._scheduler.update(),this._scheduler.renderResult?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback?.(),this._scheduler.pause(),this._scheduler.teardown(),this._scheduler.renderResult?.setConnected(!1)}attributeChangedCallback(l,p,b){if(p===b)return;let v=b===""?!0:b;Reflect.set(this,nt(l),v)}}function c(g){let l=g,p=!1;return Object.freeze({enumerable:!0,configurable:!0,get(){return l},set(b){p&&l===b||(p=!0,l=b,this._scheduler&&this._scheduler.update())}})}const w=new Proxy(d.prototype,{getPrototypeOf(g){return g},set(g,l,p,b){let v;return l in g?(v=Object.getOwnPropertyDescriptor(g,l),v&&v.set?(v.set.call(b,p),b._scheduler?.update(),!0):(Reflect.set(g,l,p,b),b._scheduler?.update(),!0)):(typeof l=="symbol"||l[0]==="_"?v={enumerable:!0,configurable:!0,writable:!0,value:p}:v=c(p),Object.defineProperty(b,l,v),v.set&&v.set.call(b,p),!0)}});return Object.setPrototypeOf(f.prototype,w),f}return o}function it(t){return e=>{const o={Provider:class extends HTMLElement{listeners;_value;constructor(){super(),this.style.display="contents",this.listeners=new Set,this.addEventListener(q,this)}disconnectedCallback(){this.removeEventListener(q,this)}handleEvent(r){const{detail:n}=r;n.Context===o&&(n.value=this.value,n.unsubscribe=this.unsubscribe.bind(this,n.callback),this.listeners.add(n.callback),r.stopPropagation())}unsubscribe(r){this.listeners.delete(r)}set value(r){this._value=r;for(let n of this.listeners)n(r)}get value(){return this._value}},Consumer:t(function({render:r}){const n=V(o);return r(n)},{useShadowDOM:!1}),defaultValue:e};return o}}const $=(t,e)=>N(()=>t,e);function at(t){let e=t;return{get current(){return e},set current(o){e=o},get value(){return e},set value(o){e=o}}}function E(t){return N(()=>at(t),[])}function ct({render:t}){const e=st(t),o=it(e);return{component:e,createContext:o}}const lt={ATTRIBUTE:1,CHILD:2},F=t=>(...e)=>({_$litDirective$:t,values:e});class dt{constructor(e){}get _$AU(){return this._$AM._$AU}_$AT(e,o,r){this._$Ct=e,this._$AM=o,this._$Ci=r}_$AS(e,o){return this.update(e,o)}update(e,o){return this.render(...o)}}const C=(t,e)=>{const o=t._$AN;if(o===void 0)return!1;for(const r of o)r._$AO?.(e,!1),C(r,e);return!0},I=t=>{let e,o;do{if((e=t._$AM)===void 0)break;o=e._$AN,o.delete(t),t=e}while(o?.size===0)},Z=t=>{for(let e;e=t._$AM;t=e){let o=e._$AN;if(o===void 0)e._$AN=o=new Set;else if(o.has(t))break;o.add(t),pt(e)}};function ut(t){this._$AN!==void 0?(I(this),this._$AM=t,Z(this)):this._$AM=t}function ht(t,e=!1,o=0){const r=this._$AH,n=this._$AN;if(n!==void 0&&n.size!==0)if(e)if(Array.isArray(r))for(let a=o;a<r.length;a++)C(r[a],!1),I(r[a]);else r!=null&&(C(r,!1),I(r));else C(this,t)}const pt=t=>{t.type==lt.CHILD&&(t._$AP??=ht,t._$AQ??=ut)};class Y extends dt{constructor(){super(...arguments),this._$AN=void 0}_$AT(e,o,r){super._$AT(e,o,r),Z(this),this.isConnected=e._$AU}_$AO(e,o=!0){e!==this.isConnected&&(this.isConnected=e,e?this.reconnected?.():this.disconnected?.()),o&&(C(this,e),I(this))}setValue(e){if(X(this._$Ct))this._$Ct._$AI(e,this);else{const o=[...this._$Ct._$AH];o[this._$Ci]=e,this._$Ct._$AI(o,this,0)}}disconnected(){}reconnected(){}}const{component:M}=ct({render:K}),B=G(A`
+import{B as tt,d as et,e as K,c as D,r as ot,D as V,A as I,b as z,a as _,u as rt,E as G,f as nt}from"./iframe-CyjxpMvI.js";const B=(...t)=>{const e=new CSSStyleSheet;return e.replaceSync(t.join("")),e},st=t=>t?.map(e=>typeof e=="string"?B(e):e),it=(t,...e)=>t.flatMap((o,r)=>[o,e[r]||""]).join(""),S=it,at=(t="")=>t.replace(/-+([a-z])?/g,(e,o)=>o?o.toUpperCase():"");function ct(t){class e extends tt{frag;renderResult;constructor(n,a,d){super(n,d||a),this.frag=a}commit(n){this.renderResult=t(n,this.frag)}}function o(r,n,a){const d=(a||n||{}).baseElement||HTMLElement,{observedAttributes:u=[],useShadowDOM:h=!0,shadowRootInit:m={},styleSheets:y}=a||n||{},i=st(r.styleSheets||y);class f extends d{_scheduler;static get observedAttributes(){return r.observedAttributes||u||[]}constructor(){if(super(),h===!1)this._scheduler=new e(r,this);else{const l=this.attachShadow({mode:"open",...m});i&&(l.adoptedStyleSheets=i),this._scheduler=new e(r,l,this)}}connectedCallback(){super.connectedCallback?.(),this._scheduler.resume(),this._scheduler.update(),this._scheduler.renderResult?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback?.(),this._scheduler.pause(),this._scheduler.teardown(),this._scheduler.renderResult?.setConnected(!1)}attributeChangedCallback(l,p,b){if(p===b)return;let v=b===""?!0:b;Reflect.set(this,at(l),v)}}function c(g){let l=g,p=!1;return Object.freeze({enumerable:!0,configurable:!0,get(){return l},set(b){p&&l===b||(p=!0,l=b,this._scheduler&&this._scheduler.update())}})}const w=new Proxy(d.prototype,{getPrototypeOf(g){return g},set(g,l,p,b){let v;return l in g?(v=Object.getOwnPropertyDescriptor(g,l),v&&v.set?(v.set.call(b,p),b._scheduler?.update(),!0):(Reflect.set(g,l,p,b),b._scheduler?.update(),!0)):(typeof l=="symbol"||l[0]==="_"?v={enumerable:!0,configurable:!0,writable:!0,value:p}:v=c(p),Object.defineProperty(b,l,v),v.set&&v.set.call(b,p),!0)}});return Object.setPrototypeOf(f.prototype,w),f}return o}function lt(t){return e=>{const o={Provider:class extends HTMLElement{listeners;_value;constructor(){super(),this.style.display="contents",this.listeners=new Set,this.addEventListener(K,this)}disconnectedCallback(){this.removeEventListener(K,this)}handleEvent(r){const{detail:n}=r;n.Context===o&&(n.value=this.value,n.unsubscribe=this.unsubscribe.bind(this,n.callback),this.listeners.add(n.callback),r.stopPropagation())}unsubscribe(r){this.listeners.delete(r)}set value(r){this._value=r;for(let n of this.listeners)n(r)}get value(){return this._value}},Consumer:t(function({render:r}){const n=et(o);return r(n)},{useShadowDOM:!1}),defaultValue:e};return o}}const $=(t,e)=>D(()=>t,e);function dt(t){let e=t;return{get current(){return e},set current(o){e=o},get value(){return e},set value(o){e=o}}}function A(t){return D(()=>dt(t),[])}function ut({render:t}){const e=ct(t),o=lt(e);return{component:e,createContext:o}}const ht={ATTRIBUTE:1,CHILD:2},q=t=>(...e)=>({_$litDirective$:t,values:e});class pt{constructor(e){}get _$AU(){return this._$AM._$AU}_$AT(e,o,r){this._$Ct=e,this._$AM=o,this._$Ci=r}_$AS(e,o){return this.update(e,o)}update(e,o){return this.render(...o)}}const P=(t,e)=>{const o=t._$AN;if(o===void 0)return!1;for(const r of o)r._$AO?.(e,!1),P(r,e);return!0},j=t=>{let e,o;do{if((e=t._$AM)===void 0)break;o=e._$AN,o.delete(t),t=e}while(o?.size===0)},X=t=>{for(let e;e=t._$AM;t=e){let o=e._$AN;if(o===void 0)e._$AN=o=new Set;else if(o.has(t))break;o.add(t),ft(e)}};function vt(t){this._$AN!==void 0?(j(this),this._$AM=t,X(this)):this._$AM=t}function bt(t,e=!1,o=0){const r=this._$AH,n=this._$AN;if(n!==void 0&&n.size!==0)if(e)if(Array.isArray(r))for(let a=o;a<r.length;a++)P(r[a],!1),j(r[a]);else r!=null&&(P(r,!1),j(r));else P(this,t)}const ft=t=>{t.type==ht.CHILD&&(t._$AP??=bt,t._$AQ??=vt)};class Q extends pt{constructor(){super(...arguments),this._$AN=void 0}_$AT(e,o,r){super._$AT(e,o,r),X(this),this.isConnected=e._$AU}_$AO(e,o=!0){e!==this.isConnected&&(this.isConnected=e,e?this.reconnected?.():this.disconnected?.()),o&&(P(this,e),j(this))}setValue(e){if(ot(this._$Ct))this._$Ct._$AI(e,this);else{const o=[...this._$Ct._$AH];o[this._$Ci]=e,this._$Ct._$AI(o,this,0)}}disconnected(){}reconnected(){}}const{component:H}=ut({render:V}),W=B(S`
 	/*
 	 * Use border-box sizing for all elements.
 	 * This is safe and doesn't conflict with child component styles.
@@ -208,7 +208,7 @@ import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E 
 	[hidden]:where(:not([hidden='until-found'])) {
 		display: none !important;
 	}
-`),j=new WeakMap,O=F(class extends Y{render(t){return T}update(t,[e]){const o=e!==this.G;return o&&this.G!==void 0&&this.rt(void 0),(o||this.lt!==this.ct)&&(this.G=e,this.ht=t.options?.host,this.rt(this.ct=t.element)),T}rt(t){if(this.isConnected||(t=void 0),typeof this.G=="function"){const e=this.ht??globalThis;let o=j.get(e);o===void 0&&(o=new WeakMap,j.set(e,o)),o.get(this.G)!==void 0&&this.G.call(this.ht,void 0),o.set(this.G,t),t!==void 0&&this.G.call(this.ht,t)}else this.G.value=t}get lt(){return typeof this.G=="function"?j.get(this.ht??globalThis)?.get(this.G):this.G?.value}disconnected(){this.lt===this.ct&&this.rt(void 0)}reconnected(){this.rt(this.ct)}});function L(t,e,o){return t?e(t):o?.(t)}const vt=A`
+`),F=new WeakMap,N=q(class extends Q{render(t){return I}update(t,[e]){const o=e!==this.G;return o&&this.G!==void 0&&this.rt(void 0),(o||this.lt!==this.ct)&&(this.G=e,this.ht=t.options?.host,this.rt(this.ct=t.element)),I}rt(t){if(this.isConnected||(t=void 0),typeof this.G=="function"){const e=this.ht??globalThis;let o=F.get(e);o===void 0&&(o=new WeakMap,F.set(e,o)),o.get(this.G)!==void 0&&this.G.call(this.ht,void 0),o.set(this.G,t),t!==void 0&&this.G.call(this.ht,t)}else this.G.value=t}get lt(){return typeof this.G=="function"?F.get(this.ht??globalThis)?.get(this.G):this.G?.value}disconnected(){this.lt===this.ct&&this.rt(void 0)}reconnected(){this.rt(this.ct)}});function M(t,e,o){return t?e(t):o?.(t)}const gt=S`
 	:host {
 		display: flex;
 		flex-direction: column;
@@ -223,11 +223,11 @@ import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E 
 	::slotted([slot='description']) {
 		margin: 0;
 	}
-`;customElements.define("cosmoz-tooltip-content",M(()=>z`
+`;customElements.define("cosmoz-tooltip-content",H(()=>z`
 			<slot name="heading"></slot>
 			<slot name="description"></slot>
 			<slot></slot>
-		`,{styleSheets:[B,vt]}));const U=G(A`
+		`,{styleSheets:[W,gt]}));const Y=B(S`
 	.cosmoz-tooltip-popover {
 		position: fixed;
 		inset: unset;
@@ -289,10 +289,10 @@ import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E 
 			transition: none;
 		}
 	}
-`),Q=(t,e,o)=>K(z`<cosmoz-tooltip-content>
-			${L(e,()=>z`<strong slot="heading">${e}</strong>`)}
-			${L(o,()=>z`<p slot="description">${o}</p>`)}
-		</cosmoz-tooltip-content>`,t),bt=(t,e)=>{const{for:o,heading:r,description:n,placement:a="top",delay:d=300,disabled:u=!1}=e,h=E(),y=!!(r||n)&&!u;k(()=>{if(!o||!y)return;const i=t.getRootNode(),f=i.adoptedStyleSheets??[];f.includes(U)||(i.adoptedStyleSheets=[...f,U]);const c=document.createElement("div");c.setAttribute("popover","manual"),c.setAttribute("role","tooltip"),c.classList.add("cosmoz-tooltip-popover"),t.after(c),h.current=c,Q(c,r,n);const w=`[name="${o}"]`,g=`--tooltip-anchor-${o}`;let l;const p=s=>{u||(clearTimeout(l),s.style.anchorName=g,c.style.positionAnchor=g,c.style.positionArea=a,l=window.setTimeout(()=>c.showPopover(),d))},b=()=>{clearTimeout(l),c.hidePopover()},v=s=>{const x=s.target.closest?.(w);x&&p(x)},R=s=>{const x=s.target.closest?.(w);if(!x)return;const S=s.relatedTarget;S&&x.contains(S)||b()},P=s=>{const x=s.target.closest?.(w);x&&p(x)},D=s=>{s.target.closest?.(w)&&b()};return i.addEventListener("pointerover",v),i.addEventListener("pointerout",R),i.addEventListener("focusin",P),i.addEventListener("focusout",D),()=>{clearTimeout(l),i.removeEventListener("pointerover",v),i.removeEventListener("pointerout",R),i.removeEventListener("focusin",P),i.removeEventListener("focusout",D),c.hidePopover(),c.remove(),h.current=void 0}},[o,a,d,y]),k(()=>{!o||!h.current||Q(h.current,r,n)},[r,n,o]),k(()=>{!u||!h.current||h.current.hidePopover()},[u])},ft=t=>{const[e,o]=tt(!1);return k(()=>{const r=t.current;if(!r)return;const n=()=>{o(r.assignedElements().length>0)};return n(),r.addEventListener("slotchange",n),()=>r.removeEventListener("slotchange",n)},[t.current]),e},gt=A`
+`),Z=(t,e,o)=>V(z`<cosmoz-tooltip-content>
+			${M(e,()=>z`<strong slot="heading">${e}</strong>`)}
+			${M(o,()=>z`<p slot="description">${o}</p>`)}
+		</cosmoz-tooltip-content>`,t),mt=(t,e)=>{const{for:o,heading:r,description:n,placement:a="top",delay:d=300,disabled:u=!1}=e,h=A(),y=!!(r||n)&&!u;_(()=>{if(!o||!y)return;const i=t.getRootNode(),f=i.adoptedStyleSheets??[];f.includes(Y)||(i.adoptedStyleSheets=[...f,Y]);const c=document.createElement("div");c.setAttribute("popover","manual"),c.setAttribute("role","tooltip"),c.classList.add("cosmoz-tooltip-popover"),t.after(c),h.current=c,Z(c,r,n);const w=`[name="${o}"]`,g=`--tooltip-anchor-${o}`;let l;const p=x=>{u||(clearTimeout(l),x.style.anchorName=g,c.style.positionAnchor=g,c.style.positionArea=a,l=window.setTimeout(()=>c.showPopover(),d))},b=()=>{clearTimeout(l),c.hidePopover()},v=x=>{const k=x.target.closest?.(w);k&&p(k)},C=x=>{const k=x.target.closest?.(w);if(!k)return;const U=x.relatedTarget;U&&k.contains(U)||b()},T=x=>{const k=x.target.closest?.(w);k&&p(k)},L=x=>{x.target.closest?.(w)&&b()};return i.addEventListener("pointerover",v),i.addEventListener("pointerout",C),i.addEventListener("focusin",T),i.addEventListener("focusout",L),()=>{clearTimeout(l),i.removeEventListener("pointerover",v),i.removeEventListener("pointerout",C),i.removeEventListener("focusin",T),i.removeEventListener("focusout",L),c.hidePopover(),c.remove(),h.current=void 0}},[o,a,d,y]),_(()=>{!o||!h.current||Z(h.current,r,n)},[r,n,o]),_(()=>{!u||!h.current||h.current.hidePopover()},[u])},zt=t=>{const[e,o]=rt(!1);return _(()=>{const r=t.current;if(!r)return;const n=()=>{o(r.assignedElements().length>0)};return n(),r.addEventListener("slotchange",n),()=>r.removeEventListener("slotchange",n)},[t.current]),e},yt=S`
 	:host {
 		display: inline-block;
 		anchor-name: --tooltip-anchor;
@@ -306,25 +306,25 @@ import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E 
 	.cosmoz-tooltip-popover {
 		position-anchor: --tooltip-anchor;
 	}
-`,mt=t=>{const{heading:e,description:o,for:r,placement:n="top",delay:a=300,disabled:d=!1}=t,u=E(),h=E(),m=E(),y=ft(m),f=!!(e||o||y)&&!d,c=$(()=>{f&&(clearTimeout(h.current),h.current=window.setTimeout(()=>{u.current?.showPopover()},a))},[a,f]);k(()=>{d&&(clearTimeout(h.current),u.current?.hidePopover())},[d]);const w=$(()=>{clearTimeout(h.current),u.current?.hidePopover()},[]);return k(()=>{if(r)return;const g=l=>{const p=l.relatedTarget;p&&t.contains(p)||w()};return t.addEventListener("pointerover",c),t.addEventListener("pointerout",g),()=>{t.removeEventListener("pointerover",c),t.removeEventListener("pointerout",g)}},[r,c,w]),bt(t,{for:r,heading:e,description:o,placement:n,delay:a,disabled:d}),r?T:f?z`
+`,wt=t=>{const{heading:e,description:o,for:r,placement:n="top",delay:a=300,disabled:d=!1}=t,u=A(),h=A(),m=A(),y=zt(m),f=!!(e||o||y)&&!d,c=$(()=>{f&&(clearTimeout(h.current),h.current=window.setTimeout(()=>{u.current?.showPopover()},a))},[a,f]);_(()=>{d&&(clearTimeout(h.current),u.current?.hidePopover())},[d]);const w=$(()=>{clearTimeout(h.current),u.current?.hidePopover()},[]);return _(()=>{if(r)return;const g=l=>{const p=l.relatedTarget;p&&t.contains(p)||w()};return t.addEventListener("pointerover",c),t.addEventListener("pointerout",g),()=>{t.removeEventListener("pointerover",c),t.removeEventListener("pointerout",g)}},[r,c,w]),mt(t,{for:r,heading:e,description:o,placement:n,delay:a,disabled:d}),r?I:f?z`
 		<slot @focusin=${c} @focusout=${w}></slot>
 		<div
 			class="cosmoz-tooltip-popover"
 			popover="manual"
 			role="tooltip"
 			style="position-area: ${n}"
-			${O(u)}
+			${N(u)}
 		>
 			<cosmoz-tooltip-content>
-				${L(e,()=>z`<strong slot="heading">${e}</strong>`)}
-				${L(o,()=>z`<p slot="description">${o}</p>`)}
-				<slot name="content" ${O(m)}></slot>
+				${M(e,()=>z`<strong slot="heading">${e}</strong>`)}
+				${M(o,()=>z`<p slot="description">${o}</p>`)}
+				<slot name="content" ${N(m)}></slot>
 			</cosmoz-tooltip-content>
 		</div>
 	`:z`
 			<slot></slot>
-			<slot name="content" ${O(m)} hidden></slot>
-		`};customElements.define("cosmoz-tooltip",M(mt,{styleSheets:[B,U,gt],observedAttributes:["heading","description","for","placement","delay","disabled"]}));const _=t=>t??T,zt=A`
+			<slot name="content" ${N(m)} hidden></slot>
+		`};customElements.define("cosmoz-tooltip",H(wt,{styleSheets:[W,Y,yt],observedAttributes:["heading","description","for","placement","delay","disabled"]}));const E=t=>t??I,xt=S`
 	:host {
 		display: inline-flex;
 	}
@@ -693,21 +693,21 @@ import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E 
 		height: 20px;
 		flex-shrink: 0;
 	}
-`,yt=["variant","size","disabled","full-width","icon-only","tooltip","tooltip-placement","type","value","href","target","rel","download","aria-expanded","aria-label","aria-pressed"],wt=t=>{const{disabled:e=!1,tooltip:o,tooltipPlacement:r,type:n="button",href:a,target:d,rel:u,download:h}=t,m=!!e;k(()=>{const f=c=>{t.disabled&&c.stopImmediatePropagation()};return t.addEventListener("click",f,{capture:!0}),()=>t.removeEventListener("click",f,{capture:!0})},[t.disabled]);const y=z`
+`,$t=["variant","size","disabled","full-width","icon-only","tooltip","tooltip-placement","type","value","href","target","rel","download","aria-expanded","aria-label","aria-pressed"],kt=t=>{const{disabled:e=!1,tooltip:o,tooltipPlacement:r,type:n="button",href:a,target:d,rel:u,download:h}=t,m=!!e;_(()=>{const f=c=>{t.disabled&&c.stopImmediatePropagation()};return t.addEventListener("click",f,{capture:!0}),()=>t.removeEventListener("click",f,{capture:!0})},[t.disabled]);const y=z`
 		<slot name="prefix"></slot>
 		<slot></slot>
 		<slot name="suffix"></slot>
-	`,i=L(a!=null,()=>z`
+	`,i=M(a!=null,()=>z`
 			<a
 				href=${a}
 				class="button"
 				part="button"
-				aria-disabled=${m?"true":T}
-				aria-expanded=${_(t.getAttribute("aria-expanded")??void 0)}
-				aria-label=${_(t.getAttribute("aria-label")??void 0)}
-				target=${_(d)}
-				rel=${_(u)}
-				download=${_(h)}
+				aria-disabled=${m?"true":I}
+				aria-expanded=${E(t.getAttribute("aria-expanded")??void 0)}
+				aria-label=${E(t.getAttribute("aria-label")??void 0)}
+				target=${E(d)}
+				rel=${E(u)}
+				download=${E(h)}
 				>${y}</a
 			>
 		`,()=>z`
@@ -716,19 +716,19 @@ import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E 
 				class="button"
 				part="button"
 				?disabled=${m}
-				aria-expanded=${_(t.getAttribute("aria-expanded")??void 0)}
-				aria-label=${_(t.getAttribute("aria-label")??void 0)}
-				aria-pressed=${_(t.getAttribute("aria-pressed")??void 0)}
+				aria-expanded=${E(t.getAttribute("aria-expanded")??void 0)}
+				aria-label=${E(t.getAttribute("aria-label")??void 0)}
+				aria-pressed=${E(t.getAttribute("aria-pressed")??void 0)}
 			>
 				${y}
 			</button>
 		`);return z`<cosmoz-tooltip
-		heading=${_(o??void 0)}
-		placement=${_(r??void 0)}
+		heading=${E(o??void 0)}
+		placement=${E(r??void 0)}
 		?disabled=${m}
 	>
 		${i}
-	</cosmoz-tooltip>`};customElements.define("cosmoz-button",M(wt,{observedAttributes:yt,styleSheets:[B,zt],shadowRootInit:{mode:"open",delegatesFocus:!0}}));class xt extends Y{_slot;_ref;#e=()=>{!this._slot||!this._ref||(this._ref.current=this._slot.assignedElements({flatten:!0}))};#t=()=>this.#e();update(e,[o]){this._ref=o;const r=e.element;this._slot!==r&&(this._slot?.removeEventListener("slotchange",this.#t),this._slot=r,r.addEventListener("slotchange",this.#t)),this.#e()}disconnected(){this._slot?.removeEventListener("slotchange",this.#t),this._slot=void 0}render(e){return H}}const W=F(xt),$t=(t,...e)=>typeof t=="function"?t(...e):t,kt=(t,e,o)=>{o==null?t.removeAttribute(e):t.setAttribute(e,o)},_t=(t,e)=>{for(const[o,r]of Object.entries(t))kt(e,o,$t(r,e))};class Et extends Y{_slot;_attrs;#e=()=>{if(!this._slot||!this._attrs)return;const e=this._slot.assignedElements({flatten:!0});for(const o of e)_t(this._attrs,o)};#t=()=>this.#e();render(e){return H}update(e,[o]){this._attrs=o;const r=e.element;return this._slot!==r&&(this._slot?.removeEventListener("slotchange",this.#t),this._slot=r,r.addEventListener("slotchange",this.#t)),this.#e(),H}disconnected(){this._slot?.removeEventListener("slotchange",this.#t),this._slot=void 0}}const At=F(Et),St=t=>{const e=N(()=>({}),[]);return N(()=>Object.assign(e,t),[e,...Object.values(t)])},Ct=t=>{for(const e of t.current??[]){const o=e.matches("[autofocus]")?e:e.querySelector("[autofocus]");if(o instanceof HTMLElement){o.focus();break}}},Tt=t=>{const{placement:e="bottom span-right",disabled:o,passthrough:r,openOnHover:n,openOnFocus:a}=t,d=E(),[u,h]=et("opened",!1),m=E(),y=E(),i=St({disabled:o,openOnHover:n}),f=$(()=>{const s=m.current?.[0];return s instanceof HTMLElement?s:void 0},[]),c=$(()=>{i.disabled||(h(!0),d.current?.showPopover?.())},[]),w=$(()=>{h(!1),d.current?.hidePopover?.()},[]),g=$(()=>{d.current?.matches(":popover-open")?w():c()},[]),l=$(()=>{clearTimeout(i.closeTimeout)},[]),p=$(s=>{i.disabled||s.target===f()&&(l(),c())},[]),b=$(()=>{i.disabled||(l(),c())},[]),v=$(()=>{clearTimeout(i.closeTimeout),i.closeTimeout=setTimeout(()=>{const s=d.current;i.openOnHover&&(t.matches(":hover")||s?.matches(":hover"))||(i.openOnHover?t.matches(":has(:focus-visible)"):t.matches(":focus-within")||s?.matches(":focus-within"))||w()},100)},[]),R=$(()=>{let s=document.activeElement;for(;s?.shadowRoot;)s=s.shadowRoot.activeElement;if(!(s==null||s===document.body||s.offsetParent==null))return;const S=f();S&&(t.removeEventListener("focusin",p),S.focus(),t.addEventListener("focusin",p))},[]),P=$(s=>{const x=s.newState==="open";h(x),x?Ct(y):R(),t.dispatchEvent(new ToggleEvent("dropdown-toggle",{newState:s.newState,oldState:s.oldState,composed:!0}))},[]);return k(()=>{const s=d.current;s&&(u?s.showPopover?.():s.hidePopover?.())},[u]),k(()=>{t.toggleAttribute("opened",!!u)},[u]),k(()=>{if(!(!a||o))return t.addEventListener("focusin",p),t.addEventListener("focusout",v),()=>{t.removeEventListener("focusin",p),t.removeEventListener("focusout",v)}},[a,o]),k(()=>{if(!(!n||o))return t.addEventListener("pointerenter",b),t.addEventListener("pointerleave",v),()=>{t.removeEventListener("pointerenter",b),t.removeEventListener("pointerleave",v)}},[n,o]),{placement:e,disabled:o,passthrough:r,opened:u,triggers:m,content:y,popoverRef:d,handleClick:a?c:g,onToggle:P,close:w,scheduleClose:v,cancelClose:l}},Lt=A`
+	</cosmoz-tooltip>`};customElements.define("cosmoz-button",H(kt,{observedAttributes:$t,styleSheets:[W,xt],shadowRootInit:{mode:"open",delegatesFocus:!0}}));class _t extends Q{_slot;_ref;#e=()=>{!this._slot||!this._ref||(this._ref.current=this._slot.assignedElements({flatten:!0}))};#t=()=>this.#e();update(e,[o]){this._ref=o;const r=e.element;this._slot!==r&&(this._slot?.removeEventListener("slotchange",this.#t),this._slot=r,r.addEventListener("slotchange",this.#t)),this.#e()}disconnected(){this._slot?.removeEventListener("slotchange",this.#t),this._slot=void 0}render(e){return G}}const J=q(_t),Et=(t,...e)=>typeof t=="function"?t(...e):t,At=(t,e,o)=>{o==null?t.removeAttribute(e):t.setAttribute(e,o)},St=(t,e)=>{for(const[o,r]of Object.entries(t))At(e,o,Et(r,e))};class Ct extends Q{_slot;_attrs;#e=()=>{if(!this._slot||!this._attrs)return;const e=this._slot.assignedElements({flatten:!0});for(const o of e)St(this._attrs,o)};#t=()=>this.#e();render(e){return G}update(e,[o]){this._attrs=o;const r=e.element;return this._slot!==r&&(this._slot?.removeEventListener("slotchange",this.#t),this._slot=r,r.addEventListener("slotchange",this.#t)),this.#e(),G}disconnected(){this._slot?.removeEventListener("slotchange",this.#t),this._slot=void 0}}const Tt=q(Ct),Lt=t=>{const e=D(()=>({}),[]);return D(()=>Object.assign(e,t),[e,...Object.values(t)])},O=150,Rt=O+100,Ot=t=>{for(const e of t.current??[]){const o=e.matches("[autofocus]")?e:e.querySelector("[autofocus]");if(o instanceof HTMLElement){o.focus();break}}},Pt=t=>{const{placement:e="bottom span-right",disabled:o,passthrough:r,openOnHover:n,openOnFocus:a}=t,d=A(),[u,h]=nt("opened",!1),m=A(),y=A(),i=Lt({disabled:o,openOnHover:n}),f=$(()=>{const s=m.current?.[0];return s instanceof HTMLElement?s:void 0},[]),c=$(()=>{i.disabled||(h(!0),d.current?.showPopover?.())},[]),w=$(()=>{h(!1),d.current?.hidePopover?.()},[]),g=$(()=>{d.current?.matches(":popover-open")?w():c()},[]),l=$(()=>{clearTimeout(i.closeTimeout)},[]),p=$(s=>{i.disabled||s.target===f()&&(l(),c())},[]),b=$(()=>{i.disabled||(l(),c())},[]),v=$(()=>{clearTimeout(i.closeTimeout),i.closeTimeout=setTimeout(()=>{const s=d.current;i.openOnHover&&(t.matches(":hover")||s?.matches(":hover"))||(i.openOnHover?t.matches(":has(:focus-visible)"):t.matches(":focus-within")||s?.matches(":focus-within"))||w()},100)},[]),C=()=>{const s=f();s&&(t.removeEventListener("focusin",p),s.focus(),t.addEventListener("focusin",p))},T=s=>s==null||s===document.body||s.offsetParent==null,L=()=>{let s=document.activeElement;for(;s?.shadowRoot;)s=s.shadowRoot.activeElement;return s},x=$(()=>{if(T(L())){C();return}const s=performance.now(),R=()=>{if(!(performance.now()-s>Rt)){if(T(L()))return C();requestAnimationFrame(R)}};requestAnimationFrame(R)},[]),k=$(s=>{const R=s.newState==="open";h(R),R?Ot(y):x(),t.dispatchEvent(new ToggleEvent("dropdown-toggle",{newState:s.newState,oldState:s.oldState,composed:!0}))},[]);return _(()=>{const s=d.current;s&&(u?s.showPopover?.():s.hidePopover?.())},[u]),_(()=>{t.toggleAttribute("opened",!!u)},[u]),_(()=>{if(!(!a||o))return t.addEventListener("focusin",p),t.addEventListener("focusout",v),()=>{t.removeEventListener("focusin",p),t.removeEventListener("focusout",v)}},[a,o]),_(()=>{if(!(!n||o))return t.addEventListener("pointerenter",b),t.addEventListener("pointerleave",v),()=>{t.removeEventListener("pointerenter",b),t.removeEventListener("pointerleave",v)}},[n,o]),{placement:e,disabled:o,passthrough:r,opened:u,triggers:m,content:y,popoverRef:d,handleClick:a?c:g,onToggle:k,close:w,scheduleClose:v,cancelClose:l}},It=S`
 	:host {
 		display: inline-block;
 		anchor-name: --dropdown-anchor;
@@ -756,10 +756,10 @@ import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E 
 		/* overlay/display transitions need allow-discrete to animate
 		 * between display:none and display:block */
 		transition:
-			opacity 150ms ease-out,
-			transform 150ms ease-out,
-			overlay 150ms ease-out allow-discrete,
-			display 150ms ease-out allow-discrete;
+			opacity ${O}ms ease-out,
+			transform ${O}ms ease-out,
+			overlay ${O}ms ease-out allow-discrete,
+			display ${O}ms ease-out allow-discrete;
 	}
 
 	@starting-style {
@@ -779,11 +779,11 @@ import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E 
 			transition: none;
 		}
 	}
-`,Rt=({placement:t,disabled:e,passthrough:o,opened:r,triggers:n,content:a,popoverRef:d,handleClick:u,onToggle:h,close:m,scheduleClose:y,cancelClose:i})=>z`
+`,Mt=({placement:t,disabled:e,passthrough:o,opened:r,triggers:n,content:a,popoverRef:d,handleClick:u,onToggle:h,close:m,scheduleClose:y,cancelClose:i})=>z`
 		<slot
 			name="button"
-			${W(n)}
-			${At({"aria-expanded":o?null:String(r),disabled:e&&!o?"":null})}
+			${J(n)}
+			${Tt({"aria-expanded":o?null:String(r),disabled:e&&!o?"":null})}
 			@click=${u}
 		></slot>
 		${e&&o?z`<slot></slot>`:z`<div
@@ -793,8 +793,8 @@ import{B as J,d as V,e as q,c as N,r as X,D as K,A as T,b as z,a as k,u as tt,E 
 					@select=${m}
 					@focusout=${y}
 					@focusin=${i}
-					${O(f=>f&&(d.current=f))}
+					${N(f=>f&&(d.current=f))}
 				>
-					<slot ${W(a)}></slot>
+					<slot ${J(a)}></slot>
 				</div>`}
-	`,Pt=t=>Rt(Tt(t));customElements.define("cosmoz-dropdown-next",M(Pt,{styleSheets:[Lt],observedAttributes:["placement","disabled","passthrough","open-on-hover","open-on-focus"],shadowRootInit:{mode:"open",delegatesFocus:!0}}));export{M as a,St as b,A as c,$ as d,F as e,dt as i,O as n,lt as t,E as u};
+	`,Nt=t=>Mt(Pt(t));customElements.define("cosmoz-dropdown-next",H(Nt,{styleSheets:[It],observedAttributes:["placement","disabled","passthrough","open-on-hover","open-on-focus"],shadowRootInit:{mode:"open",delegatesFocus:!0}}));export{H as a,Lt as b,S as c,$ as d,q as e,pt as i,N as n,ht as t,A as u};
