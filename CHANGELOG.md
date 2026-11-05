@@ -1,3 +1,9 @@
+## 8.1.1
+
+### Patch Changes
+
+- 4fbb358: `cosmoz-dropdown-next` with `open-on-hover` now closes when the pointer leaves, even if a click left focus on the trigger. Keyboard focus still keeps it open.
+
 ## 8.1.0
 
 ### Minor Changes
