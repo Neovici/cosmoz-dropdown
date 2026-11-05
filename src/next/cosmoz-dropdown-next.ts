@@ -70,6 +70,7 @@ interface DropdownNextState {
 	triggers: { current?: Element[] };
 	content: { current?: Element[] };
 	popoverRef: { current?: HTMLElement };
+	handlePointerDown: () => void;
 	handleClick: () => void;
 	onToggle: (e: ToggleEvent) => void;
 	close: () => void;
@@ -85,6 +86,7 @@ const renderCosmozDropdownNext = ({
 	triggers,
 	content,
 	popoverRef,
+	handlePointerDown,
 	handleClick,
 	onToggle,
 	close,
@@ -101,6 +103,7 @@ const renderCosmozDropdownNext = ({
 				'aria-expanded': passthrough ? null : String(opened),
 				disabled: disabled && !passthrough ? '' : null,
 			})}
+			@pointerdown=${handlePointerDown}
 			@click=${handleClick}
 		></slot>
 		${disabled && passthrough
