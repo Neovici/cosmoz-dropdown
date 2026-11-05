@@ -119,7 +119,12 @@ export const useCosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 			) {
 				return;
 			}
-			if (host.matches(':focus-within') || popover?.matches(':focus-within')) {
+			// In hover mode, focus a click left behind does not hold it open; keyboard focus does.
+			if (
+				meta.openOnHover
+					? host.matches(':has(:focus-visible)')
+					: host.matches(':focus-within') || popover?.matches(':focus-within')
+			) {
 				return;
 			}
 			close();
