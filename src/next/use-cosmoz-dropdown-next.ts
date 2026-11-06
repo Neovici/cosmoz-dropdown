@@ -75,6 +75,7 @@ export const useCosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		disabled?: boolean;
 		openOnHover?: boolean;
 		closeTimeout?: ReturnType<typeof setTimeout>;
+		openAtPointerDown?: boolean;
 	}>({ disabled, openOnHover });
 
 	const findTrigger = useCallback((): HTMLElement | undefined => {
@@ -93,9 +94,20 @@ export const useCosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		popoverRef.current?.hidePopover?.();
 	}, []);
 
-	const toggle = useCallback(() => {
-		const popover = popoverRef.current;
-		if (popover?.matches(':popover-open')) close();
+	const isOpen = () => !!popoverRef.current?.matches(':popover-open');
+
+	// Read the state at pointerdown: light dismiss closes the popover on
+	// pointerup and focus may open it, both before the click lands.
+	const handlePointerDown = useCallback(() => {
+		meta.openAtPointerDown = isOpen();
+	}, []);
+
+	const handleClick = useCallback(() => {
+		const atPointerDown = meta.openAtPointerDown;
+		meta.openAtPointerDown = undefined;
+		// In hover mode the pointer already opened it; only keyboard clicks close
+		const hovered = meta.openOnHover && atPointerDown !== undefined;
+		if ((atPointerDown ?? isOpen()) && !hovered) close();
 		else open();
 	}, []);
 
@@ -235,10 +247,6 @@ export const useCosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		};
 	}, [openOnHover, disabled]);
 
-	// With open-on-focus, only open (not toggle) on click to avoid racing
-	// with the focusin handler
-	const handleClick = openOnFocus ? open : toggle;
-
 	return {
 		placement,
 		disabled,
@@ -247,6 +255,7 @@ export const useCosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		triggers,
 		content,
 		popoverRef,
+		handlePointerDown,
 		handleClick,
 		onToggle,
 		close,
