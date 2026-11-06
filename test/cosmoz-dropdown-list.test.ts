@@ -1,7 +1,8 @@
-import { expect, fixture, html } from '@open-wc/testing';
+import { expect, fixture, html, waitUntil } from '@open-wc/testing';
 import { sendKeys } from '@web/test-runner-commands';
 
 import '../src/cosmoz-dropdown-menu.js';
+import '../src/next/cosmoz-dropdown-next.js';
 
 describe('cosmoz-dropdown-list keyboard', () => {
 	let items: HTMLElement[];
@@ -82,5 +83,48 @@ describe('cosmoz-dropdown-list keyboard with unfocusable items', () => {
 		expect(document.activeElement).to.equal(one);
 		await sendKeys({ press: 'ArrowUp' });
 		expect(document.activeElement).to.equal(three);
+	});
+});
+
+// Like cosmoz-bottom-bar: the items are slotted through the host's shadow
+// root, so the dropdown's own [autofocus] search can't see them.
+customElements.define(
+	'slotted-menu',
+	class extends HTMLElement {
+		constructor() {
+			super();
+			this.attachShadow({ mode: 'open' }).innerHTML = `
+				<cosmoz-dropdown-next>
+					<button slot="button">More</button>
+					<div><cosmoz-dropdown-list autofocus><slot></slot></cosmoz-dropdown-list></div>
+				</cosmoz-dropdown-next>`;
+		}
+	},
+);
+
+describe('cosmoz-dropdown-list autofocus', () => {
+	it('focuses the first enabled item when the dropdown opens', async () => {
+		const el = await fixture(html`
+			<slotted-menu>
+				<button disabled>One</button>
+				<button>Two</button>
+				<button>Three</button>
+			</slotted-menu>
+		`);
+		const [, two, three] = el.querySelectorAll('button');
+		el.shadowRoot!.querySelector<HTMLElement>('[slot="button"]')!.focus();
+		await sendKeys({ press: 'Enter' });
+		await waitUntil(() => document.activeElement === two);
+		await sendKeys({ press: 'ArrowDown' });
+		expect(document.activeElement).to.equal(three);
+	});
+
+	it('does nothing when no item is enabled', async () => {
+		const list = await fixture<HTMLElement>(html`
+			<cosmoz-dropdown-list><button disabled>One</button></cosmoz-dropdown-list>
+		`);
+		const before = document.activeElement;
+		list.focus();
+		expect(document.activeElement).to.equal(before);
 	});
 });
