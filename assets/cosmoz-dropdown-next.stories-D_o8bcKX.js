@@ -1,4 +1,4 @@
-import"./cosmoz-dropdown-next-DX2_7onz.js";import{b as c}from"./iframe-C3i6rEj8.js";/* empty css                             */import"./preload-helper-PPVm8Dsz.js";const{expect:o,userEvent:T,waitFor:r}=__STORYBOOK_MODULE_TEST__,I={title:"Tests/Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["!autodocs"],args:{placement:"bottom span-right"}},a=t=>t.shadowRoot.querySelector("[popover]"),i={render:t=>c`
+import"./cosmoz-dropdown-next-equjhwPq.js";import{b as c}from"./iframe-phQsJPsh.js";/* empty css                             */import"./preload-helper-PPVm8Dsz.js";const{expect:o,userEvent:T,waitFor:r}=__STORYBOOK_MODULE_TEST__,I={title:"Tests/Cosmoz Dropdown Next",component:"cosmoz-dropdown-next",tags:["!autodocs"],args:{placement:"bottom span-right"}},a=t=>t.shadowRoot.querySelector("[popover]"),i={render:t=>c`
         <cosmoz-dropdown-next placement=${t.placement}>
             <cosmoz-button slot="button">Toggle</cosmoz-button>
             <div class="dropdown-content">
