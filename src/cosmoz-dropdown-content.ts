@@ -10,7 +10,10 @@ const style = css`
 		box-sizing: border-box;
 		padding: var(--cosmoz-dropdown-spacing, 0px);
 		z-index: var(--cosmoz-dropdown-z-index, 2);
-		border-radius: var(--cosmoz-dropdown-border-radius, 15px);
+		border-radius: var(
+			--cosmoz-dropdown-border-radius,
+			var(--cz-radius-surface, 15px)
+		);
 	}
 	:host(:popover-open) {
 		margin: 0;
@@ -24,7 +27,10 @@ const style = css`
 			var(--cz-color-bg-primary)
 		);
 		box-shadow: var(--cosmoz-dropdown-box-shadow, var(--cz-shadow-sm));
-		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
+		border-radius: var(
+			--cosmoz-dropdown-border-radius,
+			var(--cz-radius-surface, var(--cz-radius-sm))
+		);
 	}
 	::slotted(*) {
 		display: block;

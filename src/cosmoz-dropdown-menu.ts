@@ -12,7 +12,10 @@ const style = css`
 		);
 		overflow-y: auto;
 		padding: var(--cz-spacing) calc(var(--cz-spacing) * 1.5);
-		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
+		border-radius: var(
+			--cosmoz-dropdown-border-radius,
+			var(--cz-radius-surface, var(--cz-radius-sm))
+		);
 		border: 1px solid
 			var(--cosmoz-dropdown-menu-border-color, var(--cz-color-border-primary));
 	}
@@ -21,7 +24,10 @@ const style = css`
 		--paper-button_-_display: block;
 		box-sizing: border-box;
 		padding: calc(var(--cz-spacing) * 2) calc(var(--cz-spacing) * 2.5);
-		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
+		border-radius: var(
+			--cosmoz-dropdown-border-radius,
+			var(--cz-radius-item, var(--cz-radius-sm))
+		);
 		background: var(--cosmoz-dropdown-menu-bg-color, transparent);
 		color: var(--cosmoz-dropdown-menu-color, var(--cz-color-text-primary));
 		transition:
@@ -55,6 +61,7 @@ const style = css`
 		padding: 0;
 		background: none;
 		--cosmoz-button-justify-content: flex-start;
+		--cosmoz-button-border-radius: var(--cz-radius-item, var(--cz-radius-md));
 	}
 
 	::slotted([variant][disabled]) {
