@@ -71,7 +71,7 @@ interface DropdownNextState {
 	content: { current?: Element[] };
 	popoverRef: { current?: HTMLElement };
 	handlePointerDown: () => void;
-	handleClick: () => void;
+	handleClick: (event: MouseEvent) => void;
 	onToggle: (e: ToggleEvent) => void;
 	close: () => void;
 	scheduleClose: () => void;

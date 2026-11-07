@@ -102,7 +102,19 @@ export const useCosmozDropdownNext = (host: HTMLElement & DropdownProps) => {
 		meta.openAtPointerDown = isOpen();
 	}, []);
 
-	const handleClick = useCallback(() => {
+	const handleClick = useCallback((event: MouseEvent) => {
+		const path = event.composedPath();
+		// A label forwards activation to its control; toggle on that click only.
+		if (
+			path.some(
+				(el) =>
+					el instanceof HTMLLabelElement &&
+					el.control &&
+					!path.includes(el.control),
+			)
+		) {
+			return;
+		}
 		const atPointerDown = meta.openAtPointerDown;
 		meta.openAtPointerDown = undefined;
 		// In hover mode the pointer already opened it; only keyboard clicks close
