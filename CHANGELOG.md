@@ -1,3 +1,13 @@
+## 8.3.0
+
+### Minor Changes
+
+- 6bac503: `cosmoz-dropdown-list`'s `focus()` focuses its first enabled item. With `<cosmoz-dropdown-list autofocus>` inside a `cosmoz-dropdown-next`, opening the dropdown puts focus on the first item even when the items are slotted in from further out, as in cosmoz-bottom-bar's actions menu.
+
+### Patch Changes
+
+- fd01f4e: `cosmoz-dropdown-next` now closes when the open trigger is clicked again, also with `open-on-focus`. Before, light dismiss closed it on pointerup and the click reopened it. With `open-on-hover` a click still only opens.
+
 ## 8.2.0
 
 ### Minor Changes
