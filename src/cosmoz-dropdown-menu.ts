@@ -25,7 +25,7 @@ const style = css`
 		box-sizing: border-box;
 		padding: calc(var(--cz-spacing) * 2) calc(var(--cz-spacing) * 2.5);
 		border-radius: var(
-			--cosmoz-dropdown-border-radius,
+			--cosmoz-dropdown-item-border-radius,
 			var(--cz-radius-item, var(--cz-radius-sm))
 		);
 		background: var(--cosmoz-dropdown-menu-bg-color, transparent);
