@@ -14,7 +14,7 @@ const style = css`
 		padding: var(--cz-spacing) calc(var(--cz-spacing) * 1.5);
 		border-radius: var(
 			--cosmoz-dropdown-border-radius,
-			var(--cz-radius-surface, var(--cz-radius-sm))
+			var(--cz-radius-card, var(--cz-radius-sm))
 		);
 		border: 1px solid
 			var(--cosmoz-dropdown-menu-border-color, var(--cz-color-border-primary));
@@ -26,7 +26,7 @@ const style = css`
 		padding: calc(var(--cz-spacing) * 2) calc(var(--cz-spacing) * 2.5);
 		border-radius: var(
 			--cosmoz-dropdown-item-border-radius,
-			var(--cz-radius-item, var(--cz-radius-sm))
+			var(--cz-radius-compact, var(--cz-radius-sm))
 		);
 		background: var(--cosmoz-dropdown-menu-bg-color, transparent);
 		color: var(--cosmoz-dropdown-menu-color, var(--cz-color-text-primary));
@@ -61,7 +61,10 @@ const style = css`
 		padding: 0;
 		background: none;
 		--cosmoz-button-justify-content: flex-start;
-		--cosmoz-button-border-radius: var(--cz-radius-item, var(--cz-radius-md));
+		--cosmoz-button-border-radius: var(
+			--cz-radius-compact,
+			var(--cz-radius-md)
+		);
 	}
 
 	::slotted([variant][disabled]) {

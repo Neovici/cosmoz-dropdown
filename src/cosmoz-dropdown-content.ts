@@ -12,7 +12,7 @@ const style = css`
 		z-index: var(--cosmoz-dropdown-z-index, 2);
 		border-radius: var(
 			--cosmoz-dropdown-border-radius,
-			var(--cz-radius-surface, 15px)
+			var(--cz-radius-card, 15px)
 		);
 	}
 	:host(:popover-open) {
@@ -29,7 +29,7 @@ const style = css`
 		box-shadow: var(--cosmoz-dropdown-box-shadow, var(--cz-shadow-sm));
 		border-radius: var(
 			--cosmoz-dropdown-border-radius,
-			var(--cz-radius-surface, var(--cz-radius-sm))
+			var(--cz-radius-card, var(--cz-radius-sm))
 		);
 	}
 	::slotted(*) {
